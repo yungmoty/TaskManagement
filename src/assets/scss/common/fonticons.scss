@@ -1,0 +1,95 @@
+@font-face {
+	font-family: "icons";
+	src: url("@/assets/fonts/icons.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+}
+
+[class^="_icon-"],
+[class*=" _icon-"] {
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: "icons" !important;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+._icon-arrow-down:before {
+	content: "\e900";
+ }
+ ._icon-arrow-slider:before {
+	content: "\e901";
+ }
+ ._icon-category:before {
+	content: "\e902";
+ }
+ ._icon-clock:before {
+	content: "\e903";
+ }
+ ._icon-folder-open:before {
+	content: "\e904";
+ }
+ ._icon-mentors:before {
+	content: "\e905";
+ }
+ ._icon-message:before {
+	content: "\e906";
+ }
+ ._icon-msg-attachfile:before {
+	content: "\e907";
+ }
+ ._icon-msg-done:before {
+	content: "\e908";
+ }
+ ._icon-msg-submit:before {
+	content: "\e909";
+ }
+ ._icon-note:before {
+	content: "\e90a";
+ }
+ ._icon-notification:before {
+	content: "\e90b";
+ }
+ ._icon-options:before {
+	content: "\e90c";
+ }
+ ._icon-overview:before {
+	content: "\e90d";
+ }
+ ._icon-player-fullscreen:before {
+	content: "\e90e";
+ }
+ ._icon-player-mini:before {
+	content: "\e90f";
+ }
+ ._icon-player-pause:before {
+	content: "\e910";
+ }
+ ._icon-player-volume:before {
+	content: "\e911";
+ }
+ ._icon-search:before {
+	content: "\e912";
+ }
+ ._icon-settings:before {
+	content: "\e913";
+ }
+ ._icon-star:before {
+	content: "\e914";
+ }
+ ._icon-task:before {
+	content: "\e915";
+ }
+ ._icon-video-call:before {
+	content: "\e916";
+ }
+ ._icon-voice-call:before {
+	content: "\e917";
+ }

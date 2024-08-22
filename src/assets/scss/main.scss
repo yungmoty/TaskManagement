@@ -1,0 +1,90 @@
+/* IMPORT SECTION */
+@import '@/assets/scss/common/reset.scss';
+@import '@/assets/scss/common/fonticons.scss';
+@import '@/assets/scss/common/variables.scss';
+@import '@/assets/scss/common/breakpoints.scss';
+@import '@/assets/scss/common/mixin.scss';
+/* ==================================================================== */
+
+$purple: #54577A;
+/* FONTS LOAD SECTION */
+@font-face {
+	src: url("@/assets/fonts/PlusJakartaSans-Regular.woff2") format("woff2");
+	font-family: "PlusJakartaSans";
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	src: url("@/assets/fonts/PlusJakartaSans-Medium.woff2") format("woff2");
+	font-family: "PlusJakartaSans";
+	font-weight: 500;
+	font-style: normal;
+}
+@font-face {
+	src: url("@/assets/fonts/PlusJakartaSans-SemiBold.woff2") format("woff2");
+	font-family: "PlusJakartaSans";
+	font-weight: 600;
+	font-style: normal;
+}
+@font-face {
+	src: url("@/assets/fonts/PlusJakartaSans-Bold.woff2") format("woff2");
+	font-family: "PlusJakartaSans";
+	font-weight: 700;
+	font-style: normal;
+}
+/* ==================================================================== */
+
+
+/* GENERAL CSS SETTINGS */
+::placeholder {
+	color: #666;
+}
+input:focus:required:invalid,
+textarea:focus:required:invalid {
+	border-color: red;
+}
+input:required:valid,
+textarea:required:valid {
+	border-color: green;
+}
+html {
+	font-size: rem(16);
+}
+body {
+	font-family: $userfont;
+	font-weight: 500;
+	line-height: $lineheight;
+	color: $mainColorText;
+	height: 100vh;
+	overflow: hidden;
+}
+body._lock {
+	overflow: hidden;
+}
+a {
+	color: inherit;
+}
+[class*="__container"] {
+	max-width: $maxWidthContainer + 30px;
+	margin: 0 auto;
+	padding: 0 15px;
+}
+._ibg {
+	position: relative;
+}
+._ibg img {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	object-fit: cover;
+}
+/* ==================================================================== */
+
+
+/* USER STYLES */
+
+
+
+/* ==================================================================== */

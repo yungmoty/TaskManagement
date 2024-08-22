@@ -1,0 +1,45 @@
+// >>>Mixin
+@mixin fontSizeAdaptive($minPixel, $pixel) {
+	font-size: $minPixel;
+	font-size: calcVw($minPixel, $pixel);
+}
+
+@mixin adaptiveValue($def, $min, $wid, $param) {
+	#{$param}: adaptive($def, $min, $wid);
+	@media (max-width: 320px){
+		#{$param}: calc($min * 1px);
+	}
+	@media (min-width: calc($wid * 1px)){
+		#{$param}: calc($def * 1px);
+	}
+}
+
+// >>>Function
+@function rem($px) {
+	@return calc(($px / 16) * 1rem);
+}
+
+@function percent($size-obj, $size-parent) {
+	@return calc(($size-obj / $size-parent) * 100%);
+}
+
+@function em($from, $to, $dimension: true) {
+	@return ($from / $to) * if($dimension, 1em, 1);
+}
+
+@function adaptive($default-pad, $min-pad, $width) {
+	@return calc(($min-pad * 1px) + ($default-pad - $min-pad) * ((100vw - 320px) / ($width - 320)));
+}
+
+// @function fz($default-pad, $min-pad, $width) {
+// 	@return calc(($min-pad * 1px) + ($default-pad - $min-pad) * ((100vw - 320px) / ($width - 320)));
+// }
+
+@function vw($pixel, $defaultWidth: 1920px) {
+	@return $pixel * (100 / $defaultWidth) * 1vw;
+}
+
+@function calcVw($minPixel, $pixel) {
+	$addPixel: vw($pixel - $minPixel);
+	@return #{"calc(#{$minPixel} + #{$addPixel})"};
+}
