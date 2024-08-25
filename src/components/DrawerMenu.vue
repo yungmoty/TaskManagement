@@ -5,7 +5,7 @@
 
 
 <template>
-	<div class="main__container">
+	<!-- <div class="main__container"> -->
 		<aside class="sidebar">
 			<div class="sidebar__logo">
 				<img src="@/assets/images/logo.svg" alt="Logo">
@@ -25,27 +25,30 @@
 						<div class="sidebar__title">Help Center</div>
 						<div class="sidebar__text">Having Trouble in Learning. Please contact us for more questions.
 						</div>
-
 						<UButton class="sidebar__btn" >Go To Help Center</UButton>
 				</div>
 			</div>
 
 		</aside>
-	</div>
+	<!-- </div> -->
 </template>
 
 
 <style lang='scss'>
 @import '@/assets/scss/main.scss';
+
 .sidebar {
 	width: 252px;
 	height: 100vh;
 	display: flex;
+	align-items: center;
 	flex-direction: column;
 	justify-content: space-between;
-	padding: rem(32);
+	background-color: $white;
+
 	&__logo {
 		margin-bottom: rem(60);
+		padding-top: rem(32);
 	}
 	&__body {
 		height: 100vh;
@@ -98,6 +101,7 @@
 		align-items: center;
 		background: $dark-purple;
 		z-index: 1;
+		margin-bottom: rem(32);
 	}
 	&__item {
 		&_circle-1 {

@@ -57,6 +57,7 @@ body {
 	color: $mainColorText;
 	height: 100vh;
 	overflow: hidden;
+	letter-spacing: -0.02em;
 }
 body._lock {
 	overflow: hidden;
