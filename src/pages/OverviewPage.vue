@@ -9,7 +9,10 @@ import HeaderMenu from '@/components/HeaderMenu.vue';
 	<div class="page">
 		<DrawerMenu />
 		<div class="main-content">
-			<HeaderMenu title="Hi, Dennis Nzioki">
+			<HeaderMenu 
+				title="Hi, Dennis Nzioki"
+				:isSearchBlock="false"
+			>
 				<span class="header__text">Let's finish your task today!</span>
 			</HeaderMenu>
 		</div>

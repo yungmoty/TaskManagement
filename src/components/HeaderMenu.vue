@@ -1,14 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 
 defineProps({
 	title: String,
+	isSearchBlock: Boolean
 })
-
+const sortIcon = ref('_icon-sort')
+const categoryIcon = ref('_icon-category')
 const task = ref('')
-const isActiveSort = ref(false)
-const isActiveCategory = ref(false)
 const categoryArr = ref([
 	'Developer',
 	'Design',
@@ -19,20 +19,7 @@ const sortArr = ref([
 	'Deadline',
 	'None',
 ])
-const sortIcon = ref('_icon-sort')
-const categoryIcon = ref('_icon-category')
-const select = ref(null)
 
-
-
-
-
-const choiceSort = () => {
-	isActiveSort.value = !isActiveSort.value
-}
-const choiceCategory = () => {
-	isActiveCategory.value = !isActiveCategory.value
-}
 
 </script>
 
@@ -53,7 +40,7 @@ const choiceCategory = () => {
 				</a>
 			</div>
 		</div>
-		<div class="header__bottom">
+		<div v-if="isSearchBlock" class="header__bottom">
 			<div class="header__search">
 				<UInput 
 					v-model="task"
