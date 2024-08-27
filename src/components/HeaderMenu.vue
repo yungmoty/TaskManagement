@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import UInput from './UI/UInput.vue';
+import { ref, onMounted } from 'vue'
+
 
 defineProps({
 	title: String,
@@ -9,6 +9,20 @@ defineProps({
 const task = ref('')
 const isActiveSort = ref(false)
 const isActiveCategory = ref(false)
+const categoryArr = ref([
+	'Developer',
+	'Design',
+	'None',
+])
+const sortArr = ref([
+	'Popular',
+	'Deadline',
+	'None',
+])
+const sortIcon = ref('_icon-sort')
+const categoryIcon = ref('_icon-category')
+const select = ref(null)
+
 
 
 
@@ -31,7 +45,9 @@ const choiceCategory = () => {
 				<slot></slot>
 			</div>
 			<div class="header__links">
-				<a href="" class="header__notification _icon-notification"><span class="header__circle"></span></a>
+				<UMiniButton class="_icon-notification">
+					<span class="header__circle"></span>
+				</UMiniButton>
 				<a href="" class="header__user">
 					<img src="@/assets/images/yungmoty.svg" alt="Profile">
 				</a>
@@ -46,27 +62,30 @@ const choiceCategory = () => {
 				/>
 			</div>
 			<div class="header__sorted">
-				<div 
-					@click="choiceCategory"
-					:class="{ _active: isActiveCategory }"
-					class="header__category sort-block">
-					<span class="_icon-category"></span>Category
-				</div>
-				<div 
-					@click="choiceSort"
-					:class="{ _active: isActiveSort }"
-					class="header__sort sort-block">
-					<span class="_icon-sort"></span>
-					Sort By {{ task }}
-				</div>
+				<USelect 
+					selectTitle="Category" 
+					:iconClass="categoryIcon" 
+					:selectArr="categoryArr"
+				/>
+				<USelect 
+					selectTitle="Sort By" 
+					:iconClass="sortIcon" 
+					:selectArr="sortArr"
+					:isSort="true"
+				/>
 			</div>
 		</div>
 	</header>
+	<div class="go">
+		
+	</div>
+
 </template>
 
 
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
+
 
 .header {
 
@@ -88,25 +107,6 @@ const choiceCategory = () => {
 	&__links {
 		display: flex;
 		gap: rem(24);
-	}
-	&__notification {
-		font-size: rem(22);
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: $white;
-		border: 1px solid #f5f5f7;
-		border-radius: 50%;
-		width: rem(52);
-		height: rem(52);
-		color: $light-purple;
-		position: relative;
-		transition: all 0.3s ease 0s;
-
-		&:hover {
-			background-color: $light-blue;
-			color: $purple;
-		}
 	}
 	&__circle {
 			position: absolute;
@@ -137,61 +137,10 @@ const choiceCategory = () => {
 		gap: rem(24);
 
 	}
-	&__category {
-
-	}
-	&__sort {
-		display: flex;
-	}
-}
-
-.sort-block {
-	border: 1px solid #f5f5f7;
-	border-radius: rem(10);
-	padding: rem(14) rem(28);
-	width: max-content;
-	height: rem(52);
-	display: flex;
-	align-items: center;
-	gap: rem(12);
-	cursor: pointer;
-	transition: all 0.3s ease 0s;
-	
-	span {
-			font-size: rem(24);
-			color: $light-purple;
-		}
-
-	&:hover {
-		background-color: $light-blue;
-	}
-	&:hover ._icon-category {
-		color: $purple;
-		// transform: rotate(90deg);
-	}
-	&:hover ._icon-sort {
-		color: $purple;
-		// transform: scaleY(-1);
-	}
-	&:hover .header__icon span {
-		background-color: $purple;
-	}
 }
 ._icon-notification {
 	position: relative;
 	transition: all 0.3s ease 0s;
+	font-size: rem(22);
 }
-._icon-category {
-	transition: all 0.3s ease 0s;
-}
-._icon-sort {
-	transition: all 0.3s ease 0s;
-}
-.header__category._active ._icon-category {
-	transform: rotate(90deg);
-}
-.header__sort._active ._icon-sort {
-	transform: scaleY(-1);
-}
-
 </style>
