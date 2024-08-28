@@ -1,122 +1,3 @@
-<!-- <script setup>
-import { ref } from 'vue'
-
-defineProps({
-	selectTitle: String,
-	selectArr: {
-			type: Array,
-			required: true
-	},
-	iconClass: String,
-})
-
-
-const isActive = ref(false)
-
-const choiceSort = () => {
-	isActive.value = !isActive.value
-}
-
-</script>
-
-
-<template>
-	<div
-		:class="{ _active: isActive }"
-		@click.prevent="choiceSort"
-		class="select"
-	>
-		<a href="" class="select__link">
-			<span :class="iconClass"></span>
-			{{ selectTitle }}
-		</a>
-
-		<div class="select__items" >
-			<a 
-				v-for="item in selectArr"
-				:item="item"
-				:key="item"
-				href=""
-				class="select__item"
-			>
-				{{ item }}
-			</a>
-		</div> 
-	</div>
-</template>
-
-
-<style lang='scss'>
-@import '@/assets/scss/main.scss';
-.select {
-	position: relative;
-	width: max-content;
-	height: rem(52);
-	cursor: pointer;
-
-	span {
-		font-size: rem(24);
-		color: $light-purple;
-	}
-	&__link {
-		padding: rem(14) rem(28);
-		display: flex;
-		gap: rem(12);
-		border: 1px solid #f5f5f7;
-		border-radius: rem(10);
-		align-items: center;
-		transition: all 0.3s ease 0s;
-
-		&:hover {
-		background-color: $light-blue;
-		}
-		&:hover span {
-			color: $purple;
-		}
-	}
-	&__items {
-		display: none;
-		flex-direction: column;
-		position: absolute;
-		background-color: $medium-white;
-		border-radius: rem(10);
-		overflow: hidden;
-		width: 100%;
-		text-align: center;
-		bottom: rem(-100);
-	}
-	&__item {
-		padding: rem(10) rem(15);
-		&:hover {
-			background-color: $light-blue;
-		}
-	}
-	&._active ._icon-sort {
-	transform: scaleY(-1);
-	}
-	&._active ._icon-category {
-	transform: rotate(90deg);
-	}
-	&._active &__items {
-		display: flex;
-	}
-	&._active &__link {
-		background-color: $light-blue;
-	}
-	&._active span {
-		color: $purple;
-	}
-}
-._icon-category {
-	transition: all 0.3s ease 0s;
-}
-._icon-sort {
-	transition: all 0.3s ease 0s;
-}
-
-</style> -->
-
-
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -196,6 +77,7 @@ function selectOption(option) {
 	width: max-content;
 	height: rem(52);
 	cursor: pointer;
+	z-index: 2;
 
 	span {
 		font-size: rem(24);
@@ -222,7 +104,9 @@ function selectOption(option) {
 		margin-right: rem(12);
 	}
 	&__items {
-		display: none;
+		display: flex;
+		opacity: 0;
+		visibility: hidden;
 		flex-direction: column;
 		background-color: $medium-white;
 		border-radius: rem(10);
@@ -232,6 +116,8 @@ function selectOption(option) {
 		margin-top: rem(15);
 		font-weight: 600;
 		font-size: rem(13);
+		transition: all 0.3s ease 0s;
+		border: 2px solid $light-blue;
 	}
 	&__item {
 		padding: rem(10) rem(15);
@@ -246,7 +132,8 @@ function selectOption(option) {
 	transform: rotate(90deg);
 	}
 	&._active &__items {
-		display: flex;
+		opacity: 1;
+		visibility: visible;
 	}
 	&._active &__link {
 		background-color: $light-blue;

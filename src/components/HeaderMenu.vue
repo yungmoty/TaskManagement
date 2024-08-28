@@ -49,12 +49,12 @@ const sortArr = ref([
 				/>
 			</div>
 			<div class="header__sorted">
-				<USelect 
+				<UHeaderSelect 
 					selectTitle="Category" 
 					:iconClass="categoryIcon" 
 					:selectArr="categoryArr"
 				/>
-				<USelect 
+				<UHeaderSelect 
 					selectTitle="Sort By" 
 					:iconClass="sortIcon" 
 					:selectArr="sortArr"

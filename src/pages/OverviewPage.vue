@@ -1,6 +1,7 @@
 <script setup>
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
+import ActivityBlock from '@/components/ActivityBlock.vue';
 
 </script>
 
@@ -15,8 +16,11 @@ import HeaderMenu from '@/components/HeaderMenu.vue';
 			>
 				<span class="header__text">Let's finish your task today!</span>
 			</HeaderMenu>
+			<ActivityBlock>
+				
+			</ActivityBlock>
 		</div>
-	</div>	
+	</div>
 </template>
 
 
@@ -29,10 +33,11 @@ import HeaderMenu from '@/components/HeaderMenu.vue';
 	flex-direction: row;
 }
 .main-content {
-	// width: 752px;
-	width: 100%;
+	width: 752px;
+	// width: 100%;
 }
 .header__text {
 	color: $purple;
 }
+
 </style>
