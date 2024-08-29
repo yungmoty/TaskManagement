@@ -122,7 +122,7 @@ function selectOption(option) {
 .progress-task {
 	border-radius: rem(10);
 	width: 194px;
-	height: 214px;
+	// height: 214px;
 	background: $dark-purple;
 	color: $white;
 	padding: rem(20);
@@ -179,10 +179,9 @@ function selectOption(option) {
 }
 .activity-graph {
 	background-color: $medium-white;
-	width: 462px;
 	padding: rem(20);
 	border-radius: rem(10);
-
+	flex: 1 0 rem(462);
 	&__header {
 		display: flex;
 		justify-content: space-between;
@@ -222,7 +221,7 @@ function selectOption(option) {
 		background-color: $medium-white;
 		border-radius: rem(10);
 		overflow: hidden;
-		width: 120%;
+		width: 130%;
 		right: 50%;
 		transform: translate(50%, 0);
 		text-align: center;
@@ -251,33 +250,4 @@ function selectOption(option) {
 	transition: transform 0.3s ease 0s;
 	display: inline-block;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// .circle-container {
-// 	display: flex;
-// 	justify-content: center;
-// 	align-items: center;
-// 	height: 100vh;
-// }
-
-// .circle {
-// 	width: 70px;
-// 	height: 70px;
-// 	transform: rotate(-90deg);
-// 	background-color: #f0f0f0;
-// 	border-radius: 50%;
-// }
 </style>

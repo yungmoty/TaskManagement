@@ -1,7 +1,8 @@
 <script setup>
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
-import ActivityBlock from '@/components/ActivityBlock.vue';
+import OverviewPageActivityBlock from '@/components/OverviewPageActivityBlock.vue';
+import OverviewPageMentorsBlock from '@/components/OverviewPageMentorsBlock.vue';
 
 </script>
 
@@ -12,13 +13,15 @@ import ActivityBlock from '@/components/ActivityBlock.vue';
 		<div class="main-content">
 			<HeaderMenu 
 				title="Hi, Dennis Nzioki"
-				:isSearchBlock="false"
+				:isSearchBlock="true"
 			>
 				<span class="header__text">Let's finish your task today!</span>
 			</HeaderMenu>
-			<ActivityBlock>
-				
-			</ActivityBlock>
+			<OverviewPageActivityBlock />
+
+			<OverviewPageMentorsBlock>
+
+			</OverviewPageMentorsBlock>
 		</div>
 	</div>
 </template>
@@ -34,7 +37,7 @@ import ActivityBlock from '@/components/ActivityBlock.vue';
 }
 .main-content {
 	width: 752px;
-	// width: 100%;
+	background-color: $light-white;
 }
 .header__text {
 	color: $purple;
