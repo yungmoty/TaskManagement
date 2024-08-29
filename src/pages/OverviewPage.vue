@@ -13,15 +13,16 @@ import OverviewPageMentorsBlock from '@/components/OverviewPageMentorsBlock.vue'
 		<div class="main-content">
 			<HeaderMenu 
 				title="Hi, Dennis Nzioki"
-				:isSearchBlock="true"
+				:isSearchBlock="false"
 			>
 				<span class="header__text">Let's finish your task today!</span>
 			</HeaderMenu>
 			<OverviewPageActivityBlock />
+			<div class="mentors-block">
+				<OverviewPageMentorsBlock>
 
-			<OverviewPageMentorsBlock>
-
-			</OverviewPageMentorsBlock>
+				</OverviewPageMentorsBlock>
+			</div>
 		</div>
 	</div>
 </template>
@@ -42,5 +43,8 @@ import OverviewPageMentorsBlock from '@/components/OverviewPageMentorsBlock.vue'
 .header__text {
 	color: $purple;
 }
-
+.mentors-block {
+	padding: rem(32);
+	padding-top: 0;
+}
 </style>

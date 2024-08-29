@@ -1,4 +1,9 @@
 <script setup>
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+const route = useRoute();
+const currentPath = computed(() => route.path);
+
 
 
 </script>
@@ -12,11 +17,42 @@
 			</div>
 			<div class="sidebar__body">
 				<div class="sidebar__navigation">
-					<div @click="$router.push('/')" class="sidebar__link"><span class="_icon-overview"></span>Overview</div>
-					<div class="sidebar__link"><span class="_icon-task"></span>Task</div>
-					<div class="sidebar__link"><span class="_icon-mentors"></span>Mentors</div>
-					<div class="sidebar__link"><span class="_icon-message"></span>Message</div>
-					<div class="sidebar__link"><span class="_icon-settings"></span>Settings</div>
+					<div 
+						:class="{_active : currentPath === '/'}" 
+						@click="$router.push('/')" 
+						class="sidebar__link"
+					>
+						<span class="_icon-overview"></span>
+						Overview
+					</div>
+					<div 
+						:class="{_active : currentPath === '/task'}" 
+						class="sidebar__link"
+					>
+						<span class="_icon-task"></span>
+						Task
+					</div>
+					<div 
+						:class="{_active : currentPath === '/mentors'}" 
+						class="sidebar__link"
+					>
+						<span class="_icon-mentors"></span>
+						Mentors
+					</div>
+					<div 
+						:class="{_active : currentPath === '/message'}" 
+						class="sidebar__link"
+					>
+						<span class="_icon-message"></span>
+						Message
+					</div>
+					<div 
+						:class="{_active : currentPath === '/settings'}" 
+						class="sidebar__link"
+					>
+						<span class="_icon-settings"></span>
+						Settings
+					</div>
 				</div>
 				<div class="sidebar__help">
 						<div class="sidebar__item sidebar__item_circle-1"></div>
@@ -28,7 +64,6 @@
 						<UButton class="sidebar__btn" >Go To Help Center</UButton>
 				</div>
 			</div>
-
 		</aside>
 	<!-- </div> -->
 </template>
