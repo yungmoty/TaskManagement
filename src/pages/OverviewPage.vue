@@ -2,8 +2,10 @@
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import OverviewPageActivityBlock from '@/components/OverviewPageActivityBlock.vue';
-import OverviewPageMentorsBlock from '@/components/OverviewPageMentorsBlock.vue';
+import SliderSwiper from '@/components/SliderSwiper.vue';
+import { useMentors } from "@/hooks/useMentors";
 
+const {mentors} = useMentors()
 </script>
 
 
@@ -19,9 +21,14 @@ import OverviewPageMentorsBlock from '@/components/OverviewPageMentorsBlock.vue'
 			</HeaderMenu>
 			<OverviewPageActivityBlock />
 			<div class="mentors-block">
-				<OverviewPageMentorsBlock>
-
-				</OverviewPageMentorsBlock>
+				<SliderSwiper sliderTitle="Monthly Mentors">
+					<USlideMentor
+					:mentors="mentors"
+					v-for="mentor in mentors"
+					:mentor="mentor"
+					:key="mentor.id"
+				/>
+				</SliderSwiper>
 			</div>
 		</div>
 	</div>

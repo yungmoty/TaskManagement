@@ -1,35 +1,38 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
+import { Navigation, Autoplay, Keyboard } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
-
+defineProps({
+	sliderTitle: String,
+})
 onMounted(() => {
 	const swiper = new Swiper('.swiper', {
-  // configure Swiper to use modules
-  modules: [Navigation],
-  navigation: {
-    nextEl: '.slider__btn-next',
-    prevEl: '.slider__btn-prev',
-  },
-  slidesPerView: 2,
-  spaceBetween: 32,
-
-});
+		modules: [Navigation, Autoplay, Keyboard],
+		navigation: {
+			nextEl: '.slider__btn-next',
+			prevEl: '.slider__btn-prev',
+		},
+		slidesPerView: 2,
+		spaceBetween: 32,
+		keyboard: true,
+		autoplay: {
+			delay: 1500,
+			pauseOnMouseEnter: true,
+		}
+	});
 })
 
 import { useMentors } from "@/hooks/useMentors";
-const {mentors, loading, error} = useMentors()
+const {loading} = useMentors()
 </script>
 
 
 <template>
 	<div class="slider">
 		<div class="slider__header">
-			<div class="slider__title">Monthly Mentors</div>
+			<div class="slider__title">{{ sliderTitle }}</div>
 			<div class="slider__navigation">
 				<div class="slider__btn-prev _icon-arrow-down"></div>
 				<div class="slider__btn-next _icon-arrow-down"></div>
@@ -68,12 +71,7 @@ const {mentors, loading, error} = useMentors()
 				</svg>
 			</div>
 			<div v-show="!loading" class="swiper-wrapper">
-				<USlideMentor
-					:mentors="mentors"
-					v-for="mentor in mentors"
-					:mentor="mentor"
-					:key="mentor.id"
-				/>
+				<slot></slot>
 			</div>
 		</div>
 	</div>
