@@ -3,9 +3,14 @@ import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import OverviewPageActivityBlock from '@/components/OverviewPageActivityBlock.vue';
 import SliderSwiper from '@/components/SliderSwiper.vue';
-import { useMentors } from "@/hooks/useMentors";
 
-const {mentors} = useMentors()
+
+import { useMentors } from "@/hooks/useMentors";
+import { useNewTasks } from "@/hooks/useNewTasks";
+const { mentors } = useMentors()
+const { newTasks } = useNewTasks()
+
+
 </script>
 
 
@@ -22,12 +27,22 @@ const {mentors} = useMentors()
 			<OverviewPageActivityBlock />
 			<div class="mentors-block">
 				<SliderSwiper sliderTitle="Monthly Mentors">
-					<USlideMentor
+					<UOverviewPageSlideMentor
 					:mentors="mentors"
 					v-for="mentor in mentors"
 					:mentor="mentor"
 					:key="mentor.id"
 				/>
+				</SliderSwiper>
+			</div>
+			<div class="task-block">
+				<SliderSwiper sliderTitle="Upcoming Task">
+					<UOverviewPageSlideTask
+						:newTasks="newTasks"
+						v-for="newTask in newTasks"
+						:newTask="newTask"
+						:key="newTask.id"
+					/>
 				</SliderSwiper>
 			</div>
 		</div>
@@ -51,6 +66,10 @@ const {mentors} = useMentors()
 	color: $purple;
 }
 .mentors-block {
+	padding: rem(32);
+	padding-top: 0;
+}
+.task-block {
 	padding: rem(32);
 	padding-top: 0;
 }

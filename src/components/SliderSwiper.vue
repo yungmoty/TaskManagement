@@ -17,15 +17,16 @@ onMounted(() => {
 		slidesPerView: 2,
 		spaceBetween: 32,
 		keyboard: true,
-		autoplay: {
-			delay: 1500,
-			pauseOnMouseEnter: true,
-		}
+		// autoplay: {
+		// 	delay: 1500,
+		// 	pauseOnMouseEnter: true,
+		// }
 	});
 })
 
 import { useMentors } from "@/hooks/useMentors";
-const {loading} = useMentors()
+const { loading } = useMentors()
+
 </script>
 
 
