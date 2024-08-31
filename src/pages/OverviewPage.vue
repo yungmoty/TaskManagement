@@ -26,7 +26,11 @@ const { newTasks } = useNewTasks()
 			</HeaderMenu>
 			<OverviewPageActivityBlock />
 			<div class="mentors-block">
-				<SliderSwiper sliderTitle="Monthly Mentors">
+				<SliderSwiper 
+					nameSwiper="swiper1" 
+					swiperBtn="swiper1-btn" 
+					sliderTitle="Monthly Mentors"
+				>
 					<UOverviewPageSlideMentor
 					:mentors="mentors"
 					v-for="mentor in mentors"
@@ -36,7 +40,11 @@ const { newTasks } = useNewTasks()
 				</SliderSwiper>
 			</div>
 			<div class="task-block">
-				<SliderSwiper sliderTitle="Upcoming Task">
+				<SliderSwiper 
+					nameSwiper="swiper2" 
+					swiperBtn="swiper2-btn" 
+					sliderTitle="Upcoming Task"
+				>
 					<UOverviewPageSlideTask
 						:newTasks="newTasks"
 						v-for="newTask in newTasks"

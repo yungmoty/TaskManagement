@@ -4,24 +4,46 @@ import Swiper from 'swiper';
 import { Navigation, Autoplay, Keyboard } from 'swiper/modules';
 import 'swiper/css';
 
-defineProps({
+const props = defineProps({
 	sliderTitle: String,
+	nameSwiper: String,
+	swiperBtn: String,
 })
+const nameSwiperSlider = props.nameSwiper
+const swiperSliderBtn = props.swiperBtn
+
 onMounted(() => {
-	const swiper = new Swiper('.swiper', {
-		modules: [Navigation, Autoplay, Keyboard],
-		navigation: {
-			nextEl: '.slider__btn-next',
-			prevEl: '.slider__btn-prev',
-		},
-		slidesPerView: 2,
-		spaceBetween: 32,
-		keyboard: true,
-		// autoplay: {
-		// 	delay: 1500,
-		// 	pauseOnMouseEnter: true,
-		// }
-	});
+	if (nameSwiperSlider === 'swiper1') {
+		const swiper = new Swiper(`.${nameSwiperSlider}`, {
+			modules: [Navigation, Autoplay, Keyboard],
+			navigation: {
+				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
+				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
+			},
+			slidesPerView: 2,
+			spaceBetween: 32,
+			keyboard: true,
+			autoplay: {
+				delay: 3000,
+				pauseOnMouseEnter: true,
+			}
+		});
+	} else {
+		const swiper = new Swiper(`.${nameSwiperSlider}`, {
+			modules: [Navigation, Autoplay, Keyboard],
+			navigation: {
+				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
+				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
+			},
+			slidesPerView: 2,
+			spaceBetween: 32,
+			keyboard: true,
+			// autoplay: {
+			// 	delay: 1500,
+			// 	pauseOnMouseEnter: true,
+			// }
+		});
+	}
 })
 
 import { useMentors } from "@/hooks/useMentors";
@@ -35,11 +57,11 @@ const { loading } = useMentors()
 		<div class="slider__header">
 			<div class="slider__title">{{ sliderTitle }}</div>
 			<div class="slider__navigation">
-				<div class="slider__btn-prev _icon-arrow-down"></div>
-				<div class="slider__btn-next _icon-arrow-down"></div>
+				<div :class="swiperBtn" class="slider__btn-prev _icon-arrow-down"></div>
+				<div :class="swiperBtn" class="slider__btn-next _icon-arrow-down"></div>
 			</div>
 		</div>
-		<div class="slider__swiper swiper">
+		<div :class="nameSwiper" class="slider__swiper swiper">
 			<div v-show="loading" class="slider__loading">
 				<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
 					<circle fill="#546FFF" stroke="none" cx="6" cy="50" r="6">

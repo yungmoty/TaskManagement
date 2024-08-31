@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import OverviewPageCahrt from '@/components/OverviewPageCahrt.vue';
 
 const currentTask = ref(65)
 const completedTasks = currentTask
@@ -98,7 +99,7 @@ function selectOption(option) {
 				</div>
 			</div>
 			<div class="activity-graph__block">
-				<UChart />
+				<OverviewPageCahrt />
 			</div>
 		</div>
 	</div>

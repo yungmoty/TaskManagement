@@ -66,6 +66,9 @@ const progress = ref(props.newTask.progress);
 }
 .task {
 	padding: rem(24);
+	background-color: $white;
+	border-radius: rem(10);
+
 	&__image {
 		display: block;
 		&:hover img {

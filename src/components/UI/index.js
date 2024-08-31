@@ -2,7 +2,6 @@ import UButton from "@/components/UI/UButton.vue"
 import UInput from '@/components/UI/UInput.vue';
 import UMiniButton from '@/components/UI/UMiniButton.vue';
 import UHeaderSelect from '@/components/UI/UHeaderSelect.vue';
-import UChart from '@/components/UI/UChart.vue';
 import UOverviewPageSlideMentor from '@/components/UI/UOverviewPageSlideMentor.vue';
 import UOverviewPageSlideTask from '@/components/UI/UOverviewPageSlideTask.vue';
 
@@ -11,7 +10,6 @@ const components = [
 	{name: 'UInput', component: UInput},
 	{name: 'UMiniButton', component: UMiniButton},
 	{name: 'UHeaderSelect', component: UHeaderSelect},
-	{name: 'UChart', component: UChart},
 	{name: 'UOverviewPageSlideMentor', component: UOverviewPageSlideMentor},
 	{name: 'UOverviewPageSlideTask', component: UOverviewPageSlideTask},
 ]
