@@ -3,6 +3,7 @@ import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import OverviewPageActivityBlock from '@/components/OverviewPageActivityBlock.vue';
 import SliderSwiper from '@/components/SliderSwiper.vue';
+import OverviewPageSidebar from '@/components/OverviewPageSidebar.vue';
 
 
 import { useMentors } from "@/hooks/useMentors";
@@ -32,11 +33,11 @@ const { newTasks } = useNewTasks()
 					sliderTitle="Monthly Mentors"
 				>
 					<UOverviewPageSlideMentor
-					:mentors="mentors"
-					v-for="mentor in mentors"
-					:mentor="mentor"
-					:key="mentor.id"
-				/>
+						:mentors="mentors"
+						v-for="mentor in mentors"
+						:mentor="mentor"
+						:key="mentor.id"
+					/>
 				</SliderSwiper>
 			</div>
 			<div class="task-block">
@@ -54,6 +55,8 @@ const { newTasks } = useNewTasks()
 				</SliderSwiper>
 			</div>
 		</div>
+		<OverviewPageSidebar />
+
 	</div>
 </template>
 

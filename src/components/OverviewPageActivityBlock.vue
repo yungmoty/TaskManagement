@@ -193,7 +193,8 @@ function selectOption(option) {
 		cursor: pointer;
 		position: relative;
 		z-index: 1;
-
+		width: rem(120);
+		text-align: right;
 		&._active .activity-graph__items {
 			opacity: 1;
 			visibility: visible;
@@ -207,6 +208,7 @@ function selectOption(option) {
 	}
 	&__link {
 		transition: all 0.3s ease 0s;
+
 		span {
 			margin-left: rem(8);
 		}
@@ -222,7 +224,7 @@ function selectOption(option) {
 		background-color: $medium-white;
 		border-radius: rem(10);
 		overflow: hidden;
-		width: 130%;
+		width: 100%;
 		right: 50%;
 		transform: translate(50%, 0);
 		text-align: center;
