@@ -8,7 +8,8 @@ const currentWeekStart = ref(moment().startOf('week'));
 const today = moment();
 
 
-const isToday = computed(() => currentWeekStart.value.isSame(today, 'day'))
+const isToday = computed(() => currentWeekStart.value.isSame(today, 'week')
+)
 const days = computed(() => {
 	const weekStart = currentWeekStart.value.clone().startOf('week');
 	return Array.from({ length: 7 }, (_, i) => weekStart.clone().add(i, 'days'));
@@ -100,8 +101,8 @@ function goToCurrentDay() {
 	&__today {
 		display: flex;
 		justify-content: center;
-		margin-top: rem(10);
-		margin-bottom: -16px;
+		margin-bottom: -38px;
+		margin-top: -2px;
 
 		span {
 			padding: rem(8) rem(25);

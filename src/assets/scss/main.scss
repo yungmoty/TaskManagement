@@ -49,14 +49,15 @@ textarea:required:valid {
 }
 html {
 	font-size: rem(16);
+	height: 100%;
 }
 body {
 	font-family: $userfont;
 	font-weight: 500;
 	line-height: $lineheight;
 	color: $mainColorText;
-	height: 100vh;
-	overflow: hidden;
+	height: 100%;
+	// overflow: hidden;
 	letter-spacing: -0.02em;
 }
 body._lock {

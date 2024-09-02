@@ -66,6 +66,9 @@ const { newTasks } = useNewTasks()
 
 // 752px
 .page {
+	// height: calc(100vh - 0px);
+	height: 100vh;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: row;
 }
@@ -81,7 +84,6 @@ const { newTasks } = useNewTasks()
 	padding-top: 0;
 }
 .task-block {
-	padding: rem(32);
-	padding-top: 0;
+	padding: 0 rem(32);
 }
 </style>

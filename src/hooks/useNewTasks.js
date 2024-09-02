@@ -1,9 +1,9 @@
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, } from 'vue';
 import axios from 'axios';
 
 export function useNewTasks() {
 	const newTasks = ref([]);
-	const loading = ref(true);
+	const loadingTask = ref(true);
 	const errorNewTasks = ref(null);
 	const fetchData = async () => {
 		try {
@@ -13,14 +13,15 @@ export function useNewTasks() {
 			errorNewTasks.value = err.message;
 			console.log(errorNewTasks.value);
 		} finally {
-			loading.value = false;
+			loadingTask.value = false;
 		}
 	}
 
 	onMounted(fetchData)
 	return {
 		newTasks,
-		loading,
+		loadingTask,
 		errorNewTasks,
+		fetchData,
 	}
 }

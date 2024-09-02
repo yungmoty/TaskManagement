@@ -1,23 +1,17 @@
-<script>
-export default {
-	props: {
-		modelValue: String,
-		placeholder: String,
-	},
-	methods: {
-		updateInput(event) {
-			this.$emit('update:modelValue', event.target.value)
-		}
-	}
-}
+<script setup>
+const model = defineModel()
+
+defineProps({
+	placeholder: String,
+})
+
 </script>
 
 
 <template>
 	<div class="input-search">
 		<input 
-			:value="modelValue" 
-			@input="updateInput" 
+			v-model="model"
 			class="input-search__input" 
 			type="text" 
 			:placeholder="placeholder"

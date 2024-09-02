@@ -63,10 +63,6 @@ const sortArr = ref([
 			</div>
 		</div>
 	</header>
-	<div class="go">
-		
-	</div>
-
 </template>
 
 

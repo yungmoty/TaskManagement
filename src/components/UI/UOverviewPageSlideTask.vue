@@ -1,22 +1,67 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+const loading = ref(false)
+setTimeout(() => {
+	loading.value = true
+}, 500);
 
 const props = defineProps({
 	newTask: {
 		type: Object,
 		required: true,
-	}
+	},
+	classToTaskToday: String,
 })
+const emit = defineEmits(['string-sent']);
+
+function sendString() {
+	const stringToSend = props.newTask.major;
+	emit('string-sent', stringToSend);
+}
 onMounted(() => {
+	sendString()
 })
 const progress = ref(props.newTask.progress);
+
+
 </script>
 
 
 <template>
-	<div class="swiper-slide task">
+	<div :class="classToTaskToday" class="swiper-slide task">
 		<a href="" class="task__image">
-			<img :src="newTask.image" :alt="newTask.titleImage">
+			<img v-show="loading" :src="newTask.image" :alt="newTask.titleImage">
+			<div v-show="!loading" class="task__loading">
+						<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+					<circle fill="#546FFF" stroke="none" cx="6" cy="50" r="6">
+						<animateTransform 
+							attributeName="transform" 
+							dur="1s" 
+							type="translate" 
+							values="0 15 ; 0 -15; 0 15" 
+							repeatCount="indefinite" 
+							begin="0.1"/>
+					</circle>
+					<circle fill="#546FFF" stroke="none" cx="30" cy="50" r="6">
+						<animateTransform 
+							attributeName="transform" 
+							dur="1s" 
+							type="translate" 
+							values="0 10 ; 0 -10; 0 10" 
+							repeatCount="indefinite" 
+							begin="0.2"/>
+					</circle>
+					<circle fill="#546FFF" stroke="none" cx="54" cy="50" r="6">
+						<animateTransform 
+							attributeName="transform" 
+							dur="1s" 
+							type="translate" 
+							values="0 5 ; 0 -5; 0 5" 
+							repeatCount="indefinite" 
+							begin="0.3"/>
+					</circle>
+						</svg>
+			</div>
 		</a>
 		<a href="" class="task__info">
 			<div class="task__title">{{ newTask.titleImage }}</div>
@@ -69,18 +114,35 @@ const progress = ref(props.newTask.progress);
 	background-color: $white;
 	border-radius: rem(10);
 
+	&.task-today &__image {
+		height: 160px;
+	}
+	&.task-today {
+		padding-top: rem(20);
+	}
 	&__image {
-		display: block;
+		display: flex;
+		justify-content: center;
+		height: 110px;
+
+
 		&:hover img {
 			transform: scale(1.05);
 		}
 		img {
 			border-radius: rem(10);
-			width: 280px;
-			height: 110px;
+			width: 100%;
+			height: 100%;
 			object-fit: cover;
 			transition: transform 0.3s ease 0s;
 		}
+	}
+	&__loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 60px;
+		padding-left: 20px;
 	}
 	&__info {
 		display: block;

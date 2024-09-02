@@ -74,11 +74,9 @@ const currentPath = computed(() => route.path);
 
 .sidebar {
 	width: 252px;
-	height: 100vh;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	justify-content: space-between;
 	background-color: $white;
 
 	&__logo {
@@ -86,10 +84,10 @@ const currentPath = computed(() => route.path);
 		padding-top: rem(32);
 	}
 	&__body {
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		flex: 1;
 	}
 	&__navigation {
 		display: flex;
@@ -143,19 +141,19 @@ const currentPath = computed(() => route.path);
 			position: absolute;
 			width: rem(160);
 			height: rem(160);
-			border-radius: 50%;
-			background-color:  rgba(255, 255, 255, 0.08);
-			top: rem(-95);
-			left: rem(-95);
+			background-color: rgba(255, 255, 255, 0.08);
+			top: rem(0);
+			left: rem(0);
+			clip-path: circle(65px at 0 0);
 		}
 		&_circle-2 {
 			position: absolute;
 			width: rem(160);
 			height: rem(160);
-			border-radius: 50%;
-			background-color:  rgba(255, 255, 255, 0.08);
-			bottom: rem(-90);
-			right: rem(-90);
+			background-color: rgba(255, 255, 255, 0.08);
+			bottom: rem(0);
+			right: rem(0);
+			clip-path: circle(80px at 160px 160px);
 		}
 		&_mark {
 			position: absolute;
@@ -205,9 +203,13 @@ const currentPath = computed(() => route.path);
 		margin-top: rem(12);
 	}
 	&__btn {
+		background-color: $white;
+		color: $dark-purple;
+		height: 40px;
 		&:hover {
 			background-color: $light-blue;
 		}
 	}
 }
+
 </style>
