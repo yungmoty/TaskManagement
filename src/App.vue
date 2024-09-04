@@ -4,7 +4,9 @@
 
 
 <template>
-	<router-view></router-view>
+	<div class="page__container">
+		<router-view></router-view>
+	</div>
 </template>
 
 
