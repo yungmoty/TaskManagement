@@ -22,6 +22,5 @@ export function useNewTasks() {
 		newTasks,
 		loadingTask,
 		errorNewTasks,
-		fetchData,
 	}
 }

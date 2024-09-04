@@ -21,11 +21,15 @@ const isOpen = ref(false);
 const dropdown = ref(null);
 
 
+defineProps({
+	title: String,
+})
+
+
 function toggleDropdown() {
-isOpen.value = !isOpen.value;
+	isOpen.value = !isOpen.value;
 }
 
-// Закрыть меню при клике вне компонента
 function handleClickOutside(event) {
 	if (dropdown.value && !dropdown.value.contains(event.target)) {
 		isOpen.value = false;
@@ -44,12 +48,15 @@ function selectOption(option) {
 	selectedOption.value = option;
 	isOpen.value = false;
 }
-
 </script>
 
 
 <template>
 	<div class="activity-block">
+		<div class="header__content">
+				<div class="header__title">{{ title }}</div>
+				<span class="header__text">Let's finish your task today!</span>
+			</div>
 		<div class="activity-block__progress-task progress-task">
 			<div class="progress-task__title">Running Task</div>
 			<div class="progress-task__current">{{ currentTask }}</div>
@@ -110,28 +117,97 @@ function selectOption(option) {
 @import '@/assets/scss/main.scss';
 
 .activity-block {
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 	gap: rem(32);
+	row-gap: 0;
+	justify-content: space-between;
 	padding: rem(32);
 
+	@media (max-width: $l-dekstop) {
+		align-items: center;
+	}
+	@media (max-width: 1180px) {
+		grid-template-columns: 1fr 1fr;
+		row-gap: rem(16);
+		justify-items: center;
+	}
 		&__progress-task {
 
 		}
 		&__activity-graph {
 		}
 }
+.header {
+
+	&__content {
+		grid-column: 1;
+		display: none;
+
+		@media (max-width: $l-dekstop) {
+			display: block;
+		}
+		@media (max-width: 1180px) {
+			justify-self: start;
+			grid-column: 1;
+			grid-row: 1;
+		}
+		@media (max-width: 580px) {
+			grid-row: 1;
+		}
+		
+	}
+
+	&__title {
+		font-weight: 600;
+		font-size: rem(24);
+		line-height: 150%;
+		letter-spacing: -0.03em;
+		color: $dark-purple;
+	}
+	&__text {
+		color: $purple;
+	}
+}
+
 .progress-task {
 	border-radius: rem(10);
 	width: 194px;
-	// height: 214px;
+	height: 214px;
 	background: $dark-purple;
 	color: $white;
 	padding: rem(20);
 	display: flex;
+
 	flex-direction: column;
 	justify-content: space-between;
 	cursor: pointer;
 	transition: box-shadow 0.3s ease 0s;
+	grid-column: 1;
+
+	@media (max-width: $l-dekstop) {
+		min-width: 327px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+		height: 124px;
+	}
+	@media (max-width: $dekstop) {
+		width: 327px;
+		min-width: 270px;
+	}
+	@media (max-width: 1180px) {
+		grid-column: 2;
+		grid-row: 1;
+		max-width: 290px;
+		justify-self: end;
+	}
+	@media (max-width: 580px) {
+		grid-row: 2;
+		grid-column: 1 / 3;
+		min-width: 100%;
+		justify-self: stretch;
+	}
 
 	&:hover {
 		box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -140,17 +216,30 @@ function selectOption(option) {
 		&__title {
 			font-weight: 600;
 			line-height: 150%;
+			
+			@media (max-width: $l-dekstop) {
+				grid-column: 1;
+			}
 		}
 		&__current {
 			font-weight: 600;
 			font-size: rem(32);
 			line-height: 150%;
 			letter-spacing: -0.03em;
+
+			@media (max-width: $l-dekstop) {
+				grid-column: 1;
+			}
 		}
 		&__all {
 			display: flex;
 			gap: rem(18);
 			align-items: center;
+
+			@media (max-width: $l-dekstop) {
+				grid-column: 2;
+				grid-row: 1 / 3;
+			}
 		}
 		&__progress {
 			position: relative;
@@ -182,7 +271,22 @@ function selectOption(option) {
 	background-color: $medium-white;
 	padding: rem(20);
 	border-radius: rem(10);
-	flex: 1 0 rem(462);
+	width: 462px;
+	grid-column: 2;
+	grid-row: 1 / 3;
+
+	@media (max-width: $l-dekstop){
+		width: 427px;
+	}
+	@media (max-width: 1310px){
+		width: 327px;
+	}
+	@media (max-width: 1180px) {
+		width: 100%;
+		grid-column: 1 / 3;
+		grid-row: 3 / 3;
+	}
+	
 	&__header {
 		display: flex;
 		justify-content: space-between;
@@ -247,6 +351,7 @@ function selectOption(option) {
 		border-radius: rem(10);
 		padding: rem(15);
 		cursor: pointer;
+		width: 100%;
 	}
 }
 ._icon-arrow-down {

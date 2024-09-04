@@ -7,6 +7,7 @@ const props = defineProps({
 		required: true,
 	}
 })
+
 const isFollow = ref(props.mentor.isFollow)
 const choiceFollow = () => {
 	isFollow.value = !isFollow.value

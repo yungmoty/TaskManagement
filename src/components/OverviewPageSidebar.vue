@@ -1,10 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import OverviewPageCalendar from '@/components/OverviewPageCalendar.vue';
+import { useTaskToday } from "@/hooks/useTaskToday";
 
-import { useNewTasks } from "@/hooks/useNewTasks";
-import UButton from './UI/UButton.vue';
-const { newTasks, fetchData, loadingTask } = useNewTasks()
+const { taskToday, fetchData, loadingTaskToday } = useTaskToday()
 const item = ref([])
 const receivedString = ref('');
 const isActive = ref(false)
@@ -22,14 +21,14 @@ onMounted(() => {
 		// const random = Math.floor(Math.random() * newTasks.value.length)
 		let currentDate = new Date();
 		let count = currentDate.getDate()
-		let maxLength = newTasks.value.length
+		let maxLength = taskToday.value.length
 		const tmp = Math.ceil(count / (maxLength - 1))
 
 		if (count > maxLength - 1) {
 			count -= (maxLength - 1) * (tmp - 1)
 		}
 
-		item.value.push(newTasks.value[count])		
+		item.value.push(taskToday.value[count])
 	}).catch(error => {
 		console.error(error)
 	});
@@ -57,17 +56,17 @@ onMounted(() => {
 					<span></span><span></span><span></span>
 				</div>
 			</div>
-			<div v-show="!loadingTask" class="current-task__task">
-				<UOverviewPageSlideTask
+			<div v-show="!loadingTaskToday" class="current-task__task">
+				<OverviewPageTaskToday
 					@string-sent="handleStringSent"
 					classToTaskToday="task-today"
-					:newTasks="newTasks"
-					v-for="newTask in item"
-					:newTask="newTask"
-					:key="newTask.id"
+					:useTaskToday="useTaskToday"
+					v-for="taskToday in item"
+					:taskToday="taskToday"
+					:key="taskToday.id"
 				/>
 			</div>
-			<div v-show="loadingTask" class="current-task__loading">
+			<div v-show="loadingTaskToday" class="current-task__loading">
 						<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
 					<circle fill="#546FFF" stroke="none" cx="6" cy="50" r="6">
 						<animateTransform 
@@ -130,17 +129,30 @@ onMounted(() => {
 @import '@/assets/scss/main.scss';
 
 .sidebar-menu {
-	background-color: $medium-white;
-	padding: rem(32);
+	width: 372px;
+	width: 100%;
+	display: grid;
+
+	@media (max-width: $laptop){
+		@include adaptiveValue(1000, 340, 1024, 'max-width');
+	}
+	@media (max-width: 400px){
+		@include adaptiveValue(460, 410, 410, 'max-width');
+	}
+
 	&__calendar {
 		margin-bottom: rem(32);
+		
+
+		@media (max-width: $laptop){
+			justify-self: center;
+		}
 	}
 	&__current-task {
 	}
 }
 .current-task {
 	background-color: $white;
-	width: 100%;
 	height: max-content;
 	border-radius: rem(10);
 	&__header {

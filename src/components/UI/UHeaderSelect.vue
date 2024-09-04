@@ -1,5 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+const selectedOption = ref('');
+const isOpen = ref(false);
+const select = ref(null);
+
 
 defineProps({
 	selectArr: {
@@ -11,15 +15,10 @@ defineProps({
 	isSort: Boolean,
 });
 
-const selectedOption = ref('');
-const isOpen = ref(false);
-const select = ref(null);
-
 function toggleDropdown() {
 isOpen.value = !isOpen.value;
 }
 
-// Закрыть меню при клике вне компонента
 function handleClickOutside(event) {
 	if (select.value && !select.value.contains(event.target)) {
 		isOpen.value = false;

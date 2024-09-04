@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 import Swiper from 'swiper';
 import { Navigation, Autoplay, Keyboard } from 'swiper/modules';
 import 'swiper/css';
@@ -11,31 +11,39 @@ const props = defineProps({
 })
 const nameSwiperSlider = props.nameSwiper
 const swiperSliderBtn = props.swiperBtn
+let swiperInstance = null;
 
-onMounted(() => {
+
+const updateSwiper = () => {
+	const slidesPerView = window.innerWidth <= 1150 ? 1 : 2;
+
+	if (swiperInstance) {
+		swiperInstance.destroy(); 
+	}
+
 	if (nameSwiperSlider === 'swiper1') {
-		const swiper = new Swiper(`.${nameSwiperSlider}`, {
-			modules: [Navigation, Autoplay, Keyboard],
-			navigation: {
-				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
-				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
-			},
-			slidesPerView: 2,
-			spaceBetween: 32,
-			keyboard: true,
-			autoplay: {
-				delay: 3000,
-				pauseOnMouseEnter: true,
-			}
+		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
+		modules: [Navigation, Autoplay, Keyboard],
+		navigation: {
+			nextEl: `.${swiperSliderBtn}.slider__btn-next`,
+			prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
+		},
+		slidesPerView: slidesPerView,
+		spaceBetween: 32,
+		keyboard: true,
+		autoplay: {
+			delay: 3000,
+			pauseOnMouseEnter: true,
+		},
 		});
 	} else {
-		const swiper = new Swiper(`.${nameSwiperSlider}`, {
+		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
 			modules: [Navigation, Autoplay, Keyboard],
 			navigation: {
 				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
 				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
 			},
-			slidesPerView: 2,
+			slidesPerView: slidesPerView,
 			spaceBetween: 32,
 			keyboard: true,
 			// autoplay: {
@@ -44,7 +52,22 @@ onMounted(() => {
 			// }
 		});
 	}
-})
+};
+
+onMounted(() => {
+	updateSwiper();
+	window.addEventListener('resize', updateSwiper);
+});
+
+onBeforeUnmount(() => {
+	if (swiperInstance) {
+		swiperInstance.destroy();
+	}
+	window.removeEventListener('resize', updateSwiper);
+});
+
+
+
 
 import { useMentors } from "@/hooks/useMentors";
 const { loading } = useMentors()
@@ -61,7 +84,7 @@ const { loading } = useMentors()
 				<div :class="swiperBtn" class="slider__btn-next _icon-arrow-down"></div>
 			</div>
 		</div>
-		<div :class="nameSwiper" class="slider__swiper swiper">
+		<div ref="swiperContainer" :class="nameSwiper" class="slider__swiper swiper">
 			<div v-show="loading" class="slider__loading">
 				<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
 					<circle fill="#546FFF" stroke="none" cx="6" cy="50" r="6">
@@ -104,7 +127,13 @@ const { loading } = useMentors()
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
 
+
 .slider {
+	// width: 752px;
+
+	@media (max-width: $l-dekstop){
+		// width: 805px;
+	}
 	&__header {
 		display: flex;
 		justify-content: space-between;

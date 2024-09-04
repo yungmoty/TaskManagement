@@ -1,15 +1,12 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import moment from 'moment';
-
-
 
 const currentWeekStart = ref(moment().startOf('week'));
 const today = moment();
 
+const isToday = computed(() => currentWeekStart.value.isSame(today, 'week'))
 
-const isToday = computed(() => currentWeekStart.value.isSame(today, 'week')
-)
 const days = computed(() => {
 	const weekStart = currentWeekStart.value.clone().startOf('week');
 	return Array.from({ length: 7 }, (_, i) => weekStart.clone().add(i, 'days'));
@@ -77,10 +74,20 @@ function goToCurrentDay() {
 @import '@/assets/scss/main.scss';
 
 .calendar {
+	// width: 100%;
 	width: 372px;
 	padding: rem(20);
 	background-color: $white;
 	border-radius: rem(10);
+
+	@media (max-width: $laptop){
+		width: 500px;
+		padding: rem(30);
+	}
+	@media (max-width: $mobile-sec-inter){
+		width: 372px;
+		padding: rem(20);
+	}
 	&__header {
 		display: flex;
 		justify-content: space-between;
@@ -97,6 +104,12 @@ function goToCurrentDay() {
 	&__title {
 		font-weight: 600;
 		font-size: rem(14);
+		@media (max-width: $laptop){
+			font-size: rem(18);
+		}
+		@media (max-width: $mobile-sec-inter){
+			font-size: rem(16);
+		}
 	}
 	&__today {
 		display: flex;

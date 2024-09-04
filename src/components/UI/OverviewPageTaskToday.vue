@@ -3,7 +3,7 @@ import { onMounted, ref, onBeforeUnmount } from 'vue'
 const loading = ref(false)
 
 const props = defineProps({
-	newTask: {
+	taskToday: {
 		type: Object,
 		required: true,
 	},
@@ -14,10 +14,11 @@ setTimeout(() => {
 	loading.value = true
 }, 500);
 
+
 const emit = defineEmits(['string-sent']);
 
 function sendString() {
-	const stringToSend = props.newTask.major;
+	const stringToSend = props.taskToday.major;
 	emit('string-sent', stringToSend);
 }
 
@@ -25,7 +26,7 @@ onMounted(() => {
 	sendString()
 })
 
-const progress = ref(props.newTask.progress);
+const progress = ref(props.taskToday.progress);
 const quotientProgress = ref(0.97);
 
 const updateQuotientProgress = () => {
@@ -52,7 +53,7 @@ onBeforeUnmount(() => {
 <template>
 	<div :class="classToTaskToday" class="swiper-slide task">
 		<a href="" class="task__image">
-			<img v-show="loading" :src="newTask.image" :alt="newTask.titleImage">
+			<img v-show="loading" :src="taskToday.image" :alt="taskToday.titleImage">
 			<div v-show="!loading" class="task__loading">
 						<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
 					<circle fill="#546FFF" stroke="none" cx="6" cy="50" r="6">
@@ -86,8 +87,8 @@ onBeforeUnmount(() => {
 			</div>
 		</a>
 		<a href="" class="task__info">
-			<div class="task__title">{{ newTask.titleImage }}</div>
-			<div class="task__major">{{ newTask.major }}</div>
+			<div class="task__title">{{ taskToday.titleImage }}</div>
+			<div class="task__major">{{ taskToday.major }}</div>
 		</a>
 		<div class="task__progress-bar">
 			<div class="task__progress">Progress</div>
@@ -102,23 +103,23 @@ onBeforeUnmount(() => {
 		<div class="task__bottom">
 			<div class="task__time">
 				<span class="_icon-clock"></span>
-				{{ newTask.timeLeft }}
+				{{ taskToday.timeLeft }}
 			</div>
 			<div class="task__contributors">
 				<a href="" class="task__contributor">
-					<img :src="newTask.contributor_1" alt="User">
+					<img :src="taskToday.contributor_1" alt="User">
 				</a>
 				<a href="" class="task__contributor">
-					<img :src="newTask.contributor_2" alt="User">
+					<img :src="taskToday.contributor_2" alt="User">
 				</a>
 				<a href="" class="task__contributor">
-					<img :src="newTask.contributor_3" alt="User">
+					<img :src="taskToday.contributor_3" alt="User">
 				</a>
 				<a href="" class="task__contributor">
-					<img :src="newTask.contributor_4" alt="User">
+					<img :src="taskToday.contributor_4" alt="User">
 				</a>
 				<a href="" class="task__contributor">
-					<img :src="newTask.contributor_5" alt="User">
+					<img :src="taskToday.contributor_5" alt="User">
 				</a>
 			</div>
 		</div>
@@ -138,6 +139,10 @@ onBeforeUnmount(() => {
 
 	&.task-today &__image {
 		height: 160px;
+
+		@media (max-width: $laptop){
+			@include adaptiveValue(300, 140, 1024, 'height');
+		}
 	}
 	&.task-today {
 		padding-top: rem(20);
@@ -153,9 +158,7 @@ onBeforeUnmount(() => {
 		@media (max-width: 1150px) {
 			height: 300px;
 		}
-		@media (max-width: $laptop){
-			@include adaptiveValue(300, 140, 1024, 'height');
-		}
+
 		&:hover img {
 			transform: scale(1.05);
 		}

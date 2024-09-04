@@ -1,17 +1,43 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch} from 'vue';
+import eventBus from '@/directives/eventBus';
+import { useMyStore } from '@/stores/counter';
+
 const route = useRoute();
 const currentPath = computed(() => route.path);
+const store = useMyStore();
+const drawerMenu = ref(null);
+let burgerMenu
+
+defineProps({
+	open: Boolean,
+})
+
+watch(() => eventBus.someEvent, (newValue) => {
+	burgerMenu = newValue
+});
 
 
+function handleClickOutside(event) {
+	if (drawerMenu.value && !drawerMenu.value.contains(event.target) && !burgerMenu.contains(event.target)) {
+		store.isTrue = false
+	}
+}
+
+onMounted(() => {
+	document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+	document.removeEventListener('click', handleClickOutside);
+});
 
 </script>
 
 
 <template>
-	<!-- <div class="main__container"> -->
-		<aside class="sidebar">
+		<aside ref="drawerMenu" :class="{_active: store.isTrue}" class="sidebar">
 			<div class="sidebar__logo">
 				<img src="@/assets/images/logo.svg" alt="Logo">
 			</div>
@@ -65,7 +91,6 @@ const currentPath = computed(() => route.path);
 				</div>
 			</div>
 		</aside>
-	<!-- </div> -->
 </template>
 
 
@@ -78,10 +103,35 @@ const currentPath = computed(() => route.path);
 	align-items: center;
 	flex-direction: column;
 	background-color: $white;
+	z-index: 5;
+	position: relative;
+	transition: all 0.3s ease 0s;
+
+	@media (max-width: $l-dekstop){
+		height: 100vh;
+		position: fixed;
+		overflow: auto;
+		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+		border-radius: rem(32) 0 0 rem(32);
+		top: 0;
+		right: -100%;
+		
+		&._active {
+			right: 0;
+		}
+	}
+	@media (max-width: $laptop-inter){
+		height: 100%;
+	}
 
 	&__logo {
 		margin-bottom: rem(60);
 		padding-top: rem(32);
+
+		@media (max-width: $laptop-inter){
+			margin-bottom: rem(25);
+			padding-top: rem(25);
+		}
 	}
 	&__body {
 		display: flex;
@@ -94,6 +144,9 @@ const currentPath = computed(() => route.path);
 		flex-direction: column;
 		gap: rem(24);
 
+		@media (max-width: $laptop-inter){
+			margin-bottom: rem(40);
+		}
 	}
 	&__link {
 		font-weight: 600;
@@ -135,6 +188,10 @@ const currentPath = computed(() => route.path);
 		background: $dark-purple;
 		z-index: 1;
 		margin-bottom: rem(32);
+
+		@media (max-width: $laptop-inter){
+			// display: none;
+		}
 	}
 	&__item {
 		&_circle-1 {
@@ -211,5 +268,4 @@ const currentPath = computed(() => route.path);
 		}
 	}
 }
-
 </style>
