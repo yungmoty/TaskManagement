@@ -15,7 +15,6 @@ const handleStringSent = (payload) => {
 	receivedString.value = payload;
 }
 
-
 onMounted(() => {
 	fetchData().then(() => {
 		// const random = Math.floor(Math.random() * newTasks.value.length)
@@ -32,6 +31,8 @@ onMounted(() => {
 	}).catch(error => {
 		console.error(error)
 	});
+
+
 })
 
 

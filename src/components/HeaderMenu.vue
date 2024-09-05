@@ -37,7 +37,8 @@ const toggleValue = () => {
 
 defineProps({
 	title: String,
-	isSearchBlock: Boolean
+	isSearchBlock: Boolean,
+	backgroundClass: String
 })
 
 onMounted(() => {
@@ -66,7 +67,7 @@ function performSearch(query) {
 
 
 <template>
-	<header class="header">
+	<header :class="backgroundClass" class="header">
 		<div class="header__top">
 			<div class="header__content">
 				<div class="header__title">{{ title }}</div>
@@ -119,7 +120,11 @@ function performSearch(query) {
 
 
 .header {
-	background-color: $white;
+	
+
+	&.backgroundClass {
+		background-color: $white;
+	}
 	&__top {
 		display: flex;
 		justify-content: space-between;

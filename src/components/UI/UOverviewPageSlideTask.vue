@@ -7,23 +7,11 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
-	classToTaskToday: String,
 })
 
 setTimeout(() => {
 	loading.value = true
 }, 500);
-
-const emit = defineEmits(['string-sent']);
-
-function sendString() {
-	const stringToSend = props.newTask.major;
-	emit('string-sent', stringToSend);
-}
-
-onMounted(() => {
-	sendString()
-})
 
 const progress = ref(props.newTask.progress);
 const quotientProgress = ref(0.97);
@@ -50,8 +38,8 @@ onBeforeUnmount(() => {
 
 
 <template>
-	<transition-group name="task-list">
-	<div :key="newTask.id" :class="classToTaskToday" class="swiper-slide task">
+	<!-- <transition-group name="task-list"> -->
+	<div :key="newTask.id" class="swiper-slide task">
 		<a href="" class="task__image">
 			<img v-show="loading" :src="newTask.image" :alt="newTask.titleImage">
 			<div v-show="!loading" class="task__loading">
@@ -124,7 +112,7 @@ onBeforeUnmount(() => {
 			</div>
 		</div>
 	</div>
-</transition-group>
+<!-- </transition-group> -->
 </template>
 
 
@@ -133,19 +121,16 @@ onBeforeUnmount(() => {
 
 .swiper-slide {
 	width: 361px;
-	margin-right: 36px;
+
+	&:not(:last-child) {
+		margin-right: 36px;
+	}
 }
 .task {
 	padding: rem(24);
 	background-color: $white;
 	border-radius: rem(10);
 
-	&.task-today &__image {
-		height: 160px;
-	}
-	&.task-today {
-		padding-top: rem(20);
-	}
 	&__image {
 		display: flex;
 		justify-content: center;
@@ -277,20 +262,20 @@ onBeforeUnmount(() => {
 		transition: left 0.4s ease;
 	}
 }
-.task-list-item {
-	display: inline-block;
-	margin-right: 10px;
-}
-.task-list-enter-active,
-.task-list-leave-active {
-	transition: all 0.4s ease 0s;
-}
-.task-list-enter-from,
-.task-list-leave-to {
-	opacity: 0;
-	transform: translateX(130px);
-}
-.task-list-move {
-	transition: transform 0.4s ease 0s;
-}
+// .task-list-item {
+// 	display: inline-block;
+// 	margin-right: 10px;
+// }
+// .task-list-enter-active,
+// .task-list-leave-active {
+// 	transition: all 0.4s ease 0s;
+// }
+// .task-list-enter-from,
+// .task-list-leave-to {
+// 	opacity: 0;
+// 	transform: translateX(130px);
+// }
+// .task-list-move {
+// 	transition: transform 0.4s ease 0s;
+// }
 </style>

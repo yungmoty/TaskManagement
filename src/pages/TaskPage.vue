@@ -71,6 +71,7 @@ const	sortedAndSearchedTasksToday = computed(() => {
 				@send-option="choiceOption"
 				title="Explore Task"
 				:isSearchBlock="true"
+				backgroundClass="backgroundClass"
 			/>
 			<div class="page__task-limit">
 				<TaskPageTimeLimit
