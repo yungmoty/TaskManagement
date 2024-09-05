@@ -1,22 +1,38 @@
 <script setup>
+import { ref } from 'vue'
 const model = defineModel()
 
 defineProps({
 	placeholder: String,
 })
 
+const emit = defineEmits(['search']);
+
+
+const query = ref('');
+
+function searchClick() {
+	emit('search', query.value);
+}
+function searchKeydown(event) {
+	if (event.key === 'Enter') {
+		event.preventDefault();
+		searchClick();
+	}
+}
 </script>
 
 
 <template>
 	<div class="input-search">
 		<input 
-			v-model="model"
+			v-model="query"
 			class="input-search__input" 
 			type="text" 
 			:placeholder="placeholder"
+			@keydown="searchKeydown"
 		>
-		<div class="input-search__icon _icon-search"></div>
+		<div @click="searchClick" class="input-search__icon _icon-search"></div>
 	</div>
 </template>
 
@@ -38,7 +54,7 @@ defineProps({
 	&__input {
 		width: 100%;
 		color: $dark-purple;
-
+		background-color: inherit;
 	}
 	&__icon {
 		display: flex;

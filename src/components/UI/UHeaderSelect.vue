@@ -5,7 +5,7 @@ const isOpen = ref(false);
 const select = ref(null);
 
 
-defineProps({
+const props = defineProps({
 	selectArr: {
 		type: Array,
 		required: true,
@@ -33,15 +33,19 @@ onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
 });
 
+const emit = defineEmits(['update:selectedOption']);
+
 function selectOption(option) {
 	selectedOption.value = ':' + ' ' + option;
 	if (selectedOption.value === ':' + ' ' + 'None') selectedOption.value = ''
 	isOpen.value = false;
+	emit('update:selectedOption', option);
 }
 </script>
 
 <template>
 	<div 
+		
 		class="select" 
 		ref="select" 
 		:class="{ _active: isOpen }"
@@ -56,9 +60,11 @@ function selectOption(option) {
 			<div v-if="isSort">{{ selectedOption }}</div>
 		</a>
 		<div class="select__items">
-			<a href=""
+			<a 
+				href=""
 				v-for="item in selectArr"
 				:key="item"
+				:value="item"
 				class="select__item"
 				@click.prevent="selectOption(item)"
 			>

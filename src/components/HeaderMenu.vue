@@ -1,24 +1,29 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useMyStore } from '@/stores/counter';
 import eventBus from '@/directives/eventBus';
 
 const sortIcon = ref('_icon-sort')
 const categoryIcon = ref('_icon-category')
-const task = ref('')
+const searchTask = ref('')
+
 const categoryArr = ref([
 	'Developer',
 	'Design',
-	'None',
+	'None'
 ])
 const sortArr = ref([
 	'Popular',
 	'Deadline',
-	'None',
+	'None'
 ])
+const selectedCategory = ref('')
+const selectedSort = ref('')
+
 const burgerMenu = ref(null)
 const bodyClass = ref(false);
 const store = useMyStore();
+
 const toggleValue = () => {
 	store.toggleValue();
 
@@ -38,6 +43,25 @@ defineProps({
 onMounted(() => {
 	eventBus.someEvent = burgerMenu.value;
 });
+
+
+function selectedCategoryOption(option) {
+	selectedCategory.value = option;
+}
+function selectedSortOption(option) {
+	selectedSort.value = option
+}
+
+const emit = defineEmits()
+
+const sendData = () => {
+	emit('send-option', selectedCategory.value, selectedSort.value, searchTask.value)
+}
+watch(sendData, () => {})
+
+function performSearch(query) {
+	searchTask.value = query
+}
 </script>
 
 
@@ -65,18 +89,20 @@ onMounted(() => {
 		<div v-if="isSearchBlock" class="header__bottom">
 			<div class="header__search">
 				<UInput 
-					v-model="task"
+					@search="performSearch"
 					type="text" 
 					placeholder="Search Task"
 				/>
 			</div>
 			<div class="header__sorted">
 				<UHeaderSelect 
+					@update:selectedOption="selectedCategoryOption"
 					selectTitle="Category" 
 					:iconClass="categoryIcon" 
 					:selectArr="categoryArr"
 				/>
 				<UHeaderSelect 
+					@update:selectedOption="selectedSortOption"
 					selectTitle="Sort By" 
 					:iconClass="sortIcon" 
 					:selectArr="sortArr"
@@ -93,7 +119,7 @@ onMounted(() => {
 
 
 .header {
-
+	background-color: $white;
 	&__top {
 		display: flex;
 		justify-content: space-between;

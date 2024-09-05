@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 import OverviewPageCalendar from '@/components/OverviewPageCalendar.vue';
 import { useTaskToday } from "@/hooks/useTaskToday";
 
-const { taskToday, fetchData, loadingTaskToday } = useTaskToday()
+const { tasksToday, fetchData, loadingTaskToday } = useTaskToday()
 const item = ref([])
 const receivedString = ref('');
 const isActive = ref(false)
@@ -21,14 +21,14 @@ onMounted(() => {
 		// const random = Math.floor(Math.random() * newTasks.value.length)
 		let currentDate = new Date();
 		let count = currentDate.getDate()
-		let maxLength = taskToday.value.length
+		let maxLength = tasksToday.value.length
 		const tmp = Math.ceil(count / (maxLength - 1))
 
 		if (count > maxLength - 1) {
 			count -= (maxLength - 1) * (tmp - 1)
 		}
 
-		item.value.push(taskToday.value[count])
+		item.value.push(tasksToday.value[count])
 	}).catch(error => {
 		console.error(error)
 	});
@@ -57,7 +57,7 @@ onMounted(() => {
 				</div>
 			</div>
 			<div v-show="!loadingTaskToday" class="current-task__task">
-				<OverviewPageTaskToday
+				<UOverviewPageTaskToday
 					@string-sent="handleStringSent"
 					classToTaskToday="task-today"
 					:useTaskToday="useTaskToday"

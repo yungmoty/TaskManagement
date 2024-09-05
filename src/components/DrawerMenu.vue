@@ -45,14 +45,15 @@ onUnmounted(() => {
 				<div class="sidebar__navigation">
 					<div 
 						:class="{_active : currentPath === '/'}" 
-						@click="$router.push('/')" 
+						@click="$router.push('/')"
 						class="sidebar__link"
 					>
 						<span class="_icon-overview"></span>
 						Overview
 					</div>
 					<div 
-						:class="{_active : currentPath === '/task'}" 
+						:class="{_active : currentPath === '/task'}"
+						@click="$router.push('/task')"
 						class="sidebar__link"
 					>
 						<span class="_icon-task"></span>
@@ -99,6 +100,7 @@ onUnmounted(() => {
 
 .sidebar {
 	width: 252px;
+	height: 100vh;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
@@ -108,7 +110,6 @@ onUnmounted(() => {
 	transition: all 0.3s ease 0s;
 
 	@media (max-width: $l-dekstop){
-		height: 100vh;
 		position: fixed;
 		overflow: auto;
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;

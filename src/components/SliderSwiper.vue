@@ -36,6 +36,23 @@ const updateSwiper = () => {
 			pauseOnMouseEnter: true,
 		},
 		});
+	} else if (nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4') {
+			swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
+			modules: [Navigation, Autoplay, Keyboard],
+			navigation: {
+				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
+				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
+			},
+			slidesPerView: 3,
+			spaceBetween: 32,
+			keyboard: true,
+			// autoplay: {
+			// 	delay: 1500,
+			// 	pauseOnMouseEnter: true,
+			// 	reverseDirection: true
+			// },
+			// loop: true,
+		});
 	} else {
 		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
 			modules: [Navigation, Autoplay, Keyboard],

@@ -51,7 +51,8 @@ onBeforeUnmount(() => {
 
 
 <template>
-	<div :class="classToTaskToday" class="swiper-slide task">
+<transition-group name="task-list">
+	<div :key="taskToday.id" :class="classToTaskToday" class="swiper-slide task">
 		<a href="" class="task__image">
 			<img v-show="loading" :src="taskToday.image" :alt="taskToday.titleImage">
 			<div v-show="!loading" class="task__loading">
@@ -124,6 +125,7 @@ onBeforeUnmount(() => {
 			</div>
 		</div>
 	</div>
+</transition-group>
 </template>
 
 
@@ -131,12 +133,13 @@ onBeforeUnmount(() => {
 @import '@/assets/scss/main.scss';
 
 .swiper-slide {
+	width: 361px;
+	margin-right: 36px;
 }
 .task {
 	padding: rem(24);
 	background-color: $white;
 	border-radius: rem(10);
-
 	&.task-today &__image {
 		height: 160px;
 
@@ -276,5 +279,20 @@ onBeforeUnmount(() => {
 		transition: left 0.4s ease;
 	}
 }
-
+.task-list-item {
+	display: inline-block;
+	margin-right: 10px;
+}
+.task-list-enter-active,
+.task-list-leave-active {
+	transition: all 0.4s ease 0s;
+}
+.task-list-enter-from,
+.task-list-leave-to {
+	opacity: 0;
+	transform: translateX(130px);
+}
+.task-list-move {
+	transition: transform 0.4s ease 0s;
+}
 </style>
