@@ -65,13 +65,13 @@ const	sortedAndSearchedTasksToday = computed(() => {
 
 <template>
 	<div class="page">
-		<DrawerMenu />
+		<DrawerMenu pageClass="task-page" />
 		<div class="page__content">
 			<HeaderMenu 
 				@send-option="choiceOption"
 				title="Explore Task"
+				pageClass="task-page"
 				:isSearchBlock="true"
-				backgroundClass="backgroundClass"
 			/>
 			<div class="page__task-limit">
 				<TaskPageTimeLimit
@@ -99,6 +99,24 @@ const	sortedAndSearchedTasksToday = computed(() => {
 	&__content {
 		background-color: $light-white;
 		max-width: 1212px;
+		margin: 0 auto;
+
+
+		@media (max-width: $l-dekstop) {
+			@include adaptiveValue(1212, 200, 1470, 'max-width');
+		}
+		@media (max-width: 1300px) {
+			padding-left: 20px;
+		}
+		@media (max-width: 1279px) {
+			padding-left: 0;
+		}
+		@media (max-width: $dekstop) {
+			max-width: 100vw;
+		}
+		@media (max-width: $tablet) {
+			// @include adaptiveValue(744, 500, 744, 'max-width');
+		}
 	}
 	&__task-limit {
 		padding: rem(32);

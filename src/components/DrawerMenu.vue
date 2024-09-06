@@ -12,6 +12,7 @@ let burgerMenu
 
 defineProps({
 	open: Boolean,
+	pageClass: String,
 })
 
 watch(() => eventBus.someEvent, (newValue) => {
@@ -37,7 +38,7 @@ onUnmounted(() => {
 
 
 <template>
-		<aside ref="drawerMenu" :class="{_active: store.isTrue}" class="sidebar">
+		<aside ref="drawerMenu" :class="[{_active: store.isTrue}, pageClass]" class="sidebar">
 			<div class="sidebar__logo">
 				<img src="@/assets/images/logo.svg" alt="Logo">
 			</div>
@@ -109,21 +110,41 @@ onUnmounted(() => {
 	position: relative;
 	transition: all 0.3s ease 0s;
 
-	@media (max-width: $l-dekstop){
-		position: fixed;
-		overflow: auto;
-		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-		border-radius: rem(32) 0 0 rem(32);
-		top: 0;
-		right: -100%;
-		
-		&._active {
-			right: 0;
+	&.overview-page {
+		@media (max-width: $l-dekstop){
+			position: fixed;
+			overflow: auto;
+			box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+			border-radius: rem(32) 0 0 rem(32);
+			top: 0;
+			right: -100%;
+			
+			&._active {
+				right: 0;
+			}
+		}
+		@media (max-width: $laptop-inter){
+			height: 100%;
 		}
 	}
-	@media (max-width: $laptop-inter){
-		height: 100%;
+	&.task-page {
+		@media (max-width: $dekstop) {
+			position: fixed;
+			overflow: auto;
+			box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+			border-radius: rem(32) 0 0 rem(32);
+			top: 0;
+			right: -100%;
+			
+			&._active {
+				right: 0;
+			}
+		}
+		@media (max-width: $laptop-inter){
+			height: 100%;
+		}
 	}
+
 
 	&__logo {
 		margin-bottom: rem(60);

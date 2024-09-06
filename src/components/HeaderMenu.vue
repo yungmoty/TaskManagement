@@ -38,7 +38,7 @@ const toggleValue = () => {
 defineProps({
 	title: String,
 	isSearchBlock: Boolean,
-	backgroundClass: String
+	pageClass: String,
 })
 
 onMounted(() => {
@@ -51,6 +51,10 @@ function selectedCategoryOption(option) {
 }
 function selectedSortOption(option) {
 	selectedSort.value = option
+}
+const isActiveOption = ref(false)
+const activeOption = () => {
+	isActiveOption.value = !isActiveOption.value
 }
 
 const emit = defineEmits()
@@ -67,7 +71,7 @@ function performSearch(query) {
 
 
 <template>
-	<header :class="backgroundClass" class="header">
+	<header :class="pageClass" class="header">
 		<div class="header__top">
 			<div class="header__content">
 				<div class="header__title">{{ title }}</div>
@@ -95,6 +99,26 @@ function performSearch(query) {
 					placeholder="Search Task"
 				/>
 			</div>
+			<div :class="{_active: isActiveOption}" @click="activeOption" class="header__choice-sort">
+				<div class="_icon-options"></div>
+						<div class="header__options">
+					<UHeaderSelect
+						class="header__option"
+						@update:selectedOption="selectedCategoryOption"
+						selectTitle="Category" 
+						:iconClass="categoryIcon" 
+						:selectArr="categoryArr"
+					/>
+					<UHeaderSelect 
+						class="header__option"
+						@update:selectedOption="selectedSortOption"
+						selectTitle="Sort By" 
+						:iconClass="sortIcon" 
+						:selectArr="sortArr"
+						:isSort="true"
+					/>
+				</div>
+			</div>
 			<div class="header__sorted">
 				<UHeaderSelect 
 					@update:selectedOption="selectedCategoryOption"
@@ -111,6 +135,7 @@ function performSearch(query) {
 				/>
 			</div>
 		</div>
+
 	</header>
 </template>
 
@@ -120,9 +145,18 @@ function performSearch(query) {
 
 
 .header {
-	
 
-	&.backgroundClass {
+	&.overview-page &__content {
+		@media (max-width: $l-dekstop){
+			display: none;
+		}
+	}
+	&.task-page &__content {
+		@media (max-width: $dekstop){
+			display: none;
+		}
+	}
+	&.task-page {
 		background-color: $white;
 	}
 	&__top {
@@ -132,9 +166,6 @@ function performSearch(query) {
 	}
 	&__content {
 
-		@media (max-width: $l-dekstop){
-		display: none;
-		}
 	}
 	&__title {
 		font-weight: 600;
@@ -171,10 +202,55 @@ function performSearch(query) {
 	}
 	&__search {
 	}
+	&__choice-sort {
+		display: none;
+		font-size: rem(24);
+		padding: rem(14);
+		justify-content: center;
+		align-items: center;
+		border: 1px solid $medium-white;
+		border-radius: rem(10);
+		color: $light-purple;
+		transition: all 0.3s ease 0s;
+
+		&._active {
+			background-color: $light-blue;
+			color: $purple;
+		}
+		@media (max-width: $tablet){
+			display: flex;
+		}
+		&._active .header__options{
+			display: flex;
+		}
+	}
+	&__options {
+		position: absolute;
+		width: 400px;
+		height: 88px;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: rgba(255, 255, 255, 0.9);
+		z-index: 50;
+		display: none;
+		align-items: center;
+		justify-content: center;
+		gap: rem(10);
+		border-radius: rem(10);
+	}
+
+	&__option {
+		background-color: $white;
+		border-radius: rem(10);
+	}
 	&__sorted {
 		display: flex;
 		gap: rem(24);
 
+		@media (max-width: $tablet){
+			display: none;
+		}
 	}
 }
 ._icon-notification {
@@ -182,20 +258,35 @@ function performSearch(query) {
 	transition: all 0.3s ease 0s;
 	font-size: rem(22);
 }
+.header.overview-page .menu__icon {
+	@media (max-width: $l-dekstop) {
+		display: inline-block;
+		cursor: pointer;
+		z-index: 5;
+		width: 52px;
+		height: 52px;
+		border: 1px solid $medium-white;
+		border-radius: 50%;
+		padding: 13px;
+	}
+}
+.header.task-page .menu__icon {
+	@media (max-width: $dekstop) {
+		display: inline-block;
+		cursor: pointer;
+		z-index: 5;
+		width: 52px;
+		height: 52px;
+		border: 1px solid $medium-white;
+		border-radius: 50%;
+		padding: 13px;
+	}
+}
 
 .menu {
 	&__icon {
 		display: none;
-		@media (max-width: $l-dekstop) {
-			display: inline-block;
-			cursor: pointer;
-			z-index: 5;
-			width: 52px;
-			height: 52px;
-			border: 1px solid $medium-white;
-			border-radius: 50%;
-			padding: 13px;
-		}
+
 		&._active .menu__wrap:nth-child(1) {
 			width: 50%;
 		}

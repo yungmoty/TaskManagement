@@ -17,12 +17,13 @@ const { newTasks } = useNewTasks()
 
 <template>
 	<div class="page">
-		<DrawerMenu />
+		<DrawerMenu pageClass="overview-page" />
 		<div class="main-content">
 			<div class="main-wrapper">
 				<HeaderMenu 
 					title="Hi, Dennis Nzioki"
 					:isSearchBlock="false"
+					pageClass="overview-page"
 				>
 					<span class="header__text">Let's finish your task today!</span>
 				</HeaderMenu>

@@ -16,7 +16,6 @@ export function useNewTasks() {
 			loadingTask.value = false;
 		}
 	}
-
 	onMounted(fetchData)
 	return {
 		newTasks,

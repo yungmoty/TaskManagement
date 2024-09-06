@@ -44,8 +44,7 @@ function selectOption(option) {
 </script>
 
 <template>
-	<div 
-		
+	<div 	
 		class="select" 
 		ref="select" 
 		:class="{ _active: isOpen }"
@@ -74,7 +73,7 @@ function selectOption(option) {
 	</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/assets/scss/main.scss';
 
 .select {
@@ -91,18 +90,22 @@ function selectOption(option) {
 	&__link {
 		padding: rem(14) rem(28);
 		display: flex;
-		border: 1px solid #f5f5f7;
+		border: 1px solid $medium-white;
 		border-radius: rem(10);
 		align-items: center;
 		transition: all 0.3s ease 0s;
 		font-weight: 600;
 		font-size: rem(13);
+		background-color: inherit;
 
-		&:hover {
-		background-color: $light-blue;
-		}
-		&:hover span {
-			color: $purple;
+
+		@media (any-hover: hover){
+			&:hover {
+			background-color: $light-blue;
+			}
+			&:hover span {
+				color: $purple;
+			}
 		}
 	}
 	&__icon {
@@ -142,6 +145,7 @@ function selectOption(option) {
 	}
 	&._active &__link {
 		background-color: $light-blue;
+		border: 1px solid $light-blue;
 	}
 	&._active span {
 		color: $purple;

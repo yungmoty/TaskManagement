@@ -1,35 +1,41 @@
 <script setup>
 import SliderSwiper from '@/components/SliderSwiper.vue';
-
-// defineProps({
-// 	tasksToday: {
-// 		type: Array,
-// 		required: true
-// 	},
-// })
-
-import { onMounted, ref, onBeforeUnmount } from 'vue'
+import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
 const loading = ref(false)
 
-defineProps({
+const props = defineProps({
 	tasksToday: {
 		type: Array,
 		required: true
 	},
 })
 
-setTimeout(() => {
-	loading.value = true
-}, 500);
 
-const quotientProgress = ref(0.97);
+const slidesCountLimitTask = ref(0);
+let timer;
+
+const startLoading = () => {
+	if (timer) {
+		clearTimeout(timer);
+	}
+	timer = setTimeout(() => {
+		loading.value = true;
+	}, 500);
+};
+
+watch(() => props.tasksToday, (taskToday) => {
+	slidesCountLimitTask.value = taskToday.length;
+});
+watch(() => slidesCountLimitTask.value, () => {
+	loading.value = false;
+	startLoading();
+});
+
+
+const quotientProgress = ref(0.95);
 
 const updateQuotientProgress = () => {
-	if (window.innerWidth > 1024) {
-		quotientProgress.value = 0.97;
-	} else if (window.innerWidth <= 1024) {
-		quotientProgress.value = 0.99;
-	} else if (window.innerWidth <= 700) {
+	if (window.innerWidth < 1024) {
 		quotientProgress.value = 0.97;
 	}
 };
@@ -50,6 +56,7 @@ onBeforeUnmount(() => {
 		nameSwiper="swiper3" 
 		swiperBtn="swiper3-btn" 
 		sliderTitle="Time Limit"
+		:slidesCountLimitTask="slidesCountLimitTask"
 	>
 		<transition-group name="task-list">
 			<!-- <UOverviewPageTaskToday
@@ -153,27 +160,17 @@ onBeforeUnmount(() => {
 	padding: rem(24);
 	background-color: $white;
 	border-radius: rem(10);
-	&.task-today &__image {
-		height: 160px;
 
-		@media (max-width: $laptop){
-			@include adaptiveValue(300, 140, 1024, 'height');
-		}
-	}
-	&.task-today {
-		padding-top: rem(20);
-		width: 100%;
-	}
 	&__image {
 		display: flex;
 		justify-content: center;
 		height: 110px;
 
-		@media (max-width: $l-dekstop){
+		@media (max-width: $dekstop){
 			height: 140px;
 		}
-		@media (max-width: 1150px) {
-			height: 300px;
+		@media (max-width: $tablet){
+			height: 240px;
 		}
 
 		&:hover img {

@@ -1,36 +1,43 @@
 <script setup>
 import SliderSwiper from '@/components/SliderSwiper.vue';
-// defineProps({
-// 	newTasks: {
-// 		type: Array,
-// 		required: true
-// 	},
-// })
-import { onMounted, ref, onBeforeUnmount } from 'vue'
+import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
 const loading = ref(false)
 
-defineProps({
+const props = defineProps({
 	newTasks: {
 		type: Array,
 		required: true
 	},
 })
 
+const slidesCountNewTask = ref(0);
+let timer;
+
+const startLoading = () => {
+	if (timer) {
+		clearTimeout(timer);
+	}
+	timer = setTimeout(() => {
+		loading.value = true;
+	}, 500);
+};
+
+watch(() => props.newTasks, (newTasks) => {
+	slidesCountNewTask.value = newTasks.length;
+});
+watch(() => slidesCountNewTask.value, () => {
+	loading.value = false;
+	startLoading();
+});
 
 
-setTimeout(() => {
-	loading.value = true
-}, 500);
 
 
-const quotientProgress = ref(0.97);
+
+const quotientProgress = ref(0.95);
 
 const updateQuotientProgress = () => {
-	if (window.innerWidth > 1024) {
-		quotientProgress.value = 0.97;
-	} else if (window.innerWidth <= 1024) {
-		quotientProgress.value = 0.99;
-	} else if (window.innerWidth <= 700) {
+	if (window.innerWidth < 1024) {
 		quotientProgress.value = 0.97;
 	}
 };
@@ -52,13 +59,9 @@ onBeforeUnmount(() => {
 		nameSwiper="swiper4" 
 		swiperBtn="swiper4-btn" 
 		sliderTitle="New Task"
+		:slidesCountNewTask="slidesCountNewTask"
 	>
 		<transition-group name="task-list">
-			<!-- <UOverviewPageSlideTask
-				v-for="newTask in newTasks"
-				:newTask="newTask"
-				:key="newTask.id"
-			/> -->
 			<div
 				v-for="newTask in newTasks"
 				:key="newTask.id"
@@ -161,15 +164,13 @@ onBeforeUnmount(() => {
 		justify-content: center;
 		height: 110px;
 
-		@media (max-width: $l-dekstop){
+		@media (max-width: $dekstop){
 			height: 140px;
 		}
-		@media (max-width: 1150px) {
-			height: 300px;
+		@media (max-width: $tablet){
+			height: 240px;
 		}
-		@media (max-width: $laptop){
-			@include adaptiveValue(300, 140, 1024, 'height');
-		}
+
 		&:hover img {
 			transform: scale(1.05);
 		}

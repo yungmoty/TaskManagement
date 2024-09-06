@@ -1,21 +1,47 @@
 <script setup>
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, ref, watch  } from 'vue'
 import Swiper from 'swiper';
-import { Navigation, Autoplay, Keyboard } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
 const props = defineProps({
 	sliderTitle: String,
 	nameSwiper: String,
 	swiperBtn: String,
+	slidesCountNewTask: Number,
+	slidesCountLimitTask: Number,
 })
 const nameSwiperSlider = props.nameSwiper
 const swiperSliderBtn = props.swiperBtn
 let swiperInstance = null;
+const swiperContainer = ref(null)
 
+
+const keyboardFlip = () => {
+	let isHovered = false;
+
+	swiperContainer.value.addEventListener('mouseenter', () => { isHovered = true });
+
+	swiperContainer.value.addEventListener('mouseleave', () => { isHovered = false });
+	
+
+	document.addEventListener('keydown', (event) => {
+		if (isHovered) {
+			if (event.key === 'ArrowLeft') {
+				swiperInstance.slidePrev();
+			} else if (event.key === 'ArrowRight') {
+				swiperInstance.slideNext();
+			}
+		}
+	});
+}
 
 const updateSwiper = () => {
-	const slidesPerView = window.innerWidth <= 1150 ? 1 : 2;
+	const slidesPerViewOverviewPage = window.innerWidth <= 1150 ? 1 : 2;
+	const slidesPerViewTaskPage = window.innerWidth > 1024 ? 3 : window.innerWidth > 744 ? 2 : 1;
+
+
+
 
 	if (swiperInstance) {
 		swiperInstance.destroy(); 
@@ -23,14 +49,13 @@ const updateSwiper = () => {
 
 	if (nameSwiperSlider === 'swiper1') {
 		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
-		modules: [Navigation, Autoplay, Keyboard],
+		modules: [Navigation, Autoplay],
 		navigation: {
 			nextEl: `.${swiperSliderBtn}.slider__btn-next`,
 			prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
 		},
-		slidesPerView: slidesPerView,
+		slidesPerView: slidesPerViewOverviewPage,
 		spaceBetween: 32,
-		keyboard: true,
 		autoplay: {
 			delay: 3000,
 			pauseOnMouseEnter: true,
@@ -38,41 +63,36 @@ const updateSwiper = () => {
 		});
 	} else if (nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4') {
 			swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
-			modules: [Navigation, Autoplay, Keyboard],
+			modules: [Navigation, Autoplay],
 			navigation: {
-				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
-				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
+				nextEl:
+					props.slidesCountNewTask > 3 ?`.${swiperSliderBtn}.slider__btn-next` : ''
+					||
+					props.slidesCountLimitTask > 3 ?`.${swiperSliderBtn}.slider__btn-next` : '',
+				prevEl:
+					props.slidesCountNewTask > 3 ?`.${swiperSliderBtn}.slider__btn-prev` : ''
+					||
+					props.slidesCountLimitTask > 3 ?`.${swiperSliderBtn}.slider__btn-prev` : '',
 			},
-			slidesPerView: 3,
+			slidesPerView: slidesPerViewTaskPage,
 			spaceBetween: 32,
-			keyboard: true,
-			// autoplay: {
-			// 	delay: 1500,
-			// 	pauseOnMouseEnter: true,
-			// 	reverseDirection: true
-			// },
-			// loop: true,
 		});
 	} else {
 		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
-			modules: [Navigation, Autoplay, Keyboard],
+			modules: [Navigation, Autoplay],
 			navigation: {
 				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
 				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
 			},
-			slidesPerView: slidesPerView,
+			slidesPerView: slidesPerViewOverviewPage,
 			spaceBetween: 32,
-			keyboard: true,
-			// autoplay: {
-			// 	delay: 1500,
-			// 	pauseOnMouseEnter: true,
-			// }
 		});
 	}
 };
 
 onMounted(() => {
-	updateSwiper();
+	updateSwiper()
+	keyboardFlip()
 	window.addEventListener('resize', updateSwiper);
 });
 
@@ -83,7 +103,12 @@ onBeforeUnmount(() => {
 	window.removeEventListener('resize', updateSwiper);
 });
 
-
+watch(() => props.slidesCountNewTask, () => {
+	updateSwiper();
+});
+watch(() => props.slidesCountLimitTask, () => {
+	updateSwiper();
+},);
 
 
 import { useMentors } from "@/hooks/useMentors";
