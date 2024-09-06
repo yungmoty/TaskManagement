@@ -98,7 +98,7 @@ const	sortedAndSearchedTasksToday = computed(() => {
 	grid-template-columns: 17.5% 1fr;
 	&__content {
 		background-color: $light-white;
-		max-width: 1212px;
+		width: 1212px;
 		margin: 0 auto;
 
 
@@ -112,10 +112,13 @@ const	sortedAndSearchedTasksToday = computed(() => {
 			padding-left: 0;
 		}
 		@media (max-width: $dekstop) {
-			max-width: 100vw;
+			@include adaptiveValue(1280, 300, 1280, 'min-width');
 		}
 		@media (max-width: $tablet) {
-			// @include adaptiveValue(744, 500, 744, 'max-width');
+			@include adaptiveValue(744, 320, 744, 'max-width');
+		}
+		@media (max-width: 375px) {
+			@include adaptiveValue(375, 420, 375, 'max-width');
 		}
 	}
 	&__task-limit {

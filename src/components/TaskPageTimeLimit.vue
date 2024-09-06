@@ -59,11 +59,6 @@ onBeforeUnmount(() => {
 		:slidesCountLimitTask="slidesCountLimitTask"
 	>
 		<transition-group name="task-list">
-			<!-- <UOverviewPageTaskToday
-				v-for="taskToday in tasksToday"
-				:taskToday="taskToday"
-				:key="taskToday.id"
-			/> -->
 			<div
 				v-for="taskToday in tasksToday"
 				:key="taskToday.id"
@@ -171,6 +166,9 @@ onBeforeUnmount(() => {
 		}
 		@media (max-width: $tablet){
 			height: 240px;
+		}
+		@media (max-width: $mobile-inter) {
+			height: 140px;
 		}
 
 		&:hover img {

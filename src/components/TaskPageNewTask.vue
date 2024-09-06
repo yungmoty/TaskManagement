@@ -170,6 +170,9 @@ onBeforeUnmount(() => {
 		@media (max-width: $tablet){
 			height: 240px;
 		}
+		@media (max-width: $mobile-inter) {
+			height: 140px;
+		}
 
 		&:hover img {
 			transform: scale(1.05);

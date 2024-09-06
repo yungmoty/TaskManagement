@@ -44,7 +44,7 @@ function selectOption(option) {
 </script>
 
 <template>
-	<div 	
+	<div
 		class="select" 
 		ref="select" 
 		:class="{ _active: isOpen }"
