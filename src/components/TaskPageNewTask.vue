@@ -1,6 +1,7 @@
 <script setup>
 import SliderSwiper from '@/components/SliderSwiper.vue';
 import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
+
 const loading = ref(false)
 
 const props = defineProps({
@@ -51,6 +52,14 @@ onBeforeUnmount(() => {
 	window.removeEventListener('resize', updateQuotientProgress);
 });
 
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+
+const navigateToDetail = (taskId) => {
+	router.push({ name: 'task-detail', params: { id: taskId } });
+};
 </script>
 
 
@@ -67,7 +76,7 @@ onBeforeUnmount(() => {
 				:key="newTask.id"
 				class="swiper-slide task"
 			>
-				<a href="" class="task__image">
+				<a @click.prevent="navigateToDetail(newTask.id)" href="" class="task__image">
 					<img v-show="loading" :src="newTask.image" :alt="newTask.titleImage">
 					<div v-show="!loading" class="task__loading">
 						<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">

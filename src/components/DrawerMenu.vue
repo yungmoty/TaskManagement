@@ -34,6 +34,7 @@ onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
 });
 
+const taskDetailPattern = /^\/task-detail\/\d+$/
 </script>
 
 
@@ -53,7 +54,7 @@ onUnmounted(() => {
 						Overview
 					</div>
 					<div 
-						:class="{_active : currentPath === '/task'}"
+						:class="[{_active : currentPath === '/task'}, {_active : taskDetailPattern.test(currentPath)}]"
 						@click="$router.push('/task')"
 						class="sidebar__link"
 					>
