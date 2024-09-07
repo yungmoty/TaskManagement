@@ -1,8 +1,11 @@
 <script setup>
-import { onMounted, onBeforeUnmount, ref, watch  } from 'vue'
+import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import Swiper from 'swiper';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import { useMentors } from "@/hooks/useMentors";
+
+const { loading } = useMentors()
 
 const props = defineProps({
 	sliderTitle: String,
@@ -18,11 +21,11 @@ const swiperContainer = ref(null)
 
 
 const keyboardFlip = () => {
-	let isHovered = false;
+	let isHovered = false
 
-	swiperContainer.value.addEventListener('mouseenter', () => { isHovered = true });
+	swiperContainer.value.addEventListener('mouseenter', () => { isHovered = true })
 
-	swiperContainer.value.addEventListener('mouseleave', () => { isHovered = false });
+	swiperContainer.value.addEventListener('mouseleave', () => { isHovered = false })
 	
 
 	document.addEventListener('keydown', (event) => {
@@ -33,86 +36,58 @@ const keyboardFlip = () => {
 				swiperInstance.slideNext();
 			}
 		}
-	});
+	})
 }
 
 const updateSwiper = () => {
-	const slidesPerViewOverviewPage = window.innerWidth <= 1150 ? 1 : 2;
+	const slidesPerViewOverviewPage = window.innerWidth <= 1150 ? 1 : 2
 	const slidesPerViewTaskPage = window.innerWidth > 1024 ? 3 : window.innerWidth > 744 ? 2 : 1;
 
 
 
-
 	if (swiperInstance) {
-		swiperInstance.destroy(); 
+		swiperInstance.destroy(true, true)
+		swiperInstance = null
 	}
 
-	if (nameSwiperSlider === 'swiper1') {
-		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
+	const swiperConfig = {
 		modules: [Navigation, Autoplay],
 		navigation: {
-			nextEl: `.${swiperSliderBtn}.slider__btn-next`,
-			prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
+			nextEl:
+				props.slidesCountNewTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-next` : null
+				||
+				props.slidesCountLimitTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-next` : null,
+			prevEl:
+				props.slidesCountNewTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-prev` : null
+				||
+				props.slidesCountLimitTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-prev` : null,
 		},
-		slidesPerView: slidesPerViewOverviewPage,
+		slidesPerView: nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4' ? slidesPerViewTaskPage : slidesPerViewOverviewPage,
 		spaceBetween: 32,
-		autoplay: {
+		autoplay: nameSwiperSlider === 'swiper1' ? {
 			delay: 3000,
 			pauseOnMouseEnter: true,
-		},
-		});
-	} else if (nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4') {
-			swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
-			modules: [Navigation, Autoplay],
-			navigation: {
-				nextEl:
-					props.slidesCountNewTask > 3 ?`.${swiperSliderBtn}.slider__btn-next` : ''
-					||
-					props.slidesCountLimitTask > 3 ?`.${swiperSliderBtn}.slider__btn-next` : '',
-				prevEl:
-					props.slidesCountNewTask > 3 ?`.${swiperSliderBtn}.slider__btn-prev` : ''
-					||
-					props.slidesCountLimitTask > 3 ?`.${swiperSliderBtn}.slider__btn-prev` : '',
-			},
-			slidesPerView: slidesPerViewTaskPage,
-			spaceBetween: 32,
-		});
-	} else {
-		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
-			modules: [Navigation, Autoplay],
-			navigation: {
-				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
-				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
-			},
-			slidesPerView: slidesPerViewOverviewPage,
-			spaceBetween: 32,
-		});
+		} : false,
 	}
+	swiperInstance = new Swiper(`.${nameSwiperSlider}`, swiperConfig)
 };
 
 onMounted(() => {
 	updateSwiper()
 	keyboardFlip()
-	window.addEventListener('resize', updateSwiper);
+	window.addEventListener('resize', updateSwiper)
 });
 
 onBeforeUnmount(() => {
 	if (swiperInstance) {
-		swiperInstance.destroy();
+		swiperInstance.destroy(true, true)
 	}
-	window.removeEventListener('resize', updateSwiper);
+	window.removeEventListener('resize', updateSwiper)
 });
 
-watch(() => props.slidesCountNewTask, () => {
-	updateSwiper();
-});
-watch(() => props.slidesCountLimitTask, () => {
-	updateSwiper();
-},);
-
-
-import { useMentors } from "@/hooks/useMentors";
-const { loading } = useMentors()
+watch(() => [props.slidesCountNewTask, props.slidesCountLimitTask], () => {
+	updateSwiper()
+}, { immediate: true })
 
 </script>
 

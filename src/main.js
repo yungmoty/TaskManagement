@@ -4,7 +4,8 @@ import '@/assets/scss/common/variables.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import components from '@/components/UI'
-import directives from '@/directives'
+// import directives from '@/directives'
+import clickOutsidePlugin from './plugins/clickOutside';
 
 import App from '@/App.vue'
 import router from '@/router'
@@ -15,6 +16,7 @@ app
 	.use(createPinia())
 	.use(router)
 	.use(components)
-	.use(directives)
+	.use(clickOutsidePlugin)
+	// .use(directives)
 	.mount('#app')
 

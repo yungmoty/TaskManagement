@@ -49,9 +49,10 @@ onMounted(() => {
 function selectedCategoryOption(option) {
 	selectedCategory.value = option;
 }
-function selectedSortOption(option) {
+function selectedSortOption(option) {	
 	selectedSort.value = option
 }
+
 const isActiveOption = ref(false)
 const activeOption = () => {
 	isActiveOption.value = !isActiveOption.value
@@ -67,6 +68,15 @@ watch(sendData, () => {})
 function performSearch(query) {
 	searchTask.value = query
 }
+const handleClickOutside = () => {
+	if (isActiveOption.value === true) {
+		isActiveOption.value = false;
+	}
+}
+watch([selectedCategory, selectedSort], () => {
+	isActiveOption.value = false
+})
+
 </script>
 
 
@@ -99,25 +109,28 @@ function performSearch(query) {
 					placeholder="Search Task"
 				/>
 			</div>
-			<div :class="{_active: isActiveOption}" @click="activeOption" class="header__choice-sort">
-				<div class="_icon-options"></div>
-						<div class="header__options">
-					<UHeaderSelect
-						class="header__option"
-						@update:selectedOption="selectedCategoryOption"
-						selectTitle="Category" 
-						:iconClass="categoryIcon" 
-						:selectArr="categoryArr"
-					/>
-					<UHeaderSelect 
-						class="header__option"
-						@update:selectedOption="selectedSortOption"
-						selectTitle="Sort By" 
-						:iconClass="sortIcon" 
-						:selectArr="sortArr"
-						:isSort="true"
-					/>
-				</div>
+			<div v-click-outside="handleClickOutside" :class="{_active: isActiveOption}" class="header__choice-sort">
+				<div @click="activeOption" class="_icon-options"></div>
+				<Transition name="bounce">
+					<div v-show="isActiveOption" class="header__options">
+						<UHeaderSelect
+							class="header__option"
+							@update:selectedOption="selectedCategoryOption"
+							selectTitle="Category" 
+							:iconClass="categoryIcon" 
+							:selectArr="categoryArr"
+							optionsClass="_options"
+						/>
+						<UHeaderSelect 
+							class="header__option"
+							@update:selectedOption="selectedSortOption"
+							selectTitle="Sort By" 
+							:iconClass="sortIcon" 
+							:selectArr="sortArr"
+							optionsClass="_options"
+						/>
+					</div>
+			</Transition>
 			</div>
 			<div class="header__sorted">
 				<UHeaderSelect 
@@ -142,7 +155,6 @@ function performSearch(query) {
 
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
-
 
 .header {
 
@@ -220,9 +232,6 @@ function performSearch(query) {
 		@media (max-width: $tablet){
 			display: flex;
 		}
-		&._active .header__options{
-			display: flex;
-		}
 	}
 	&__options {
 		position: absolute;
@@ -231,13 +240,17 @@ function performSearch(query) {
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background-color: rgba(255, 255, 255, 0.9);
+		background-color: rgba(250, 250, 250, 0.9);
 		z-index: 50;
-		display: none;
+		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: rem(10);
 		border-radius: rem(10);
+
+		@media (max-width: 470px){
+			@include adaptiveValue(400, 310, 470, 'width');
+		}
 	}
 
 	&__option {
@@ -310,6 +323,23 @@ function performSearch(query) {
 	}
 	&__wrap:nth-child(3) {
 		width: 50%;
+	}
+}
+.bounce-enter-active {
+	animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+	animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+	0% {
+		transform: translate(-50%, -50%) scale(0);
+	}
+	50% {
+		transform: translate(-50%, -50%) scale(1.25)
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(1)
 	}
 }
 </style>

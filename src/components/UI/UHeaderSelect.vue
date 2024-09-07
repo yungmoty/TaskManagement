@@ -13,6 +13,7 @@ const props = defineProps({
 	selectTitle: String,
 	iconClass: String,
 	isSort: Boolean,
+	optionsClass: String,
 });
 
 function toggleDropdown() {
@@ -58,7 +59,7 @@ function selectOption(option) {
 			{{ selectTitle }}
 			<div v-if="isSort">{{ selectedOption }}</div>
 		</a>
-		<div class="select__items">
+		<div :class="optionsClass" class="select__items">
 			<a 
 				href=""
 				v-for="item in selectArr"
@@ -126,6 +127,10 @@ function selectOption(option) {
 		font-size: rem(13);
 		transition: all 0.3s ease 0s;
 		border: 2px solid $light-blue;
+
+		&._options {
+			transition: all 0s ease 0s;
+		}
 	}
 	&__item {
 		padding: rem(10) rem(15);

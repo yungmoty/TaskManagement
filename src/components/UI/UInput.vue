@@ -50,6 +50,9 @@ function searchKeydown(event) {
 	justify-content: space-between;
 	align-items: center;
 	gap: rem(15);
+	@media (max-width: 415px) {
+			@include adaptiveValue(270, 150, 415, 'width');
+	}
 
 	&__input {
 		width: 100%;

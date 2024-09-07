@@ -96,6 +96,9 @@ const	sortedAndSearchedTasksToday = computed(() => {
 	display: grid;
 	display: grid;
 	grid-template-columns: 17.5% 1fr;
+	@media (max-width: $dekstop){
+		grid-template-columns: 1fr;
+	}
 	&__content {
 		background-color: $light-white;
 		width: 1212px;
@@ -117,8 +120,8 @@ const	sortedAndSearchedTasksToday = computed(() => {
 		@media (max-width: $tablet) {
 			@include adaptiveValue(744, 320, 744, 'max-width');
 		}
-		@media (max-width: 375px) {
-			@include adaptiveValue(375, 420, 375, 'max-width');
+		@media (max-width: 415px) {
+			@include adaptiveValue(415, 320, 415, 'max-width');
 		}
 	}
 	&__task-limit {
