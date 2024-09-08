@@ -5,6 +5,7 @@ import UHeaderSelect from '@/components/UI/UHeaderSelect.vue';
 import UOverviewPageSlideMentor from '@/components/UI/UOverviewPageSlideMentor.vue';
 import UOverviewPageSlideTask from '@/components/UI/UOverviewPageSlideTask.vue';
 import UOverviewPageTaskToday from '@/components/UI/UOverviewPageTaskToday.vue';
+import USubmitBtn from '@/components/UI/USubmitBtn.vue';
 
 const components = [
 	{name: 'UButton', component: UButton},
@@ -14,6 +15,7 @@ const components = [
 	{name: 'UOverviewPageSlideMentor', component: UOverviewPageSlideMentor},
 	{name: 'UOverviewPageSlideTask', component: UOverviewPageSlideTask},
 	{name: 'UOverviewPageTaskToday', component: UOverviewPageTaskToday},
+	{name: 'USubmitBtn', component: USubmitBtn},
 ]
 
 export default {

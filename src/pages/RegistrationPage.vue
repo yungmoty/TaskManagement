@@ -39,7 +39,7 @@ let requiredName = false
 let requiredClass = false
 
 onMounted(() => {
-	function validate(e) {
+	function validate() {
 		const username = document.getElementById('name');
 		if (username.value.trim() == '') {
 			requiredName = false
@@ -86,8 +86,7 @@ onMounted(() => {
 		<form 
 			@submit.prevent="registerStudent" 
 			id="register" 
-			class="register__form 
-			register-form" 
+			class="register__form register-form"
 			method="post"
 		>
 			<div class="register-form__title">Registration</div>
@@ -129,7 +128,9 @@ onMounted(() => {
 					<img class="register-form__image" :src="studentPhotoUrl" :alt="studentName" />
 				</div>
 			</Transition>
-			<button class="register-form__btn" type="submit">Submit</button>
+			<div class="register-form__btn">
+				<USubmitBtn>Submit</USubmitBtn>
+			</div>
 		</form>
 		<div v-if="isLoading" class="register__loading">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="#546FFF" stroke="%23FF156D" stroke-width="15" r="15" cx="40" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="#546FFF" stroke="%23FF156D" stroke-width="15" r="15" cx="100" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="#546FFF" stroke="%23FF156D" stroke-width="15" r="15" cx="160" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>
@@ -242,21 +243,7 @@ onMounted(() => {
 		border-radius: rem(10);
 	}
 	&__btn {
-		width: 100%;
-		height: rem(52);
-		background-color: $dark-blue;
-		border-radius: rem(10);
-		color: $white;
-		cursor: pointer;
-		font-size: rem(18);
 		margin-top: rem(40);
-		transition: all 0.3s ease 0s;
-
-		&:hover {
-			@media (any-hover: hover){
-				transform: scale(0.95);
-			}
-		}
 	}
 }
 .reg-label {

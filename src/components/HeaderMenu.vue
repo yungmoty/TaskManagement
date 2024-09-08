@@ -163,7 +163,6 @@ onMounted(() => {
 @import '@/assets/scss/main.scss';
 
 .header {
-
 	&.overview-page &__content {
 		@media (max-width: $l-dekstop){
 			display: none;
@@ -175,6 +174,9 @@ onMounted(() => {
 		}
 	}
 	&.task-page {
+		background-color: $white;
+	}
+	&.detail-task-page {
 		background-color: $white;
 	}
 	&__top {
