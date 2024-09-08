@@ -46,8 +46,8 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 			<div class="sidebar__body">
 				<div class="sidebar__navigation">
 					<div 
-						:class="{_active : currentPath === '/'}" 
-						@click="$router.push('/')"
+						:class="{_active : currentPath === '/overview'}" 
+						@click="$router.push('/overview')"
 						class="sidebar__link"
 					>
 						<span class="_icon-overview"></span>

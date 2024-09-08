@@ -1,17 +1,22 @@
 <script setup>
+import { onMounted } from 'vue';
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import OverviewPageActivityBlock from '@/components/OverviewPageActivityBlock.vue';
 import SliderSwiper from '@/components/SliderSwiper.vue';
 import OverviewPageSidebar from '@/components/OverviewPageSidebar.vue';
 
-
+import { useStudentStore } from '@/stores/counter';
 import { useMentors } from "@/hooks/useMentors";
 import { useNewTasks } from "@/hooks/useNewTasks";
+const studentStore = useStudentStore();
 const { mentors } = useMentors()
 const { newTasks } = useNewTasks()
 
 
+onMounted(() => {
+	studentStore.loadFromLocalStorage();
+});
 </script>
 
 
@@ -21,7 +26,7 @@ const { newTasks } = useNewTasks()
 		<div class="main-content">
 			<div class="main-wrapper">
 				<HeaderMenu 
-					title="Hi, Dennis Nzioki"
+					:title="`Hi, ${studentStore.studentName}`"
 					:isSearchBlock="false"
 					pageClass="overview-page"
 				>

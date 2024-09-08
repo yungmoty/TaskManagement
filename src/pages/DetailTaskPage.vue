@@ -6,7 +6,10 @@ import { enUS } from 'date-fns/locale';
 import { useNewTasks } from '@/hooks/useNewTasks'; 
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
+import { useStudentStore } from '@/stores/counter';
 
+
+const studentStore = useStudentStore();
 const route = useRoute();
 const { fetchTaskById } = useNewTasks();
 const task = ref(null);
@@ -24,6 +27,8 @@ onMounted(async () => {
 	task.value = await fetchTaskById(taskId);
 	loadingTask.value = false;
 
+	studentStore.loadFromLocalStorage();
+
 	formatDate();
 });
 
@@ -35,7 +40,7 @@ onMounted(async () => {
 
 <template>
 
-  <div class="page">
+<div class="page">
 	<DrawerMenu pageClass="detail-task-page" />
 		<div class="page__content">
 			<HeaderMenu 
@@ -117,15 +122,15 @@ onMounted(async () => {
 						<ul class="sidebar-content__detail-student">
 							<li class="sidebar-content__option">
 								<p class="sidebar-content__quality">Student's name</p>
-								<p class="sidebar-content__name">Dennis Nzioki</p>
+								<p class="sidebar-content__name">{{ studentStore.studentName }}</p>
 							</li>
 							<li class="sidebar-content__option">
 								<p class="sidebar-content__quality">Student Class</p>
-								<p class="sidebar-content__name">MIPA 2</p>
+								<p class="sidebar-content__name">{{ studentStore.studentClass }}</p>
 							</li>
 							<li class="sidebar-content__option">
 								<p class="sidebar-content__quality">Student Number</p>
-								<p class="sidebar-content__name">10</p>
+								<p class="sidebar-content__name">{{ studentStore.studentId }}</p>
 							</li>
 						</ul>
 					</div>
@@ -147,7 +152,7 @@ onMounted(async () => {
 				</div>
 			</div>
 		</div>
-	</div>
+</div>
 </template>
 
 
@@ -317,6 +322,7 @@ onMounted(async () => {
 	&__submission {
 		font-size: rem(14);
 		color: $purple;
+		margin-top: rem(20);
 	}
 	&__file {
 		width: 100%;

@@ -2,7 +2,9 @@
 import { ref, onMounted, watch } from 'vue'
 import { useMyStore } from '@/stores/counter';
 import eventBus from '@/directives/eventBus';
+import { useStudentStore } from '@/stores/counter';
 
+const studentStore = useStudentStore();
 const sortIcon = ref('_icon-sort')
 const categoryIcon = ref('_icon-category')
 const searchTask = ref('')
@@ -77,6 +79,9 @@ watch([selectedCategory, selectedSort], () => {
 	isActiveOption.value = false
 })
 
+onMounted(() => {
+	studentStore.loadFromLocalStorage();
+});
 </script>
 
 
@@ -97,7 +102,8 @@ watch([selectedCategory, selectedSort], () => {
 					<span class="header__circle"></span>
 				</UMiniButton>
 				<a href="" class="header__user">
-					<img src="@/assets/images/yungmoty.svg" alt="Profile">
+					<img v-if="studentStore.studentPhotoUrl" :src="studentStore.studentPhotoUrl" :alt="studentStore.studentName">
+					<img v-else src="@/assets/images/unavatar.svg" :alt="studentStore.studentName">
 				</a>
 			</div>
 		</div>
@@ -174,6 +180,7 @@ watch([selectedCategory, selectedSort], () => {
 	&__top {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		padding: rem(32);
 	}
 	&__content {
@@ -204,6 +211,8 @@ watch([selectedCategory, selectedSort], () => {
 		img {
 			width: rem(52);
 			height: rem(52);
+			border-radius: 50%;
+			object-fit: cover;
 		}
 	}
 	&__bottom {
