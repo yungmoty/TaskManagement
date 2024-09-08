@@ -54,7 +54,7 @@ onMounted(() => {
 			username.style.backgroundColor = null;
 			requiredName = true
 		}
-		
+
 		const userclass = document.getElementById('class');
 		if (userclass.value.trim() == '') {
 			requiredClass = false
@@ -83,7 +83,13 @@ onMounted(() => {
 
 <template>
 	<div class="register">
-		<form @submit.prevent="registerStudent" id="register" class="register__form register-form" method="post">
+		<form 
+			@submit.prevent="registerStudent" 
+			id="register" 
+			class="register__form 
+			register-form" 
+			method="post"
+		>
 			<div class="register-form__title">Registration</div>
 			<div class="register-form__name">
 				<label for="name" class="register-form__label-name reg-label">Name</label>
@@ -110,7 +116,12 @@ onMounted(() => {
 					Photo
 					<span class="register-form__icon _icon-msg-attachfile"></span>
 				</label>
-				<input @change="handleFileUpload" type="file" id="photo" class="register-form__input-photo reg-input">
+				<input 
+					@change="handleFileUpload" 
+					type="file" 
+					id="photo" 
+					class="register-form__input-photo reg-input"
+				>
 			</div>
 			<Transition>
 				<div class="register-form__preview" v-if="studentPhotoUrl">
@@ -122,7 +133,7 @@ onMounted(() => {
 		</form>
 		<div v-if="isLoading" class="register__loading">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="#546FFF" stroke="%23FF156D" stroke-width="15" r="15" cx="40" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="#546FFF" stroke="%23FF156D" stroke-width="15" r="15" cx="100" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="#546FFF" stroke="%23FF156D" stroke-width="15" r="15" cx="160" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>
-			</div>
+		</div>
 	</div>
 </template>
 

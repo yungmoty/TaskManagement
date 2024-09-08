@@ -43,6 +43,10 @@ const updateSwiper = () => {
 	const slidesPerViewOverviewPage = window.innerWidth <= 1150 ? 1 : 2
 	const slidesPerViewTaskPage = window.innerWidth > 1024 ? 3 : window.innerWidth > 744 ? 2 : 1;
 
+	const slidesCountNewTaskNext = props.slidesCountNewTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
+	const slidesCountLimitTaskNext = props.slidesCountLimitTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
+	const slidesCountNewTaskPrev = props.slidesCountNewTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
+	const slidesCountLimitTaskPrev = props.slidesCountLimitTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
 
 
 	if (swiperInstance) {
@@ -53,14 +57,15 @@ const updateSwiper = () => {
 	const swiperConfig = {
 		modules: [Navigation, Autoplay],
 		navigation: {
-			nextEl:
-				props.slidesCountNewTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-next` : null
-				||
-				props.slidesCountLimitTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-next` : null,
-			prevEl:
-				props.slidesCountNewTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-prev` : null
-				||
-				props.slidesCountLimitTask > slidesPerViewTaskPage ?`.${swiperSliderBtn}.slider__btn-prev` : null,
+
+			nextEl: nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4'
+			? slidesCountNewTaskNext || slidesCountLimitTaskNext
+			: `.${swiperSliderBtn}.slider__btn-next`,
+
+			prevEl: nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4'
+			? slidesCountNewTaskPrev || slidesCountLimitTaskPrev 
+			: `.${swiperSliderBtn}.slider__btn-prev`,
+			
 		},
 		slidesPerView: nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4' ? slidesPerViewTaskPage : slidesPerViewOverviewPage,
 		spaceBetween: 32,

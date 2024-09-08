@@ -56,15 +56,17 @@ function goToCurrentDay() {
 			<span @click="goToCurrentDay">Today</span>
 		</div>
 		<div class="calendar__days">
-			<div
-				v-for="(day, index) in days"
-				:key="index"
-				class="calendar__day"
-				:class="{ today: day.isSame(today, 'day'), 'current-month': day.month() === today.month() }"
-			>
-				<div class="calendar__day-name">{{ day.format('dddd')[0] }}</div>
-				<div class="calendar__day-date">{{ day.date() }}</div>
-			</div>
+			<TransitionGroup>
+				<div
+					v-for="(day, index) in days"
+					:key="index"
+					class="calendar__day"
+					:class="{ today: day.isSame(today, 'day'), 'current-month': day.month() === today.month() }"
+				>
+					<div class="calendar__day-name">{{ day.format('dddd')[0] }}</div>
+					<div class="calendar__day-date">{{ day.date() }}</div>
+				</div>
+			</TransitionGroup>
 		</div>
 	</div>
 </template>
@@ -73,6 +75,10 @@ function goToCurrentDay() {
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 
+
+.v-move {
+	transition: all 0.4s ease 0s;
+}
 .calendar {
 	// width: 100%;
 	width: 372px;
