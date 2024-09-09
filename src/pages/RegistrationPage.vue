@@ -115,11 +115,12 @@ onMounted(() => {
 					Photo
 					<span class="register-form__icon _icon-msg-attachfile"></span>
 				</label>
-				<input 
+				<input
 					@change="handleFileUpload" 
 					type="file" 
 					id="photo" 
 					class="register-form__input-photo reg-input"
+					accept="image/*"
 				>
 			</div>
 			<Transition>

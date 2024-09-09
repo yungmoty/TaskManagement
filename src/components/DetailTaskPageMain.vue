@@ -1,10 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useNewTasks } from '@/hooks/useNewTasks'; 
 import { useStudentStore } from '@/stores/counter';
+import VideoPlayer from './VideoPlayer.vue';
 
-
+// const video = ref(null)
+// const progress = ref(null)
 const studentStore = useStudentStore();
 const route = useRoute();
 const { fetchTaskById } = useNewTasks();
@@ -18,14 +20,35 @@ onMounted(async () => {
 	studentStore.loadFromLocalStorage();
 });
 
+
+onMounted(() => {
+
+})
+// const play = computed(() => {
+// 	video.value.play()
+	
+// })
+// const go = computed (() => {
+// 	// console.log(video.value.duration);
+// 	console.log(progress.value.value);
+	
+// 	progress.value.value = (video.value.currentTime / video.value.duration) * 100
+// })
+// watch(progress, (v) => {
+// 	console.log(v.value);
+	
+// })
 </script>
 
 
 <template>
 	<div v-if="task" class="detail-task">
 		<div class="detail-task__main-content main-content">
-			<div class="main-content__video">
-				<img :src="task.image" :alt="task.titleImage">
+			<div class="main-content__video video-player">
+				<!-- <img :src="task.image" :alt="task.titleImage"> -->
+				<VideoPlayer
+					videoUrl="https://res.cloudinary.com/videoapi-demo/video/upload/v1/samples/surfer_crop_rm6b19"
+				/>
 			</div>
 			<div class="main-content__all">
 				<div class="main-content__top">
@@ -92,9 +115,17 @@ onMounted(async () => {
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
 
+
+
+.video-player {
+	border-radius: rem(10);
+	width: 100%;
+	// margin-bottom: rem(24);
+	overflow: hidden;
+}
+
 .main-content {
 	&__video {
-		height: 360px;
 
 		img {
 			width: 100%;
