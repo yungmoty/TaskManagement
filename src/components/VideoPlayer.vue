@@ -228,6 +228,7 @@ onUnmounted(() => {
 .video-player {
 	position: relative;
 	cursor: pointer;
+
 	
 	video {
 		border-radius: rem(10);
@@ -236,23 +237,27 @@ onUnmounted(() => {
 	}
 
 	&._active &__controls {
-		margin: rem(24);
+		margin: 0 0 rem(24) rem(24);
 		opacity: 1;
 	}
 	&__controls {
 		font-size: rem(20);
 		position: absolute;
-		width: 704px;
+		width: calc(100% - rem(48));
 		bottom: 0;
 		background-color: $white;
 		display: flex;
 		align-items: center;
 		height: 44px;
-		margin: 0 rem(24);
+		margin: 0 0 0 rem(24);
 		border-radius: rem(10);
 		padding: rem(12) rem(24);
 		opacity: 0;
 		transition: all 0.3s ease 0s;
+
+		@media (max-width: 425px){
+			padding: rem(12) rem(12);
+		}
 
 	}
 	&__btns-start {
@@ -284,6 +289,10 @@ onUnmounted(() => {
 		margin-right: rem(40);
 		white-space: nowrap;
 		font-size: rem(14);
+
+		@media (max-width: 500px){
+			display: none;
+		}
 	}
 	&__other-btns {
 		display: flex;
@@ -303,10 +312,14 @@ onUnmounted(() => {
 	&__player-mini {
 		transition: all 0.3s ease 0s;
 		cursor: pointer;
+
 		@media (any-hover: hover){
 			&:hover {
 				color: $dark-blue;
 			}
+		}
+		@media (max-width: 375px){
+			display: none;
 		}
 	}
 	&__volume {
@@ -384,6 +397,10 @@ onUnmounted(() => {
 	align-items: center;
 	position: relative;
 	margin: 0 rem(24);
+
+	@media (max-width: 375px){
+		margin: 0 rem(10);
+	}
 	&__container {
 		flex: 1;
 		height: 8px;

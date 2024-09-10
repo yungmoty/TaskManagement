@@ -163,7 +163,8 @@ onMounted(() => {
 @import '@/assets/scss/main.scss';
 
 .header {
-	&.overview-page &__content {
+	&.overview-page &__content,
+	&.detail-task-page &__content {
 		@media (max-width: $l-dekstop){
 			display: none;
 		}
@@ -282,7 +283,8 @@ onMounted(() => {
 	transition: all 0.3s ease 0s;
 	font-size: rem(22);
 }
-.header.overview-page .menu__icon {
+.header.overview-page .menu__icon,
+.header.detail-task-page .menu__icon {
 	@media (max-width: $l-dekstop) {
 		display: inline-block;
 		cursor: pointer;

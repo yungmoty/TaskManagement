@@ -152,6 +152,10 @@ const hideControls = () => {
 	overflow: hidden;
 	position: relative;
 
+	@media (max-width: 1220px){
+		min-height: 155px;
+	}
+
 	&__hover-control {
 		position: absolute;
 		top: 50%;
@@ -181,10 +185,57 @@ const hideControls = () => {
 			max-height: 400px;
 			border-radius: rem(10);
 			cursor: pointer;
+
+			@media (max-width: $l-dekstop){
+				max-height: 560px;
+			}
+			@media (max-width: 1350px){
+				max-height: 460px;
+			}
+			@media (max-width: 1180px){
+				max-height: 370px;
+			}
+			@media (max-width: 1080px){
+				max-height: 320px;
+			}
+			@media (max-width: $laptop){
+				max-height: 500px;
+			}
+			@media (max-width: 900px){
+				max-height: 400px;
+			}
+			@media (max-width: 710px){
+				max-height: 340px;
+			}
+			@media (max-width: 610px){
+				max-height: 280px;
+			}
+			@media (max-width: 520px){
+				max-height: 240px;
+			}
+			@media (max-width: 450px){
+				max-height: 200px;
+			}
+			@media (max-width: 380px){
+				max-height: 165px;
+			}
+			@media (max-width: 330px){
+				max-height: 140px;
+			}
 		}
 	}
 	&__all {
 		padding: rem(24);
+
+		@media (max-width: $tablet-inter){
+			padding-bottom: rem(10);
+		}
+		@media (max-width: 375px){
+			padding: rem(5);
+		}
+		@media (max-width: 330px){
+			padding-top: 0;
+		}
 	}
 	&__top {
 		display: flex;
@@ -196,6 +247,19 @@ const hideControls = () => {
 		font-weight: 600;
 		font-size: rem(32);
 		letter-spacing: -0.03em;
+
+		@media (max-width: 517px){
+			line-height: 110%;
+		}
+		@media (max-width: $tablet){
+			font-size: rem(28);
+		}
+		@media (max-width: $mobile-sec-inter){
+			font-size: rem(24);
+		}
+		@media (max-width: $mobile-inter){
+			font-size: rem(22);
+		}
 	}
 	&__major {
 		font-size: rem(14);
@@ -251,6 +315,25 @@ const hideControls = () => {
 		display: flex;
 		line-height: 200%;
 		align-items: center;
+		gap: rem(10);
+
+
+		svg {
+			@media (max-width: 460px){
+				width: 18px;
+				height: 18px;
+			}
+			@media (max-width: 370px){
+				width: 16px;
+				height: 16px;
+			}
+		}
+		@media (max-width: 460px){
+			font-size: rem(12);
+		}
+		@media (max-width: 370px){
+			font-size: rem(10);
+		}
 	}
 }
 .subtitle {
@@ -258,5 +341,9 @@ const hideControls = () => {
 	font-weight: 600;
 	margin-bottom: rem(16);
 	letter-spacing: -0.03em;
+
+	@media (max-width: $tablet){
+		font-size: rem(22);
+	}
 }
 </style>

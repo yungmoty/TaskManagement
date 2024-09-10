@@ -111,7 +111,12 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 	position: relative;
 	transition: all 0.3s ease 0s;
 
-	&.overview-page {
+	@media (max-width: 374px){
+		width: 225px;
+	}
+
+	&.overview-page,
+	&.detail-task-page{
 		@media (max-width: $l-dekstop){
 			position: fixed;
 			overflow: auto;

@@ -192,6 +192,9 @@ onUpdated(() => {
 		font-weight: 600;
 		letter-spacing: -0.03em;
 		margin-bottom: rem(12);
+		@media (max-width: $mobile-inter){
+			font-size: rem(22);
+		}
 	}
 	&__major {
 		font-size: rem(14);
@@ -257,6 +260,9 @@ onUpdated(() => {
 				color: $dark-blue;
 			}
 		}
+		@media (max-width: $mobile-inter){
+			height: 120px;
+		}
 	}
 	&__input {
 		display: none;
@@ -268,6 +274,10 @@ onUpdated(() => {
 		color: $purple;
 		margin-top: rem(12);
 		margin-bottom: rem(60);
+
+		@media (max-width: $mobile-inter){
+			margin-bottom: rem(40);
+		}
 	}
 	&__btn {
 		font-size: rem(14);
@@ -278,6 +288,10 @@ onUpdated(() => {
 	font-size: rem(20);
 	font-weight: 600;
 	margin-bottom: rem(20);
+
+	@media (max-width: $mobile-inter){
+		font-size: rem(18);
+	}
 }
 .task-form__file.active .task-form__label {
 	background-color: rgba($dark-blue, 0.5);

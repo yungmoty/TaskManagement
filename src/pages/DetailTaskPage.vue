@@ -39,6 +39,10 @@ import DetailTaskPageMain from '@/components/DetailTaskPageMain.vue';
 	grid-template-columns: 17% 1fr;
 	height: 100vh;
 	background-color: $light-white;
+	
+	@media (max-width: $l-dekstop){
+		grid-template-columns: 1fr;
+	}
 
 	&__content {
 	}
@@ -46,18 +50,35 @@ import DetailTaskPageMain from '@/components/DetailTaskPageMain.vue';
 		display: grid;
 		grid-template-columns: 1fr auto;
 		padding: rem(32);
+
+		@media (max-width: $laptop){
+			grid-template-columns: 1fr;
+		}
+		@media (max-width: 375px){
+			padding: rem(22);
+		}
 	}
 	&__main-content {
 		background-color: $white;
 		border-radius: rem(10);
 		margin-right: rem(32);
+
+		@media (max-width: $laptop){
+			margin: 0;
+		}
 	}
 	&__sidebar-content {
-		width: 372px;
 		background-color: $white;
 		border-radius: rem(10);
 		height: max-content;
 		padding: rem(32);
+
+		@media (max-width: $laptop){
+			padding: rem(24);
+		}
+		@media (max-width: 375px){
+			padding: rem(5);
+		}
 	}
 }
 
