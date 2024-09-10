@@ -19,6 +19,9 @@ const props = defineProps({
 const selectSlide = (slideId) => {
 	sliderStore.setActiveSlideId(slideId);
 	sliderStore.setActiveSlider('newTasks');
+
+	localStorage.setItem('activeSlideId', JSON.stringify(slideId));
+	localStorage.setItem('activeSlider', JSON.stringify('newTasks'));
 };
 
 const slidesCountNewTask = ref(0);

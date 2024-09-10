@@ -31,8 +31,19 @@ const loadTask = async () => {
 }
 watch(() => sliderStore.activeSlideId, loadTask, { immediate: true });
 
+const loadSavedSlide = () => {
+	const savedSlideId = localStorage.getItem('activeSlideId');
+	const savedSlider = localStorage.getItem('activeSlider');
+	
+	if (savedSlideId && savedSlider) {
+		sliderStore.setActiveSlideId(JSON.parse(savedSlideId));
+		sliderStore.setActiveSlider(JSON.parse(savedSlider));
+	}
+};
+
 onMounted(async () => {
 	studentStore.loadFromLocalStorage();
+	loadSavedSlide()
 })
 
 const showControls = () => {

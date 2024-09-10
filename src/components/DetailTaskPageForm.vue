@@ -15,6 +15,12 @@ const { fetchTaskTodayById } = useTaskToday();
 const task = ref(null)
 const file = ref(null)
 const formattedDate = ref('')
+const dataTask = ref({
+	name: String,
+	class: String,
+	id: Number,
+	file: null
+});
 
 const formatDate = () => {
 	const now = new Date()
@@ -33,13 +39,60 @@ const loadTask = async () => {
 }
 watch(() => sliderStore.activeSlideId, loadTask, { immediate: true });
 
+const loadSavedSlide = () => {
+	const savedSlideId = localStorage.getItem('activeSlideId');
+	const savedSlider = localStorage.getItem('activeSlider');
+	
+	
+	if (savedSlideId && savedSlider) {
+		sliderStore.setActiveSlideId(JSON.parse(savedSlideId));
+		sliderStore.setActiveSlider(JSON.parse(savedSlider));
+	}
+}
+
+
 onMounted(async () => {
 	studentStore.loadFromLocalStorage()
 	formatDate()
+	loadSavedSlide()
+})
+
+onMounted(() => {
+	if (studentStore) {
+		dataTask.value.name = studentStore.studentName;
+		dataTask.value.class = studentStore.studentClass;
+		dataTask.value.id = studentStore.studentId;
+	}
 });
+
+const sendDataTask = () => {
+	if (dataTask.value.file) {
+		const reader = new FileReader();
+
+		reader.onload = () => {
+			dataTask.value.file = reader.result;
+			localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
+		};
+		reader.readAsDataURL(dataTask.value.file);
+	} else {
+		localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
+	}
+}
+
+function handleFileUpload(event) {
+	const dropArea = file.value
+	if (!dropArea) return
+
+	const nameFile = event.target.files[0]?.name || ''
+	dataTask.value.file = event.target.files[0]
+	
+	
+	dropArea.style.setProperty('--after-content', `"${nameFile}"`)
+}
 
 onUpdated(() => {
 	const dropArea = file.value
+	if (!dropArea) return
 
 	dropArea.addEventListener('dragover', (e) => {
 		e.preventDefault()
@@ -60,45 +113,6 @@ onUpdated(() => {
 	})
 })
 
-const dataTask = ref({
-	name: String,
-	class: String,
-	id: Number,
-	file: null
-});
-
-function handleFileUpload(event) {
-	const dropArea = file.value
-	const nameFile = event.target.files[0].name
-	dataTask.value.file = event.target.files[0];
-	
-	
-	dropArea.style.setProperty('--after-content', `"${nameFile}"`)
-}
-
-
-onMounted(() => {
-	if (studentStore) {
-		dataTask.value.name = studentStore.studentName;
-		dataTask.value.class = studentStore.studentClass;
-		dataTask.value.id = studentStore.studentId;
-	}
-});
-
-
-const sendDataTask = () => {
-	if (dataTask.value.file) {
-		const reader = new FileReader();
-
-		reader.onload = () => {
-			dataTask.value.file = reader.result;
-			localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
-		};
-		reader.readAsDataURL(dataTask.value.file);
-	} else {
-		localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
-	}
-};
 </script>
 
 
