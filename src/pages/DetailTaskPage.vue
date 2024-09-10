@@ -68,6 +68,7 @@ import DetailTaskPageMain from '@/components/DetailTaskPageMain.vue';
 		}
 	}
 	&__sidebar-content {
+		width: 372px;
 		background-color: $white;
 		border-radius: rem(10);
 		height: max-content;
@@ -75,6 +76,7 @@ import DetailTaskPageMain from '@/components/DetailTaskPageMain.vue';
 
 		@media (max-width: $laptop){
 			padding: rem(24);
+			width: 100%;
 		}
 		@media (max-width: 375px){
 			padding: rem(5);
