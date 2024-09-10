@@ -5,6 +5,7 @@ export function useTaskToday() {
 	const tasksToday = ref([]);
 	const loadingTaskToday = ref(true);
 	const errorTaskToday = ref(null);
+
 	const fetchData = async () => {
 		try {
 			const response = await axios.get('https://1c95d6dd92be91a6.mokky.dev/timeLimitTask');
@@ -17,11 +18,22 @@ export function useTaskToday() {
 		}
 	}
 
+	const fetchTaskTodayById = async (taskId) => {
+		try {
+			const response = await axios.get(`https://1c95d6dd92be91a6.mokky.dev/timeLimitTask/${taskId}`);
+			return response.data;
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	};
 	onMounted(fetchData)
+
 	return {
 		tasksToday,
 		loadingTaskToday,
 		errorTaskToday,
 		fetchData,
-	}
+		fetchTaskTodayById,
+	};
 }

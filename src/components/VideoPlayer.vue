@@ -1,13 +1,12 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, defineExpose } from 'vue';
 
 defineProps({
 	videoUrl: String,
 })
 
 const videoElement = ref(null)
-const video = ref(null)
-const isPlaying = ref(false)
+const isPlaying = ref(true)
 const isRestart = ref(false)
 const duration = ref(0)
 const currentTime = ref(0)
@@ -57,8 +56,6 @@ const initializeProgress = () => {
 
 const showControls = () => {
 	if (videoElement.value) {
-		
-		
 		isControls.value = true
 	}
 }
@@ -66,6 +63,11 @@ const showControls = () => {
 const hideControls = () => {
 	if (videoElement.value) {
 		isControls.value = false
+	}
+}
+const toggleControls = () => {
+	if (videoElement.value) {
+		isControls.value = !isControls.value
 	}
 }
 
@@ -95,11 +97,29 @@ const handleVideoEnd = () => {
 	isRestart.value = true
 }
 
+const handleKeyboardEvents = (event) => {
+	if (event.key === ' ') {
+		event.preventDefault()
+		toggleControls()
+		togglePlay()
+	}
+}
+
+const play = () => {
+	if (videoElement.value) {
+		videoElement.value.play().catch((error) => {
+			console.error(error)
+		})
+	}
+}
+defineExpose({ play })
+
 onMounted(() => {
 	if (videoElement.value) {
 		videoElement.value.addEventListener('loadedmetadata', initializeProgress)
 		videoElement.value.addEventListener('ended', handleVideoEnd)
 	}
+	document.addEventListener('keydown', handleKeyboardEvents)
 })
 
 onUnmounted(() => {
@@ -107,8 +127,8 @@ onUnmounted(() => {
 		videoElement.value.removeEventListener('loadedmetadata', initializeProgress)
 		videoElement.value.removeEventListener('ended', handleVideoEnd)
 	}
+	document.removeEventListener('keydown', handleKeyboardEvents)
 })
-
 </script>
 
 
@@ -118,13 +138,12 @@ onUnmounted(() => {
 		@mouseout="hideControls" 
 		:class="{_active : isControls}" 
 		class="video-player"
-		ref="video"
 	>
 		<video 
 			ref="videoElement" 
 			@timeupdate="updateProgress" 
 			@loadedmetadata="initializeProgress"
-			@click="togglePlay" 
+			@click="togglePlay"
 		>
 			<source :src="videoUrl" type="video/mp4" />
 		</video>
@@ -213,6 +232,7 @@ onUnmounted(() => {
 	video {
 		border-radius: rem(10);
 		height: 100%;
+		width: 100%;
 	}
 
 	&._active &__controls {

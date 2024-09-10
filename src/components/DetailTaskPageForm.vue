@@ -1,16 +1,19 @@
 <script setup>
-import { ref, onMounted, onUpdated } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, onUpdated, watch } from 'vue'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { useNewTasks } from '@/hooks/useNewTasks'
-import { useStudentStore } from '@/stores/counter'
-const file = ref(null)
+import { useTaskToday } from '@/hooks/useTaskToday'; 
+import { useStudentStore, useSliderStore } from '@/stores/counter';
 
+
+
+const sliderStore = useSliderStore();
 const studentStore = useStudentStore()
-const route = useRoute()
 const { fetchTaskById } = useNewTasks()
+const { fetchTaskTodayById } = useTaskToday();
 const task = ref(null)
+const file = ref(null)
 const formattedDate = ref('')
 
 const formatDate = () => {
@@ -19,12 +22,19 @@ const formatDate = () => {
 	formattedDate.value = format(now, 'd MMMM yyyy', { locale: enUS })
 };
 
+const loadTask = async () => {
+	const taskId = sliderStore.activeSlideId;
+
+	if (sliderStore.activeSlider === 'newTasks') {
+		task.value = await fetchTaskById(taskId);
+	} else if (sliderStore.activeSlider === 'tasksToday') {
+		task.value = await fetchTaskTodayById(taskId);
+	}
+}
+watch(() => sliderStore.activeSlideId, loadTask, { immediate: true });
+
 onMounted(async () => {
-	const taskId = route.params.id;
-	task.value = await fetchTaskById(taskId)
-
 	studentStore.loadFromLocalStorage()
-
 	formatDate()
 });
 

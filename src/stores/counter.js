@@ -63,3 +63,22 @@ export const useStudentStore = defineStore('student', () => {
 	}
 })
 
+export const useSliderStore = defineStore('slider', () => {
+	const activeSlider = ref('newTasks')
+	const activeSlideId = ref(null)
+
+	function setActiveSlider(sliderType) {
+		activeSlider.value = sliderType;
+	}
+		function setActiveSlideId(slideId) {
+		activeSlideId.value = slideId;
+	}
+
+	return {
+		activeSlider,
+		activeSlideId,
+		setActiveSlider,
+		setActiveSlideId,
+	}
+})
+

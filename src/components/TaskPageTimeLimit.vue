@@ -1,6 +1,11 @@
 <script setup>
 import SliderSwiper from '@/components/SliderSwiper.vue';
 import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
+import { useRouter } from 'vue-router';
+import { useSliderStore } from '@/stores/counter';
+
+const sliderStore = useSliderStore();
+const router = useRouter();
 const loading = ref(false)
 
 const props = defineProps({
@@ -9,6 +14,11 @@ const props = defineProps({
 		required: true
 	},
 })
+
+const selectSlide = (slideId) => {
+	sliderStore.setActiveSlideId(slideId);
+	sliderStore.setActiveSlider('tasksToday');
+};
 
 
 const slidesCountLimitTask = ref(0);
@@ -31,6 +41,9 @@ watch(() => slidesCountLimitTask.value, () => {
 	startLoading();
 });
 
+const navigateToDetail = (taskId) => {
+	router.push({ name: 'task-detail', params: { id: taskId } });
+};
 
 const quotientProgress = ref(0.95);
 
@@ -64,7 +77,7 @@ onBeforeUnmount(() => {
 				:key="taskToday.id"
 				class="swiper-slide task"
 			>
-				<a href="" class="task__image">
+				<a @click.prevent="[navigateToDetail(taskToday.id), selectSlide(taskToday.id)]" href="" class="task__image">
 					<img v-show="loading" :src="taskToday.image" :alt="taskToday.titleImage">
 					<div v-show="!loading" class="task__loading">
 						<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
@@ -98,7 +111,7 @@ onBeforeUnmount(() => {
 						</svg>
 					</div>
 				</a>
-				<a href="" class="task__info">
+				<a @click.prevent="[navigateToDetail(taskToday.id), selectSlide(taskToday.id)]" href="" class="task__info">
 					<div class="task__title">{{ taskToday.titleImage }}</div>
 					<div class="task__major">{{ taskToday.major }}</div>
 				</a>

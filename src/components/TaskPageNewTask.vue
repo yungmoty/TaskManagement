@@ -1,8 +1,13 @@
 <script setup>
 import SliderSwiper from '@/components/SliderSwiper.vue';
 import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
+import { useRouter } from 'vue-router';
+import { useSliderStore } from '@/stores/counter';
 
+
+const sliderStore = useSliderStore();
 const loading = ref(false)
+const router = useRouter();
 
 const props = defineProps({
 	newTasks: {
@@ -10,6 +15,11 @@ const props = defineProps({
 		required: true
 	},
 })
+
+const selectSlide = (slideId) => {
+	sliderStore.setActiveSlideId(slideId);
+	sliderStore.setActiveSlider('newTasks');
+};
 
 const slidesCountNewTask = ref(0);
 let timer;
@@ -31,9 +41,9 @@ watch(() => slidesCountNewTask.value, () => {
 	startLoading();
 });
 
-
-
-
+const navigateToDetail = (taskId) => {
+	router.push({ name: 'task-detail', params: { id: taskId } });
+};
 
 const quotientProgress = ref(0.95);
 
@@ -51,15 +61,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
 	window.removeEventListener('resize', updateQuotientProgress);
 });
-
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-
-const navigateToDetail = (taskId) => {
-	router.push({ name: 'task-detail', params: { id: taskId } });
-};
 </script>
 
 
@@ -76,7 +77,7 @@ const navigateToDetail = (taskId) => {
 				:key="newTask.id"
 				class="swiper-slide task"
 			>
-				<a @click.prevent="navigateToDetail(newTask.id)" href="" class="task__image">
+				<a @click.prevent="[navigateToDetail(newTask.id), selectSlide(newTask.id)]" href="" class="task__image">
 					<img v-show="loading" :src="newTask.image" :alt="newTask.titleImage">
 					<div v-show="!loading" class="task__loading">
 						<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
@@ -110,7 +111,7 @@ const navigateToDetail = (taskId) => {
 						</svg>
 					</div>
 				</a>
-				<a href="" class="task__info">
+				<a @click.prevent="[navigateToDetail(newTask.id), selectSlide(newTask.id)]" href="" class="task__info">
 					<div class="task__title">{{ newTask.titleImage }}</div>
 					<div class="task__major">{{ newTask.major }}</div>
 				</a>

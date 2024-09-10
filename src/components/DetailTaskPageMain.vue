@@ -1,54 +1,71 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
 import { useNewTasks } from '@/hooks/useNewTasks'; 
-import { useStudentStore } from '@/stores/counter';
+import { useTaskToday } from '@/hooks/useTaskToday'; 
+import { useStudentStore, useSliderStore } from '@/stores/counter';
 import VideoPlayer from './VideoPlayer.vue';
 
-// const video = ref(null)
-// const progress = ref(null)
+const sliderStore = useSliderStore();
 const studentStore = useStudentStore();
-const route = useRoute();
 const { fetchTaskById } = useNewTasks();
+const { fetchTaskTodayById } = useTaskToday();
 const task = ref(null);
+const isVideo = ref(false);
+const isControls = ref(true);
+const videoPlayerRef = ref(null);
 
+const playVideo = () => {
+	isVideo.value = true;
+	if (videoPlayerRef.value) {
+		videoPlayerRef.value.play();
+	}
+}
+const loadTask = async () => {
+	const taskId = sliderStore.activeSlideId;
+
+	if (sliderStore.activeSlider === 'newTasks') {
+		task.value = await fetchTaskById(taskId);
+	} else if (sliderStore.activeSlider === 'tasksToday') {
+		task.value = await fetchTaskTodayById(taskId);
+	}
+}
+watch(() => sliderStore.activeSlideId, loadTask, { immediate: true });
 
 onMounted(async () => {
-	const taskId = route.params.id;
-	task.value = await fetchTaskById(taskId);
-
 	studentStore.loadFromLocalStorage();
-});
-
-
-onMounted(() => {
-
 })
-// const play = computed(() => {
-// 	video.value.play()
-	
-// })
-// const go = computed (() => {
-// 	// console.log(video.value.duration);
-// 	console.log(progress.value.value);
-	
-// 	progress.value.value = (video.value.currentTime / video.value.duration) * 100
-// })
-// watch(progress, (v) => {
-// 	console.log(v.value);
-	
-// })
+
+const showControls = () => {
+	isControls.value = true
+}
+
+const hideControls = () => {
+	isControls.value = false
+}
 </script>
 
 
 <template>
 	<div v-if="task" class="detail-task">
 		<div class="detail-task__main-content main-content">
-			<div class="main-content__video video-player">
-				<!-- <img :src="task.image" :alt="task.titleImage"> -->
+			<div 
+				@mouseover="showControls" 
+				@mouseout="hideControls" 
+				class="main-content__video video-player"
+			>
+				<img v-if="!isVideo" @click="playVideo" :src="task.image" :alt="task.titleImage">
 				<VideoPlayer
-					videoUrl="https://res.cloudinary.com/videoapi-demo/video/upload/v1/samples/surfer_crop_rm6b19"
+					ref="videoPlayerRef"
+					v-show="isVideo"
+					:videoUrl="task.video"
 				/>
+				<div 
+					v-if="isControls && !isVideo" 
+					@click="playVideo" 
+					class="video-player__hover-control"
+				>
+					<span class="_icon-player-play"></span>
+				</div>
 			</div>
 			<div class="main-content__all">
 				<div class="main-content__top">
@@ -120,8 +137,29 @@ onMounted(() => {
 .video-player {
 	border-radius: rem(10);
 	width: 100%;
-	// margin-bottom: rem(24);
+	min-height: 396px;
 	overflow: hidden;
+	position: relative;
+
+	&__hover-control {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: rgba($medium-white, 0.5);
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: rem(18);
+		pointer-events: none;
+		transition: all 0.3s ease 0s;
+		span {
+			color: rgba($dark-purple, 0.9);
+		}
+	}
 }
 
 .main-content {
@@ -129,8 +167,9 @@ onMounted(() => {
 
 		img {
 			width: 100%;
-			height: 100%;
+			max-height: 400px;
 			border-radius: rem(10);
+			cursor: pointer;
 		}
 	}
 	&__all {
