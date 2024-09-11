@@ -62,7 +62,8 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 						Task
 					</div>
 					<div 
-						:class="{_active : currentPath === '/mentors'}" 
+						:class="{_active : currentPath === '/mentors'}"
+						@click="$router.push('/mentors')"
 						class="sidebar__link"
 					>
 						<span class="_icon-mentors"></span>
