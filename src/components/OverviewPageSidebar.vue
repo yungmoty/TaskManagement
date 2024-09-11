@@ -137,7 +137,7 @@ onMounted(() => {
 		@include adaptiveValue(1000, 340, 1024, 'max-width');
 	}
 	@media (max-width: 400px){
-		@include adaptiveValue(460, 410, 410, 'max-width');
+		@include adaptiveValue(400, 320, 400, 'max-width');
 	}
 
 	&__calendar {

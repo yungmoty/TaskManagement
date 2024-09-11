@@ -54,9 +54,9 @@ function selectOption(option) {
 <template>
 	<div class="activity-block">
 		<div class="header__content">
-				<div class="header__title">{{ title }}</div>
-				<span class="header__text">Let's finish your task today!</span>
-			</div>
+			<div class="header__title">{{ title }}</div>
+			<span class="header__text">Let's finish your task today!</span>
+		</div>
 		<div class="activity-block__progress-task progress-task">
 			<div class="progress-task__title">Running Task</div>
 			<div class="progress-task__current">{{ currentTask }}</div>
@@ -134,6 +134,12 @@ function selectOption(option) {
 		row-gap: rem(16);
 		justify-items: center;
 	}
+	@media (max-width: 425px){
+		padding: rem(22) rem(22) rem(22) rem(19);
+	}
+	@media (max-width: 375px){
+		padding: rem(22) 0;
+	}
 		&__progress-task {
 
 		}
@@ -156,6 +162,7 @@ function selectOption(option) {
 		}
 		@media (max-width: 580px) {
 			grid-row: 1;
+			grid-column: 1 / 3;
 		}
 		
 	}
@@ -201,7 +208,7 @@ function selectOption(option) {
 	@media (max-width: 1180px) {
 		grid-column: 2;
 		grid-row: 1;
-		max-width: 290px;
+		max-width: 280px;
 		justify-self: end;
 	}
 	@media (max-width: 580px) {

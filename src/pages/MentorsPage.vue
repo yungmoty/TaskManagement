@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import RecentMentors from '@/components/MentorsPageRecentMentors.vue';
+import TotalMentors from '@/components/MentorsPageTotalMentors.vue';
 import { useMentors } from "@/hooks/useMentors";
 
 
@@ -56,7 +57,9 @@ const	sortedAndSearchedMentors = computed(() => {
 				</div>
 				
 				<div class="page__total-mentors">
-
+					<TotalMentors
+						:mentors="sortedAndSearchedMentors"
+					/>
 				</div>
 			</div>
 		</div>
@@ -71,19 +74,48 @@ const	sortedAndSearchedMentors = computed(() => {
 	height: 100vh;
 	display: grid;
 	grid-template-columns: 17.5% 1fr;
+
+	@media (max-width: $dekstop){
+		grid-template-columns: 1fr;
+	}
 	&__content {
 		background-color: $light-white;
 		width: 1212px;
 		margin: 0 auto;
+
+		@media (max-width: $l-dekstop) {
+			@include adaptiveValue(1212, 200, 1470, 'max-width');
+		}
+		@media (max-width: 1300px) {
+			padding-left: 20px;
+		}
+		@media (max-width: 1279px) {
+			padding-left: 0;
+		}
+		@media (max-width: $dekstop) {
+			@include adaptiveValue(1280, 300, 1280, 'min-width');
+		}
+		@media (max-width: $tablet) {
+			@include adaptiveValue(744, 320, 744, 'max-width');
+		}
+		@media (max-width: 415px) {
+			@include adaptiveValue(415, 320, 415, 'max-width');
+		}
 	}
 	&__common {
 
 	}
 	&__recent-mentors {
 		padding: rem(32);
+		@media (max-width: 425px){
+			padding: rem(22);
+		}
 	}
 	&__total-mentors {
-
+		padding: rem(32);
+		@media (max-width: 425px){
+			padding: rem(22);
+		}
 	}
 }
 

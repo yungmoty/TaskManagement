@@ -46,13 +46,15 @@ watch(() => slidesCountLimitTask.value, () => {
 				class="swiper-slide recent-mentors"
 			>
 				<div class="recent-mentors__top">
-					<a href class="recent-mentors__avatar">
-						<img :src="mentor.avatar" :alt="mentor.name">
-					</a>
-					<a href="" class="recent-mentors__info">
-						<div class="recent-mentors__name">{{ mentor.name }}</div>
-						<div class="recent-mentors__major">{{ mentor.major }}</div>
-					</a>
+					<div class="recent-mentors__main">
+						<a href class="recent-mentors__avatar">
+							<img :src="mentor.avatar" :alt="mentor.name">
+						</a>
+						<a href="" class="recent-mentors__info">
+							<div class="recent-mentors__name">{{ mentor.name }}</div>
+							<div class="recent-mentors__major">{{ mentor.major }}</div>
+						</a>
+					</div>
 					<a 
 						v-if="mentor.isFollow"
 						href=""
@@ -111,6 +113,24 @@ watch(() => slidesCountLimitTask.value, () => {
 		display: flex;
 		align-items: center;
 		margin-bottom: rem(20);
+		justify-content: space-between;
+
+		@media (max-width: 425px){
+			align-items: flex-start;
+			flex-direction: column;
+		}
+		@media (max-width: 375px){
+			margin-bottom: rem(16);
+		}
+	}
+	&__main {
+		display: flex;
+		@media (max-width: 425px){
+			margin-bottom: rem(20);
+		}
+		@media (max-width: 375px){
+			margin-bottom: rem(14);
+		}
 	}
 	&__avatar {
 		img {
@@ -206,4 +226,8 @@ watch(() => slidesCountLimitTask.value, () => {
 .task-list-move {
 	transition: transform 0.4s ease 0s;
 }
+.task-list-leave-active {
+	position: absolute;
+}
+
 </style>

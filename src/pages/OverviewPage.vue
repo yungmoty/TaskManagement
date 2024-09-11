@@ -89,12 +89,7 @@ onMounted(() => {
 	}
 }
 .main-content {
-	// width: 752px;
-	// width: 100%;
 	background-color: $light-white;
-	// @media (max-width: $laptop){
-	// 	width: 100%;
-	// }
 }
 .main-wrapper {
 	max-width: 752px;
@@ -107,7 +102,7 @@ onMounted(() => {
 		@include adaptiveValue(1000, 340, 1024, 'max-width');
 	}
 	@media (max-width: 400px){
-		@include adaptiveValue(460, 410, 410, 'max-width');
+		@include adaptiveValue(400, 320, 410, 'max-width');
 	}
 }
 .header__text {
@@ -116,11 +111,23 @@ onMounted(() => {
 .mentors-block {
 	padding: rem(32);
 	padding-top: 0;
-	// display: flex;
-	// justify-content: center;
+
+	@media (max-width: 425px){
+		padding: rem(22);
+	}
+	@media (max-width: 375px){
+		padding: rem(22) 0;
+	}
 }
 .task-block {
 	padding: 0 rem(32);
+
+	@media (max-width: 425px){
+		padding: 0 rem(22);
+	}
+	@media (max-width: 375px){
+		padding: 0 0 rem(22) 0;
+	}
 }
 .sidebar-block {
 	padding: rem(32);
@@ -128,6 +135,10 @@ onMounted(() => {
 	// width: 50vw;
 	@media (max-width: $laptop){
 		// @include adaptiveValue(1000, 340, 1024, 'max-width');
+	}
+
+	@media (max-width: 425px){
+		padding: rem(22);
 	}
 }
 </style>

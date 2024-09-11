@@ -18,29 +18,31 @@ const choiceFollow = () => {
 <template>
 	<div class="swiper-slide mentor">
 		<div class="mentor__top">
-			<a href class="mentor__avatar">
-				<img :src="mentor.avatar" :alt="mentor.name">
-			</a>
-			<a href="" class="mentor__info">
-				<div class="mentor__name">{{ mentor.name }}</div>
-				<div class="mentor__major">{{ mentor.major }}</div>
-			</a>
-			<a 
-				v-if="isFollow"
-				href=""
-				class="mentor__followed"
-				@click.prevent="choiceFollow"
-			>
-				Followed
-			</a>
-			<a
-				v-if="!isFollow"
-				href=""
-				class="mentor__follow"
-				@click.prevent="choiceFollow"
-			>
-			+ Follow
-			</a>
+			<div class="mentor__main">
+				<a href class="mentor__avatar">
+					<img :src="mentor.avatar" :alt="mentor.name">
+				</a>
+				<a href="" class="mentor__info">
+					<div class="mentor__name">{{ mentor.name }}</div>
+					<div class="mentor__major">{{ mentor.major }}</div>
+				</a>
+			</div>
+				<a 
+					v-if="isFollow"
+					href=""
+					class="mentor__followed"
+					@click.prevent="choiceFollow"
+				>
+					Followed
+				</a>
+				<a
+					v-if="!isFollow"
+					href=""
+					class="mentor__follow"
+					@click.prevent="choiceFollow"
+				>
+				+ Follow
+				</a>
 		</div>
 		<div class="mentor__bottom">
 			<a 
@@ -73,7 +75,19 @@ const choiceFollow = () => {
 	&__top {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		margin-bottom: rem(20);
+
+		@media (max-width: 425px){
+			align-items: flex-start;
+			flex-direction: column;
+		}
+	}
+	&__main {
+		display: flex;
+		@media (max-width: 425px){
+			margin-bottom: rem(20);
+		}
 	}
 	&__avatar {
 		img {

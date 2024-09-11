@@ -169,12 +169,14 @@ onMounted(() => {
 			display: none;
 		}
 	}
-	&.task-page &__content {
+	&.task-page &__content,
+	&.mentors-page &__content {
 		@media (max-width: $dekstop){
 			display: none;
 		}
 	}
-	&.task-page {
+	&.task-page,
+	&.mentors-page {
 		background-color: $white;
 	}
 	&.detail-task-page {
@@ -185,6 +187,10 @@ onMounted(() => {
 		justify-content: space-between;
 		align-items: center;
 		padding: rem(32);
+
+		@media (max-width: 425px){
+			padding: rem(32) rem(22);
+		}
 	}
 	&__content {
 
@@ -223,6 +229,10 @@ onMounted(() => {
 		justify-content: space-between;
 		gap: rem(24);
 		padding: rem(32);
+
+		@media (max-width: 425px){
+			padding: rem(32) rem(22);
+		}
 	}
 	&__search {
 	}
@@ -296,7 +306,8 @@ onMounted(() => {
 		padding: 13px;
 	}
 }
-.header.task-page .menu__icon {
+.header.task-page .menu__icon,
+.header.mentors-page .menu__icon {
 	@media (max-width: $dekstop) {
 		display: inline-block;
 		cursor: pointer;

@@ -125,9 +125,15 @@ const	sortedAndSearchedTasksToday = computed(() => {
 	}
 	&__task-limit {
 		padding: rem(32);
+		@media (max-width: 425px){
+			padding: rem(22);
+		}
 	}
 	&__new-task {
 		padding: 0 rem(32);
+		@media (max-width: 425px){
+			padding: 0 rem(22);
+		}
 	}
 }
 

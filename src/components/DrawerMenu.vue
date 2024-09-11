@@ -26,6 +26,10 @@ function handleClickOutside(event) {
 	}
 }
 
+const removeBodyClass = () => {
+	document.body.classList.remove('_lock');
+}
+
 onMounted(() => {
 	document.addEventListener('click', handleClickOutside);
 });
@@ -33,6 +37,7 @@ onMounted(() => {
 onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
 });
+
 
 const taskDetailPattern = /^\/task-detail\/\d+$/
 </script>
@@ -44,7 +49,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 				<img src="@/assets/images/logo.svg" alt="Logo">
 			</div>
 			<div class="sidebar__body">
-				<div class="sidebar__navigation">
+				<div 	@click="removeBodyClass" class="sidebar__navigation">
 					<div 
 						:class="{_active : currentPath === '/overview'}" 
 						@click="$router.push('/overview')"
@@ -135,7 +140,8 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 			height: 100%;
 		}
 	}
-	&.task-page {
+	&.task-page,
+	&.mentors-page {
 		@media (max-width: $dekstop) {
 			position: fixed;
 			overflow: auto;
