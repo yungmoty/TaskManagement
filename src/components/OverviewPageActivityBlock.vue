@@ -92,17 +92,19 @@ function selectOption(option) {
 					>
 						{{ selectedOption }} <span class="_icon-arrow-down"></span>
 					</a>
-					<div class="activity-graph__items">
-						<a
-							v-for="item in timeInterval"
-							:key="item"
-							href=""
-							class="activity-graph__item"
-							@click.prevent="selectOption(item)"
-						>
-						{{ item }}
-						</a>
-					</div>
+					<Transition name="select-menu">
+						<div v-if="isOpen" class="activity-graph__items">
+							<a
+								v-for="item in timeInterval"
+								:key="item"
+								href=""
+								class="activity-graph__item"
+								@click.prevent="selectOption(item)"
+							>
+							{{ item }}
+							</a>
+						</div>
+					</Transition>
 				</div>
 			</div>
 			<div class="activity-graph__block">
@@ -299,10 +301,6 @@ function selectOption(option) {
 		z-index: 1;
 		width: rem(120);
 		text-align: right;
-		&._active .activity-graph__items {
-			opacity: 1;
-			visibility: visible;
-		}
 		&._active ._icon-arrow-down {
 			transform: rotate(180deg);
 		}
@@ -322,8 +320,6 @@ function selectOption(option) {
 	}
 	&__items {
 		display: flex;
-		opacity: 0;
-		visibility: hidden;
 		flex-direction: column;
 		background-color: $medium-white;
 		border-radius: rem(10);
@@ -355,7 +351,24 @@ function selectOption(option) {
 	}
 }
 ._icon-arrow-down {
-	transition: transform 0.3s ease 0s;
+	transition: transform 0.6s ease 0s;
 	display: inline-block;
+}
+.select-menu-enter-active {
+	animation: fadeInUp 0.3s;
+}
+.select-menu-leave-active {
+	animation: fadeInUp 0.3s reverse;
+}
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translate(50%, 0) translate3d(0, 10%, 0);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate(50%, 0) translate3d(0, 0, 0);
+	}
 }
 </style>

@@ -59,18 +59,20 @@ function selectOption(option) {
 			{{ selectTitle }}
 			<div v-if="isSort">{{ selectedOption }}</div>
 		</a>
-		<div :class="optionsClass" class="select__items">
-			<a 
-				href=""
-				v-for="item in selectArr"
-				:key="item"
-				:value="item"
-				class="select__item"
-				@click.prevent="selectOption(item)"
-			>
-				{{ item }}
-			</a>
-		</div>
+		<Transition name="select-menu">
+			<div v-if="isOpen" :class="optionsClass" class="select__items">
+				<a 
+					href=""
+					v-for="item in selectArr"
+					:key="item"
+					:value="item"
+					class="select__item"
+					@click.prevent="selectOption(item)"
+				>
+					{{ item }}
+				</a>
+			</div>
+		</Transition>
 	</div>
 </template>
 
@@ -114,8 +116,6 @@ function selectOption(option) {
 	}
 	&__items {
 		display: flex;
-		opacity: 0;
-		visibility: hidden;
 		flex-direction: column;
 		background-color: $medium-white;
 		border-radius: rem(10);
@@ -125,7 +125,6 @@ function selectOption(option) {
 		margin-top: rem(15);
 		font-weight: 600;
 		font-size: rem(13);
-		transition: all 0.3s ease 0s;
 		border: 2px solid $light-blue;
 
 		&._options {
@@ -144,10 +143,6 @@ function selectOption(option) {
 	&._active ._icon-category {
 	transform: rotate(90deg);
 	}
-	&._active &__items {
-		opacity: 1;
-		visibility: visible;
-	}
 	&._active &__link {
 		background-color: $light-blue;
 		border: 1px solid $light-blue;
@@ -161,6 +156,23 @@ function selectOption(option) {
 }
 ._icon-sort {
 	transition: all 0.3s ease 0s;
+}
+.select-menu-enter-active {
+	animation: fadeInUp 0.3s;
+}
+.select-menu-leave-active {
+	animation: fadeInUp 0.3s reverse;
+}
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translate3d(0, 10%, 0);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
 }
 </style>
  

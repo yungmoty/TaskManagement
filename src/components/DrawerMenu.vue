@@ -109,7 +109,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 	background-color: $white;
 	z-index: 5;
 	position: relative;
-	transition: all 0.3s ease 0s;
+	transition: all 0.5s ease 0s;
 
 	@media (max-width: 374px){
 		width: 225px;
@@ -127,6 +127,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 			
 			&._active {
 				right: 0;
+				animation: slideInRight;
 			}
 		}
 		@media (max-width: $laptop-inter){
@@ -144,6 +145,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 			
 			&._active {
 				right: 0;
+				animation: slideInRight;
 			}
 		}
 		@media (max-width: $laptop-inter){
@@ -294,6 +296,17 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 		&:hover {
 			background-color: $light-blue;
 		}
+	}
+}
+
+@keyframes slideInRight {
+	from {
+		transform: translate3d(100%, 0, 0);
+		visibility: visible;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0);
 	}
 }
 </style>
