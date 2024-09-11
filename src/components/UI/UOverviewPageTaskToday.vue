@@ -18,8 +18,9 @@ setTimeout(() => {
 const emit = defineEmits(['string-sent']);
 
 function sendString() {
-	const stringToSend = props.taskToday.major;
-	emit('string-sent', stringToSend);
+	const majorToSend = props.taskToday.major;
+	const idToSend = props.taskToday.id;
+	emit('string-sent', majorToSend, idToSend);
 }
 
 onMounted(() => {

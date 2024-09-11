@@ -2,18 +2,36 @@
 import { onMounted, ref } from 'vue'
 import OverviewPageCalendar from '@/components/OverviewPageCalendar.vue';
 import { useTaskToday } from "@/hooks/useTaskToday";
+import { useRouter } from 'vue-router';
+import { useSliderStore } from '@/stores/counter';
 
+const sliderStore = useSliderStore();
 const { tasksToday, fetchData, loadingTaskToday } = useTaskToday()
+const router = useRouter();
 const item = ref([])
-const receivedString = ref('');
+const getMajor = ref('');
+const getId = ref('');
 const isActive = ref(false)
 
 const openSettings = () => {
 	isActive.value = !isActive.value
 }
-const handleStringSent = (payload) => {
-	receivedString.value = payload;
+const handleStringSent = (major, id) => {
+	getMajor.value = major;
+	getId.value = id;
 }
+
+const selectSlide = (slideId) => {
+	sliderStore.setActiveSlideId(slideId);
+	sliderStore.setActiveSlider('tasksToday');
+
+	localStorage.setItem('activeSlideId', JSON.stringify(slideId));
+	localStorage.setItem('activeSlider', JSON.stringify('tasksToday'));
+};
+
+const navigateToDetail = (taskId) => {
+	router.push({ name: 'task-detail', params: { id: taskId } });
+};
 
 onMounted(() => {
 	fetchData().then(() => {
@@ -31,8 +49,6 @@ onMounted(() => {
 	}).catch(error => {
 		console.error(error)
 	});
-
-
 })
 
 
@@ -100,7 +116,7 @@ onMounted(() => {
 			<div class="current-task__about">
 				<div class="current-task__detail">
 					<div class="current-task__subtitle">Detail Task</div>
-					<div class="current-task__major">{{ receivedString }}</div>
+					<div class="current-task__major">{{ getMajor }} {{ getId }}</div>
 				</div>
 				<ul class="current-task__list">
 					<li class="current-task__item">
@@ -116,7 +132,7 @@ onMounted(() => {
 						Design a mobile application with figma
 					</li>
 				</ul>
-				<UButton class="current-task__btn">
+				<UButton @click="[navigateToDetail(getId), selectSlide(getId)]" class="current-task__btn">
 					Go To Detail
 				</UButton>
 			</div>
