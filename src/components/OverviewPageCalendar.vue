@@ -6,7 +6,7 @@ import moment from 'moment';
 	const namePeriod = ref('week')
 	const lengthDays = ref(7)
 
-const currentWeekStart = ref(moment().startOf(namePeriod));
+const currentWeekStart = ref(moment().startOf(namePeriod.value));
 const today = moment();
 
 const isToday = computed(() => currentWeekStart.value.isSame(today, namePeriod.value))

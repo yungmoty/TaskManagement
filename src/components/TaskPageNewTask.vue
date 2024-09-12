@@ -320,4 +320,7 @@ onBeforeUnmount(() => {
 .task-list-move {
 	transition: transform 0.4s ease 0s;
 }
+.task-list-leave-active {
+	position: absolute;
+}
 </style>
