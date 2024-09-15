@@ -33,23 +33,25 @@ const navigateToDetail = (taskId) => {
 	router.push({ name: 'task-detail', params: { id: taskId } });
 };
 
-onMounted(() => {
-	fetchData().then(() => {
-		// const random = Math.floor(Math.random() * newTasks.value.length)
+const fetchDataAndSetItem = async () => {
+	try {
+		await fetchData();
 		let currentDate = new Date();
-		let count = currentDate.getDate()
-		let maxLength = tasksToday.value.length
-		const tmp = Math.ceil(count / (maxLength - 1))
+		let count = currentDate.getDate();
+		let maxLength = tasksToday.value.length;
+		const tmp = Math.ceil(count / (maxLength - 1));
 
 		if (count > maxLength - 1) {
-			count -= (maxLength - 1) * (tmp - 1)
+				count -= (maxLength - 1) * (tmp - 1);
 		}
 
-		item.value.push(tasksToday.value[count])
-	}).catch(error => {
-		console.error(error)
-	});
-})
+		item.value.push(tasksToday.value[count]);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+onMounted(fetchDataAndSetItem);
 
 
 </script>
@@ -116,7 +118,7 @@ onMounted(() => {
 			<div class="current-task__about">
 				<div class="current-task__detail">
 					<div class="current-task__subtitle">Detail Task</div>
-					<div class="current-task__major">{{ getMajor }} {{ getId }}</div>
+					<div class="current-task__major">{{ getMajor }}</div>
 				</div>
 				<ul class="current-task__list">
 					<li class="current-task__item">

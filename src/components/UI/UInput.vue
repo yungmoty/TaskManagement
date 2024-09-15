@@ -37,7 +37,7 @@ function searchKeydown(event) {
 </template>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/assets/scss/main.scss';
 
 .input-search {

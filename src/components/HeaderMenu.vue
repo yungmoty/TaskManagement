@@ -113,6 +113,7 @@ onMounted(() => {
 					@search="performSearch"
 					type="text" 
 					placeholder="Search Task"
+					class="header__input"
 				/>
 			</div>
 			<div v-click-outside="handleClickOutside" :class="{_active: isActiveOption}" class="header__choice-sort">
@@ -163,24 +164,32 @@ onMounted(() => {
 @import '@/assets/scss/main.scss';
 
 .header {
+
 	&.overview-page &__content,
 	&.detail-task-page &__content {
 		@media (max-width: $l-dekstop){
 			display: none;
 		}
 	}
+
 	&.task-page &__content,
 	&.mentors-page &__content {
 		@media (max-width: $dekstop){
 			display: none;
 		}
 	}
+
 	&.task-page,
 	&.mentors-page {
 		background-color: $white;
 	}
+
 	&.detail-task-page {
 		background-color: $white;
+	}
+	&.message-page {
+		border-bottom: 1px solid $medium-white;
+		border-right: 1px solid #F8F6F7;
 	}
 	&__top {
 		display: flex;
@@ -235,6 +244,9 @@ onMounted(() => {
 		}
 	}
 	&__search {
+	}
+	&__input {
+		padding: rem(14) rem(28);
 	}
 	&__choice-sort {
 		display: none;

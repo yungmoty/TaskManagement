@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onUnmounted } from 'vue';
 import { useStudentStore } from '@/stores/counter';
 import { useRouter } from 'vue-router';
 
@@ -10,6 +10,9 @@ const studentName = ref('');
 const studentClass = ref('');
 const studentPhotoUrl = ref('');
 const isLoading = ref(false)
+const username = ref(null)
+const userclass = ref(null)
+const registerForm = ref(null)
 
 function handleFileUpload(event) {
 	const file = event.target.files[0];
@@ -32,38 +35,31 @@ function registerStudent() {
 	});
 
 	studentStore.saveToLocalStorage();
-	studentStore.studentId++;	
+	studentStore.studentId++;
 }
 
 let requiredName = false
 let requiredClass = false
 
-onMounted(() => {
-	function validate() {
-		const username = document.getElementById('name');
-		if (username.value.trim() == '') {
+
+function validate() {
+		if (username.value.value.trim() == '') {
 			requiredName = false
-			username.classList.add('required');
-			username.style.borderColor = '#FF4D5E';
+			username.value.classList.add('required');
 			
 			setTimeout(function() {
-				username.style.borderColor = null;
-				username.classList.remove('required');
+				username.value.classList.remove('required');
 			}, 300);
 		} else {
-			username.style.backgroundColor = null;
 			requiredName = true
 		}
 
-		const userclass = document.getElementById('class');
-		if (userclass.value.trim() == '') {
+		if (userclass.value.value.trim() == '') {
 			requiredClass = false
-			userclass.classList.add('required');
-			userclass.style.borderColor = '#FF4D5E';
+			userclass.value.classList.add('required');
 			
 			setTimeout(function() {
-				userclass.style.borderColor = null;
-				userclass.classList.remove('required');
+				userclass.value.classList.remove('required');
 			}, 300);
 		} else {
 			requiredClass = true
@@ -76,8 +72,10 @@ onMounted(() => {
 			}, 1000);
 		}
 	}
-	document.getElementById('register').addEventListener('submit', validate);
+onMounted(() => {
+	registerForm.value.addEventListener('submit', validate);
 })
+
 </script>
 
 
@@ -85,7 +83,8 @@ onMounted(() => {
 	<div class="register">
 		<form 
 			@submit.prevent="registerStudent" 
-			id="register" 
+			id="register"
+			ref="registerForm"
 			class="register__form register-form"
 			method="post"
 		>
@@ -96,7 +95,8 @@ onMounted(() => {
 					placeholder="Name..." 
 					v-model="studentName" 
 					type="text" 
-					id="name" 
+					id="name"
+					ref="username"
 					class="register-form__input-name reg-input"
 				>
 			</div>
@@ -106,7 +106,8 @@ onMounted(() => {
 					placeholder="Class..." 
 					v-model="studentClass" 
 					type="text" 
-					id="class" 
+					id="class"
+					ref="userclass"
 					class="register-form__input-class reg-input"
 				>
 			</div>
@@ -288,6 +289,7 @@ onMounted(() => {
 	position: relative;
 	animation: shake .1s linear;
 	animation-iteration-count: 3;
+	border-color: #FF4D5E;
 }
 
 @keyframes shake {

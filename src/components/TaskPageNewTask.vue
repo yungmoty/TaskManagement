@@ -315,7 +315,7 @@ onBeforeUnmount(() => {
 .task-list-enter-from,
 .task-list-leave-to {
 	opacity: 0;
-	transform: translateX(130px);
+	transform: scale(0.1);
 }
 .task-list-move {
 	transition: transform 0.4s ease 0s;

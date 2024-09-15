@@ -159,7 +159,7 @@ onUpdated(() => {
 					<span class="task-form__icon _icon-folder-open"></span>
 				</label>
 				<input 
-					@change="handleFileUpload" 
+					@change="handleFileSend" 
 					type="file" 
 					id="file" 
 					class="task-form__input"

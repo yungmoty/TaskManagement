@@ -94,7 +94,7 @@ const	sortedAndSearchedTasksToday = computed(() => {
 .page {
 	height: 100vh;
 	display: grid;
-	grid-template-columns: 17.5% 1fr;
+	grid-template-columns: 16.5% 1fr;
 	@media (max-width: $dekstop){
 		grid-template-columns: 1fr;
 	}

@@ -8,7 +8,7 @@ defineProps({
 
 
 <template>
-	<a href="" :class="title" class="mini-btn">
+	<a @click.prevent href="" :class="title" class="mini-btn">
 		<slot></slot>
 	</a>
 </template>

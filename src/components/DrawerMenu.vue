@@ -77,6 +77,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 					<div 
 						:class="{_active : currentPath === '/message'}" 
 						class="sidebar__link"
+						@click="$router.push('/message')"
 					>
 						<span class="_icon-message"></span>
 						Message
@@ -140,6 +141,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 			height: 100%;
 		}
 	}
+
 	&.task-page,
 	&.mentors-page {
 		@media (max-width: $dekstop) {
@@ -158,6 +160,10 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 		@media (max-width: $laptop-inter){
 			height: 100%;
 		}
+	}
+
+	&.message-page {
+		border-right: 1px solid $medium-white;
 	}
 
 
