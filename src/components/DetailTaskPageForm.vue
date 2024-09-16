@@ -14,6 +14,7 @@ const { fetchTaskById } = useNewTasks()
 const { fetchTaskTodayById } = useTaskToday();
 const task = ref(null)
 const file = ref(null)
+const photoUrl = ref('');
 const formattedDate = ref('')
 const dataTask = ref({
 	name: String,
@@ -65,21 +66,33 @@ onMounted(() => {
 	}
 });
 
-const sendDataTask = () => {
-	if (dataTask.value.file) {
-		const reader = new FileReader();
+// const sendDataTask = () => {
+// 	if (dataTask.value.file) {
+// 		const reader = new FileReader();
 
-		reader.onload = () => {
-			dataTask.value.file = reader.result;
-			localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
-		};
-		reader.readAsDataURL(dataTask.value.file);
-	} else {
-		localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
-	}
-}
+// 		reader.onload = () => {
+// 			dataTask.value.file = reader.result;
+// 			localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
+// 		};
+// 		reader.readAsDataURL(dataTask.value.file);
+// 	} else {
+// 		localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
+// 	}
+// }
 
 function handleFileUpload(event) {
+	const files = event.target.files;
+	if (files.length > 0) {
+		const file = files[0];
+		dataTask.value.file = file;
+
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			photoUrl.value = e.target.result;
+		};
+		reader.readAsDataURL(file);
+	}
+
 	const dropArea = file.value
 	if (!dropArea) return
 
@@ -113,13 +126,36 @@ onUpdated(() => {
 	})
 })
 
+const WEB3FORMS_ACCESS_KEY = "e74a2fef-3d97-48a4-9513-bdfcd5086d0b";
+
+const submitForm = async () => {
+	const response = await fetch("https://api.web3forms.com/submit", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+		body: JSON.stringify({
+			access_key: WEB3FORMS_ACCESS_KEY,
+			name: dataTask.value.name,
+			class: dataTask.value.class,
+			id: dataTask.value.id,
+			file: dataTask.value.file,
+		}),
+	});
+	const result = await response.json();
+	
+	if (result.success) {
+		console.log(result);
+	}
+}
 </script>
 
 
 <template>
 	<div v-if="task" class="detail-task">
 		<form
-			@submit.prevent="sendDataTask"
+			@submit.prevent="submitForm"
 			id="task-form"
 			class="task-form"
 			method="post"
@@ -158,8 +194,8 @@ onUpdated(() => {
 				<label for="file" class="task-form__label">
 					<span class="task-form__icon _icon-folder-open"></span>
 				</label>
-				<input 
-					@change="handleFileSend" 
+				<input
+					@change="handleFileUpload" 
 					type="file" 
 					id="file" 
 					class="task-form__input"
