@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUpdated } from 'vue';
 import { format, subDays, isToday, isYesterday, parseISO, subHours } from 'date-fns';
 
 function adjustTime(date, hours) {
@@ -95,6 +95,7 @@ const chats = ref([
 ]);
 
 const currentChatId = ref(0);
+const chatSelected = ref(false)
 
 const currentChat = computed(() => {
 	return chats.value.find(chat => chat.id === currentChatId.value);
@@ -103,6 +104,8 @@ const currentChat = computed(() => {
 const setChat = (id) => {
 	currentChatId.value = id;
 	chats.value[currentChatId.value-1].isRead = true
+	chatSelected.value = true
+	document.body.classList.add('_lock');
 };
 
 const newMessage = ref('');
@@ -129,7 +132,9 @@ const searchedChats = computed(() => {
 })
 
 const selectedFile = ref(null);
+const main = ref(null);
 const filePreviewUrl = ref('');
+const heightFile = ref(0);
 
 const handleFileUpload = (event) => {
 	const file = event.target.files[0];
@@ -140,6 +145,10 @@ const handleFileUpload = (event) => {
 		};
 		reader.readAsDataURL(file);
 		selectedFile.value = file;
+		heightFile.value = 42
+		if (window.innerWidth <= 830) {
+			main.value.style.height = (window.innerHeight - fileUploadVar.value) + 'px'
+		}
 	}
 };
 
@@ -156,8 +165,62 @@ const sendMessage = () => {
 		newMessage.value = '';
 		filePreviewUrl.value = '';
 		selectedFile.value = null;
+		heightFile.value = 0
+		if (window.innerWidth <= 830) {
+			main.value.style.height = (window.innerHeight - sendVar.value) + 'px'
+		}
 	}
 };
+const comeBackChats = () => {
+	chatSelected.value = false
+	document.body.classList.remove('_lock');
+
+	setTimeout(() => {
+		currentChatId.value = 0
+	}, 300);
+}
+const isMobile = ref(false)
+const sendVar = ref(196)
+const fileUploadVar = ref(238)
+
+const checkMobile = () => {
+	isMobile.value = window.innerWidth <= 830 ? true : false
+}
+
+const fileUploadMargins = () => {
+	fileUploadVar.value = window.innerWidth <= 540 ? 268 : 238
+}
+
+const sendMargins = () => {
+	sendVar.value = window.innerWidth <= 540 ? 268 : 196
+}
+onMounted(() => {
+	checkMobile()
+	fileUploadMargins()
+	sendMargins()
+	window.addEventListener('resize', checkMobile, fileUploadMargins, sendMargins)
+	window.addEventListener('resize', fileUploadMargins)
+})
+
+const images = ref(null)
+const showModal = ref(false);
+const modalImage = ref('');
+
+const openModal = (url) => {
+	modalImage.value = url;
+	showModal.value = true;
+};
+
+
+const closeModal = () => {
+	showModal.value = false;
+};
+
+onUpdated(() => {
+	images.value.forEach(img => {
+		img.addEventListener('click', () => openModal(img.src));
+	});
+});
 </script>
 
 
@@ -213,7 +276,7 @@ const sendMessage = () => {
 				</transition-group>
 			</div>
 		</div>
-		<div class="message-chat__current-chat current-chat">
+		<div :class="{_active: chatSelected}" class="message-chat__current-chat current-chat">
 			<div v-if="currentChatId === 0" class="current-chat__none">
 				<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 20 20"><path fill="#04A4F4" d="M10 0c5.342 0 10 4.41 10 9.5c0 5.004-4.553 8.942-10 8.942a11 11 0 0 1-3.43-.546c-.464.45-.623.603-1.608 1.553c-.71.536-1.378.718-1.975.38c-.602-.34-.783-1.002-.66-1.874l.4-2.319C.99 14.002 0 11.842 0 9.5C0 4.41 4.657 0 10 0m0 1.4c-4.586 0-8.6 3.8-8.6 8.1c0 2.045.912 3.928 2.52 5.33l.02.017l.297.258l-.067.39l-.138.804l-.037.214l-.285 1.658a3 3 0 0 0-.03.337v.095q0 .007-.002.008c.007-.01.143-.053.376-.223l2.17-2.106l.414.156a9.6 9.6 0 0 0 3.362.605c4.716 0 8.6-3.36 8.6-7.543c0-4.299-4.014-8.1-8.6-8.1M5.227 7.813a1.5 1.5 0 1 1 0 2.998a1.5 1.5 0 0 1 0-2.998m4.998 0a1.5 1.5 0 1 1 0 2.998a1.5 1.5 0 0 1 0-2.998m4.997 0a1.5 1.5 0 1 1 0 2.998a1.5 1.5 0 0 1 0-2.998"/>
 				</svg>
@@ -222,6 +285,15 @@ const sendMessage = () => {
 			<div v-else class="current-chat__done">
 				<div class="current-chat__header">
 					<div class="current-chat__people">
+						<a v-if="isMobile" class="current-chat__back" @click.prevent="comeBackChats" href="">
+							<svg viewBox="0 0 62 22" 
+								stroke="#141522" 
+								stroke-width="3" 
+								fill="none">
+								<line x1="-20" y1="11" x2="40" y2="11" />
+								<polyline points="30,1 40,11 30,21" />
+							</svg>
+						</a>
 						<div class="current-chat__avatar">
 							<img :src="currentChat.avatar" :alt="currentChat.name">
 						</div>
@@ -254,7 +326,7 @@ const sendMessage = () => {
 						<UMiniButton class="current-chat__btn" title="_icon-voice-call" />
 					</div>
 				</div>
-				<div class="current-chat__main">
+				<div ref="main" class="current-chat__main">
 					<div 
 						class="current-chat__messages" 
 						v-for="(message, index) in currentChat.messages" 
@@ -278,6 +350,7 @@ const sendMessage = () => {
 									v-if="message.file"
 									:src="message.file.url"
 									:alt="message.file.name"
+									ref="images"
 									class="current-chat__message-image">
 							</p>
 							<span 
@@ -315,6 +388,12 @@ const sendMessage = () => {
 				</div>
 			</div>
 		</div>
+		<div v-if="showModal" class="modal" @click="closeModal">
+			<div class="modal__content" @click.stop>
+				<img :src="modalImage" class="modal__image" />
+				<button @click="closeModal" class="modal__close-btn">✕</button>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -322,26 +401,47 @@ const sendMessage = () => {
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
 
+
 .message-chat {
 	display: grid;
 	grid-template-columns: 400px 1fr;
+	height: 100%;
+	position: relative;
+
+	@media (max-width: $laptop){
+		grid-template-columns: 350px 1fr;
+	}
+	@media (max-width: $laptop-inter){
+		grid-template-columns: 1fr;
+	}
 	&__total-chats {
 	}
 	&__current-chat {
 	}
 }
 .total-chats {
+	width: 100%;
 	&__search-block {
 		padding: rem(24) rem(24) 0 rem(24);
 	}
 	&__search {
 		max-width: 352px;
 		padding: rem(14) rem(28);
+
+		@media (max-width: $laptop){
+			max-width: 300px;
+		}
+		@media (max-width: $laptop-inter){
+			min-width: 100%;
+		}
 	}
 	&__chats {
 		padding: rem(32) rem(24);
 		height: 932px;
 		overflow-y: auto;
+		@media (max-width: $tablet){
+			height: max-content;
+		}
 
 		&::-webkit-scrollbar {
 			width: 10px;
@@ -418,6 +518,13 @@ const sendMessage = () => {
 		width: 200px;
 		color: $light-purple;
 
+		@media (max-width: $laptop){
+			width: 150px;
+		}
+		@media (max-width: $laptop-inter){
+			@include adaptiveValue(600, 120, 830, 'width');
+		}
+
 		&.unread {
 			color: $dark-purple;
 			font-weight: 500;
@@ -438,6 +545,20 @@ const sendMessage = () => {
 .current-chat {
 	border-left: 1px solid #F8F6F7;
 	border-right: 1px solid #F8F6F7;
+
+
+	@media (max-width: $laptop-inter){
+		z-index: 10;
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 100%;
+		transition: all 0.3s ease 0s;
+		&._active {
+			left: 0;
+		}
+	}
+
 	&__none {
 		display: flex;
 		align-items: center;
@@ -451,14 +572,57 @@ const sendMessage = () => {
 			color: $light-purple;
 		}
 	}
+	&__done {
+
+	}
 	&__header {
 		display: flex;
 		justify-content: space-between;
 		padding: rem(24) rem(48);
+		
+		@media (max-width: $mobile-sec-inter){
+			flex-direction: column;
+			gap: rem(20);
+		}
+		@media (max-width: $laptop-inter){
+			background-color: $white;
+		}
+		@media (max-width: 375px){
+			padding: rem(24) rem(24);
+		}
 	}
 	&__people {
 		display: flex;
 		cursor: pointer;
+	}
+	&__back {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 20px;
+
+		svg * {
+			-webkit-transition-duration: 200ms;
+			-o-transition-duration: 200ms;
+			transition-duration: 200ms;
+			-webkit-transition-property: all;
+			-o-transition-property: all;
+			transition-property: all;
+			shape-rendering: geometricPrecision;
+		}
+
+		svg {
+			width: 42px;
+			height: 52px;
+			transform: rotate(180deg);
+			margin-left: -14px;
+		}
+
+		&:hover svg * {
+			-webkit-transform: translate(10px, 0);
+			-ms-transform: translate(10px 0);
+			transform: translate(10px 0);
+		}
 	}
 	&__avatar {
 		margin-right: rem(12);
@@ -480,6 +644,10 @@ const sendMessage = () => {
 	&__interaction {
 		display: flex;
 		gap: rem(24);
+		@media (max-width: $mobile-sec-inter){
+			justify-content: space-between;
+			gap: 0;
+		}
 	}
 	&__btn {
 		color: $light-purple;
@@ -500,7 +668,16 @@ const sendMessage = () => {
 		flex-direction: column;
 		gap: rem(52);
 		overflow-y: auto;
-		height: 900px;
+		height: 800px;
+		transition: all 0.1s ease 0s;
+
+
+		@media (max-width: $laptop-inter){
+			height: calc(100vh - 196px);
+		}
+		@media (max-width: $mobile-sec-inter){
+			height: calc(100vh - 268px);
+		}
 
 		&::-webkit-scrollbar {
 			width: 10px;
@@ -589,6 +766,7 @@ const sendMessage = () => {
 		object-fit: cover;
 		border-radius: 10px;
 		margin: 0 auto;
+		cursor: pointer;
 	}
 	&__others-time {
 		position: absolute;
@@ -605,6 +783,10 @@ const sendMessage = () => {
 		align-items: center;
 		gap: rem(20);
 		padding: rem(18) rem(32);
+
+		@media (max-width: $laptop-inter){
+			background-color: $white;
+		}
 	}
 	&__write-message {
 		width: 100%;
@@ -618,21 +800,6 @@ const sendMessage = () => {
 			font-size: rem(16);
 			color: $light-purple;
 		}
-		&::-webkit-scrollbar {
-			width: 10px;
-			background-color: #f9f9fd;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			border-radius: 10px;
-			background-color: $dark-blue;
-		}
-
-		&::-webkit-scrollbar-track {
-			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-			border-radius: 10px;
-			background-color: $light-blue;
-		}
 	}
 	&__file-preview {
 
@@ -641,6 +808,11 @@ const sendMessage = () => {
 		max-height: 100px;
 		max-width: 200px;
 		border-radius: 10px;
+
+		@media (max-width: $mobile-sec-inter){
+			max-height: 50px;
+			max-width: 100px;
+		}
 	}
 	&__attach-file {
 		font-size: rem(24);
@@ -700,5 +872,50 @@ const sendMessage = () => {
 }
 .chats-leave-active {
 	position: absolute;
+}
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	&__content {
+		position: relative;
+		max-width: 90%;
+		max-height: 90%;
+	}
+
+	&__image {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+		border-radius: 10px;
+	}
+
+	&__close-btn {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background-color: $medium-white;
+		color: $dark-purple;
+		border: none;
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		font-size: 24px;
+		cursor: pointer;
+		transition: all 0.3s ease 0s;
+
+		@media (any-hover: hover){
+			&:hover {
+				background-color: $light-blue;
+			}
+		}
+	}
 }
 </style>

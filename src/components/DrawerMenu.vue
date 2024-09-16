@@ -143,7 +143,8 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 	}
 
 	&.task-page,
-	&.mentors-page {
+	&.mentors-page,
+	&.message-page {
 		@media (max-width: $dekstop) {
 			position: fixed;
 			overflow: auto;

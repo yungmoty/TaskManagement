@@ -1,5 +1,4 @@
 <script setup>
-import { ref, computed } from 'vue'
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import MessagePageChat from '@/components/MessagePageChat.vue';
@@ -31,12 +30,22 @@ import MessagePageChat from '@/components/MessagePageChat.vue';
 	display: grid;
 	grid-template-columns: 16.5% 1fr;
 
+	@media (max-width: $dekstop){
+		grid-template-columns: 1fr;
+	}
+
 	&__content {
 		width: 1210px;
 		margin: 0 auto;
+
+		@media (max-width: 1470px){
+			@include adaptiveValue(1180, 20, 1470, 'width');
+		}
+		@media (max-width: $dekstop){
+			@include adaptiveValue(1280, 320, 1280, 'width');
+		}
 	}
 	&__common {
-
 	}
 }
 

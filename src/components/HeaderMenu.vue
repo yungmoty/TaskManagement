@@ -173,7 +173,8 @@ onMounted(() => {
 	}
 
 	&.task-page &__content,
-	&.mentors-page &__content {
+	&.mentors-page &__content,
+	&.message-page &__content {
 		@media (max-width: $dekstop){
 			display: none;
 		}
@@ -319,7 +320,8 @@ onMounted(() => {
 	}
 }
 .header.task-page .menu__icon,
-.header.mentors-page .menu__icon {
+.header.mentors-page .menu__icon,
+.header.message-page .menu__icon {
 	@media (max-width: $dekstop) {
 		display: inline-block;
 		cursor: pointer;
