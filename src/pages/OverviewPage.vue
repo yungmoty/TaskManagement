@@ -73,13 +73,11 @@ onMounted(() => {
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
 
-// 752px
 .page {
 	height: 100vh;
 	box-sizing: border-box;
 	display: grid;
-	// flex-direction: row;
-	grid-template-columns: 17.5% auto 30.3%;
+	grid-template-columns: 16.5% auto 30.3%;	
 
 	@media (max-width: $l-dekstop){
 		grid-template-columns: 1fr auto;
@@ -138,7 +136,7 @@ onMounted(() => {
 	}
 
 	@media (max-width: 425px){
-		padding: rem(22);
+		padding: rem(22) rem(22) rem(22) rem(22);
 	}
 }
 </style>

@@ -134,9 +134,9 @@ onMounted(fetchDataAndSetItem);
 						Design a mobile application with figma
 					</li>
 				</ul>
-				<UButton @click="[navigateToDetail(getId), selectSlide(getId)]" class="current-task__btn">
+				<USubmitBtn @click="[navigateToDetail(getId), selectSlide(getId)]">
 					Go To Detail
-				</UButton>
+				</USubmitBtn>
 			</div>
 		</div>
 	</aside>
@@ -266,14 +266,6 @@ onMounted(fetchDataAndSetItem);
 			height: 36px;
 			border-radius: rem(10);
 			background-color: $medium-white;
-		}
-	}
-	&__btn {
-		background-color: $dark-blue;
-		transition: transform 0.3s ease 0s;
-
-		&:hover {
-			transform: scale(0.97);
 		}
 	}
 }

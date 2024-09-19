@@ -37,6 +37,7 @@ import MessagePageChat from '@/components/MessagePageChat.vue';
 	&__content {
 		width: 1210px;
 		margin: 0 auto;
+		background-color: $white;
 
 		@media (max-width: 1470px){
 			@include adaptiveValue(1180, 20, 1470, 'width');

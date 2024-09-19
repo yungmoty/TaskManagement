@@ -32,12 +32,20 @@ const removeBodyClass = () => {
 
 onMounted(() => {
 	document.addEventListener('click', handleClickOutside);
+	if (currentPath.value === '/overview') {
+		document.body.classList.add('overview');
+	} else document.body.classList.remove('overview')
+
+	if (currentPath.value === '/') {
+		document.body.classList.add('registration');
+	} else document.body.classList.remove('registration');
+
 });
+console.log(currentPath.value);
 
 onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
 });
-
 
 const taskDetailPattern = /^\/task-detail\/\d+$/
 </script>
@@ -49,9 +57,9 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 				<img src="@/assets/images/logo.svg" alt="Logo">
 			</div>
 			<div class="sidebar__body">
-				<div 	@click="removeBodyClass" class="sidebar__navigation">
+				<div @click="removeBodyClass" class="sidebar__navigation">
 					<div 
-						:class="{_active : currentPath === '/overview'}" 
+						:class="[{_active : currentPath === '/overview'}]" 
 						@click="$router.push('/overview')"
 						class="sidebar__link"
 					>
@@ -85,6 +93,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 					<div 
 						:class="{_active : currentPath === '/settings'}" 
 						class="sidebar__link"
+						@click="$router.push('/settings')"
 					>
 						<span class="_icon-settings"></span>
 						Settings
@@ -121,6 +130,9 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 	@media (max-width: 374px){
 		width: 225px;
 	}
+	&.registration-page {
+		display: none;
+	}
 
 	&.overview-page,
 	&.detail-task-page{
@@ -146,6 +158,24 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 	&.mentors-page,
 	&.message-page {
 		@media (max-width: $dekstop) {
+			position: fixed;
+			overflow: auto;
+			box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+			border-radius: rem(32) 0 0 rem(32);
+			top: 0;
+			right: -100%;
+			
+			&._active {
+				right: 0;
+				animation: slideInRight;
+			}
+		}
+		@media (max-width: $laptop-inter){
+			height: 100%;
+		}
+	}
+	&.settings-page {
+		@media (max-width: $laptop) {
 			position: fixed;
 			overflow: auto;
 			box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;

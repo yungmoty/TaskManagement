@@ -6,6 +6,7 @@ import UOverviewPageSlideMentor from '@/components/UI/UOverviewPageSlideMentor.v
 import UOverviewPageSlideTask from '@/components/UI/UOverviewPageSlideTask.vue';
 import UOverviewPageTaskToday from '@/components/UI/UOverviewPageTaskToday.vue';
 import USubmitBtn from '@/components/UI/USubmitBtn.vue';
+import USelect from '@/components/UI/USelect.vue';
 
 const components = [
 	{name: 'UButton', component: UButton},
@@ -16,6 +17,7 @@ const components = [
 	{name: 'UOverviewPageSlideTask', component: UOverviewPageSlideTask},
 	{name: 'UOverviewPageTaskToday', component: UOverviewPageTaskToday},
 	{name: 'USubmitBtn', component: USubmitBtn},
+	{name: 'USelect', component: USelect},
 ]
 
 export default {

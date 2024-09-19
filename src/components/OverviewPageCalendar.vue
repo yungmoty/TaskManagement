@@ -5,7 +5,6 @@ import moment from 'moment';
 	const countDays = ref(1)
 	const namePeriod = ref('week')
 	const lengthDays = ref(7)
-
 const currentWeekStart = ref(moment().startOf(namePeriod.value));
 const today = moment();
 

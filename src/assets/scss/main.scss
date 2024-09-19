@@ -50,6 +50,7 @@ textarea:required:valid {
 html {
 	font-size: rem(16);
 	height: 100%;
+
 }
 body {
 	font-family: $userfont;
@@ -59,6 +60,14 @@ body {
 	height: 100%;
 	overflow-x: hidden;
 	letter-spacing: -0.02em;
+	background: linear-gradient(to right, $white 50%, $light-white 50%);
+
+	&.registration {
+		background: $white;
+	}
+	&.overview {
+		background: linear-gradient(to right, $white 50%, $medium-white 50%);
+	}
 }
 body._lock {
 	overflow: hidden;

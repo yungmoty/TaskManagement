@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUpdated } from 'vue';
+import { ref, computed, onMounted, onUpdated, onBeforeUnmount } from 'vue';
 import { format, subDays, isToday, isYesterday, parseISO, subHours } from 'date-fns';
 
 function adjustTime(date, hours) {
@@ -199,7 +199,9 @@ onMounted(() => {
 	fileUploadMargins()
 	sendMargins()
 	window.addEventListener('resize', checkMobile, fileUploadMargins, sendMargins)
-	window.addEventListener('resize', fileUploadMargins)
+})
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', checkMobile, fileUploadMargins, sendMargins)
 })
 
 const images = ref(null)
@@ -388,12 +390,14 @@ onUpdated(() => {
 				</div>
 			</div>
 		</div>
-		<div v-if="showModal" class="modal" @click="closeModal">
+		<Transition >
+		<div v-if="showModal" class="message-chat__modal modal" @click="closeModal">
 			<div class="modal__content" @click.stop>
 				<img :src="modalImage" class="modal__image" />
 				<button @click="closeModal" class="modal__close-btn">✕</button>
 			</div>
 		</div>
+	</Transition>
 	</div>
 </template>
 
@@ -437,7 +441,7 @@ onUpdated(() => {
 	}
 	&__chats {
 		padding: rem(32) rem(24);
-		height: 932px;
+		height: calc(100vh - 194px);
 		overflow-y: auto;
 		@media (max-width: $tablet){
 			height: max-content;
@@ -668,7 +672,7 @@ onUpdated(() => {
 		flex-direction: column;
 		gap: rem(52);
 		overflow-y: auto;
-		height: 800px;
+		height: calc(100vh - 310px);
 		transition: all 0.1s ease 0s;
 
 
@@ -917,5 +921,14 @@ onUpdated(() => {
 			}
 		}
 	}
+}
+.v-enter-active,
+.v-leave-active {
+	transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+	opacity: 0;
 }
 </style>

@@ -2,6 +2,7 @@
 import { onMounted, ref, onUnmounted } from 'vue';
 import { useStudentStore } from '@/stores/counter';
 import { useRouter } from 'vue-router';
+import DrawerMenu from '@/components/DrawerMenu.vue';
 
 const studentStore = useStudentStore();
 const router = useRouter();
@@ -75,11 +76,13 @@ function validate() {
 onMounted(() => {
 	registerForm.value.addEventListener('submit', validate);
 })
-
+onUnmounted(() => {
+})
 </script>
 
 
 <template>
+	<DrawerMenu pageClass="registration-page"/>
 	<div class="register">
 		<form 
 			@submit.prevent="registerStudent" 

@@ -179,13 +179,17 @@ onMounted(() => {
 			display: none;
 		}
 	}
-
-	&.task-page,
-	&.mentors-page {
-		background-color: $white;
+	&.settings-page &__content {
+		@media (max-width: $laptop){
+			display: none;
+		}
 	}
 
-	&.detail-task-page {
+	&.task-page,
+	&.mentors-page,
+	&.message-page,
+	&.detail-task-page,
+	&.settings-page {
 		background-color: $white;
 	}
 	&.message-page {
@@ -323,6 +327,18 @@ onMounted(() => {
 .header.mentors-page .menu__icon,
 .header.message-page .menu__icon {
 	@media (max-width: $dekstop) {
+		display: inline-block;
+		cursor: pointer;
+		z-index: 5;
+		width: 52px;
+		height: 52px;
+		border: 1px solid $medium-white;
+		border-radius: 50%;
+		padding: 13px;
+	}
+}
+.header.settings-page .menu__icon {
+	@media (max-width: $laptop) {
 		display: inline-block;
 		cursor: pointer;
 		z-index: 5;

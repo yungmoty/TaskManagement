@@ -5,6 +5,7 @@ import DetailTaskPage from '@/pages/DetailTaskPage.vue'
 import RegistrationPage from '@/pages/RegistrationPage.vue'
 import MentorsPage from '@/pages/MentorsPage.vue'
 import MessagePage from '@/pages/MessagePage.vue'
+import SettingsPage from '@/pages/SettingsPage.vue'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,10 @@ const router = createRouter({
 		{
 			path: '/message',
 			component: MessagePage,
+		},
+		{
+			path: '/settings',
+			component: SettingsPage,
 		},
 	]
 })
