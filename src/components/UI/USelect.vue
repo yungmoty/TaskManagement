@@ -9,15 +9,10 @@ const props = defineProps({
 	}
 })
 const isOpen = ref(false)
-const selectedOption = ref(props.selectList[0])
+const selectedOption = ref(props.selectList[0].name)
 
 function toggleDropdown() {
 	isOpen.value = !isOpen.value
-}
-
-function selectOption(option) {
-	selectedOption.value = option
-	isOpen.value = false
 }
 
 const handleClickOutside = () => {
@@ -25,7 +20,13 @@ const handleClickOutside = () => {
 		isOpen.value = false;
 	}
 }
+const emit = defineEmits(['update:selectedOption']);
 
+function selectOption(option) {
+	selectedOption.value = option.name
+	isOpen.value = false
+	emit('update:selectedOption', option.value);
+}
 </script>
 
 
@@ -47,12 +48,12 @@ const handleClickOutside = () => {
 			<div v-if="isOpen" class="dropdown__items">
 				<a
 					v-for="item in selectList"
-					:key="item"
+					:key="item.value"
 					href=""
 					class="dropdown__item"
 					@click.prevent="selectOption(item)"
 				>
-				{{ item }}
+				{{ item.name }}
 				</a>
 			</div>
 		</Transition>

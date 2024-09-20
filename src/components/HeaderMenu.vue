@@ -3,21 +3,23 @@ import { ref, onMounted, watch } from 'vue'
 import { useMyStore } from '@/stores/counter';
 import eventBus from '@/directives/eventBus';
 import { useStudentStore } from '@/stores/counter';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const studentStore = useStudentStore();
 const sortIcon = ref('_icon-sort')
 const categoryIcon = ref('_icon-category')
 const searchTask = ref('')
 
 const categoryArr = ref([
-	'Developer',
-	'Design',
-	'None'
+	t('headerMenu.categoryArr.option-1'),
+	t('headerMenu.categoryArr.option-2'),
+	t('headerMenu.categoryArr.option-3'),
 ])
 const sortArr = ref([
-	'Popular',
-	'Deadline',
-	'None'
+	t('headerMenu.sortArr.option-1'),
+	t('headerMenu.sortArr.option-2'),
+	t('headerMenu.sortArr.option-3'),
 ])
 const selectedCategory = ref('')
 const selectedSort = ref('')
@@ -112,7 +114,7 @@ onMounted(() => {
 				<UInput 
 					@search="performSearch"
 					type="text" 
-					placeholder="Search Task"
+					:placeholder="t('headerMenu.searchInputPlaceholder')"
 					class="header__input"
 				/>
 			</div>
@@ -123,7 +125,7 @@ onMounted(() => {
 						<UHeaderSelect
 							class="header__option"
 							@update:selectedOption="selectedCategoryOption"
-							selectTitle="Category" 
+							:selectTitle="t('headerMenu.categoryArr.name')" 
 							:iconClass="categoryIcon" 
 							:selectArr="categoryArr"
 							optionsClass="_options"
@@ -131,7 +133,7 @@ onMounted(() => {
 						<UHeaderSelect 
 							class="header__option"
 							@update:selectedOption="selectedSortOption"
-							selectTitle="Sort By" 
+							:selectTitle="t('headerMenu.sortArr.name')" 
 							:iconClass="sortIcon" 
 							:selectArr="sortArr"
 							optionsClass="_options"
@@ -142,13 +144,13 @@ onMounted(() => {
 			<div class="header__sorted">
 				<UHeaderSelect 
 					@update:selectedOption="selectedCategoryOption"
-					selectTitle="Category" 
+					:selectTitle="t('headerMenu.categoryArr.name')" 
 					:iconClass="categoryIcon" 
 					:selectArr="categoryArr"
 				/>
 				<UHeaderSelect 
 					@update:selectedOption="selectedSortOption"
-					selectTitle="Sort By" 
+					:selectTitle="t('headerMenu.sortArr.name')" 
 					:iconClass="sortIcon" 
 					:selectArr="sortArr"
 					:isSort="true"

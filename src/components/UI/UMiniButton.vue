@@ -21,7 +21,6 @@ defineProps({
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: $white;
 		border: 1px solid #f5f5f7;
 		border-radius: 50%;
 		width: rem(52);

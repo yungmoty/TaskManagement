@@ -5,9 +5,9 @@ import { enUS } from 'date-fns/locale'
 import { useNewTasks } from '@/hooks/useNewTasks'
 import { useTaskToday } from '@/hooks/useTaskToday'; 
 import { useStudentStore, useSliderStore } from '@/stores/counter';
+import { useI18n } from 'vue-i18n'
 
-
-
+const { t } = useI18n({useScope: 'global'})
 const sliderStore = useSliderStore();
 const studentStore = useStudentStore()
 const { fetchTaskById } = useNewTasks()
@@ -65,20 +65,6 @@ onMounted(() => {
 		dataTask.value.id = studentStore.studentId;
 	}
 });
-
-// const sendDataTask = () => {
-// 	if (dataTask.value.file) {
-// 		const reader = new FileReader();
-
-// 		reader.onload = () => {
-// 			dataTask.value.file = reader.result;
-// 			localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
-// 		};
-// 		reader.readAsDataURL(dataTask.value.file);
-// 	} else {
-// 		localStorage.setItem('dataTask', JSON.stringify(dataTask.value));
-// 	}
-// }
 
 function handleFileUpload(event) {
 	const files = event.target.files;
@@ -160,35 +146,35 @@ const submitForm = async () => {
 			class="task-form"
 			method="post"
 		>
-			<div class="task-form__assigned">Assigned Assignments</div>
+			<div class="task-form__assigned">{{ $t('detailTask.taskForm.assigned') }}</div>
 			<div class="task-form__top">
 				<div class="task-form__title">{{ task.titleImage }}</div>
-				<div class="task-form__major">{{ task.major }}. Apps Design </div>
+				<div class="task-form__major">{{ task.major }}. {{ $t('detailTask.taskForm.major') }} </div>
 			</div>
 			<div class="task-form__middle">
-				<div class="task-form__subtitle-middle subtitle-folder">Detail Student</div>
+				<div class="task-form__subtitle-middle subtitle-folder">{{ $t('detailTask.taskForm.studentTitle') }}</div>
 				<ul class="task-form__detail-student">
 					<li class="task-form__option">
-						<p class="task-form__quality">Student's name</p>
+						<p class="task-form__quality">{{ $t('detailTask.taskForm.studentName') }}</p>
 						<p class="task-form__name">{{ studentStore.studentName }}</p>
 					</li>
 					<li class="task-form__option">
-						<p class="task-form__quality">Student Class</p>
+						<p class="task-form__quality">{{ $t('detailTask.taskForm.studentClass') }}</p>
 						<p class="task-form__name">{{ studentStore.studentClass }}</p>
 					</li>
 					<li class="task-form__option">
-						<p class="task-form__quality">Student Number</p>
+						<p class="task-form__quality">{{ $t('detailTask.taskForm.studentId') }}</p>
 						<p class="task-form__name">{{ studentStore.studentId }}</p>
 					</li>
 				</ul>
 			</div>
 			<div class="task-form__bottom">
-				<div class="task-form__subtitle-bottom subtitle-folder">File Task</div>
+				<div class="task-form__subtitle-bottom subtitle-folder">{{ $t('detailTask.taskForm.fileTitle') }}</div>
 				<div class="task-form__option">
-					<p class="task-form__quality">Last Modified</p>
+					<p class="task-form__quality">{{ $t('detailTask.taskForm.modified') }}</p>
 					<p class="task-form__name">{{ formattedDate }}</p>
 				</div>
-				<div class="task-form__submission">File submissions</div>
+				<div class="task-form__submission">{{ $t('detailTask.taskForm.submissions') }}</div>
 			</div>
 			<div ref="file" class="task-form__file">
 				<label for="file" class="task-form__label">
@@ -201,8 +187,8 @@ const submitForm = async () => {
 					class="task-form__input"
 				>
 			</div>
-			<p class="task-form__alert">*drag or browser from device</p>
-			<USubmitBtn>Submit</USubmitBtn>
+			<p class="task-form__alert">*{{ $t('detailTask.taskForm.alert') }}</p>
+			<USubmitBtn>{{ $t('detailTask.taskForm.nameBtn') }}</USubmitBtn>
 		</form>
 	</div>
 </template>

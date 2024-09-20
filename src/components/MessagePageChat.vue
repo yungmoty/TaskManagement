@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed, onMounted, onUpdated, onBeforeUnmount } from 'vue';
 import { format, subDays, isToday, isYesterday, parseISO, subHours } from 'date-fns';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 function adjustTime(date, hours) {
 	return subHours(date, hours);
 }
@@ -118,8 +120,8 @@ function searchKeydown(event) {
 
 const formatMessageDay = (date, year) => {
 	const parsedDate = parseISO(date);
-	if (isToday(parsedDate)) return 'Today';
-	if (isYesterday(parsedDate)) return 'Yesterday';
+	if (isToday(parsedDate)) return t('message.chat.today');
+	if (isYesterday(parsedDate)) return t('message.chat.yesterday');
 	if (year === false) return format(parsedDate, `dd MMM`);
 	return format(parsedDate, `dd MMM yyyy`)
 }
@@ -233,7 +235,7 @@ onUpdated(() => {
 		<div class="message-chat__total-chats total-chats">
 			<div class="total-chats__search-block">
 				<UInput 
-					placeholder="Search Name" 
+					:placeholder="t('message.chat.inputPlaceholder')" 
 					class="total-chats__search" 
 					@search="performSearch"
 				/>
@@ -254,7 +256,7 @@ onUpdated(() => {
 							<div class="total-chats__main">
 								<div class="total-chats__name">{{ chat.name }}</div>
 								<div class="total-chats__message" :class="{unread: !chat.isRead}">
-									{{ chat.messages[chat.messages.length - 1].own ? 'You: ' : '' }}
+									{{ chat.messages[chat.messages.length - 1].own ? t('message.chat.ownMessage') + ': ' : '' }}
 									{{ chat.messages[chat.messages.length - 1].text ? chat.messages[chat.messages.length - 1].text : chat.messages[chat.messages.length - 1].file.name}}
 								</div>
 							</div>
@@ -282,7 +284,7 @@ onUpdated(() => {
 			<div v-if="currentChatId === 0" class="current-chat__none">
 				<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 20 20"><path fill="#04A4F4" d="M10 0c5.342 0 10 4.41 10 9.5c0 5.004-4.553 8.942-10 8.942a11 11 0 0 1-3.43-.546c-.464.45-.623.603-1.608 1.553c-.71.536-1.378.718-1.975.38c-.602-.34-.783-1.002-.66-1.874l.4-2.319C.99 14.002 0 11.842 0 9.5C0 4.41 4.657 0 10 0m0 1.4c-4.586 0-8.6 3.8-8.6 8.1c0 2.045.912 3.928 2.52 5.33l.02.017l.297.258l-.067.39l-.138.804l-.037.214l-.285 1.658a3 3 0 0 0-.03.337v.095q0 .007-.002.008c.007-.01.143-.053.376-.223l2.17-2.106l.414.156a9.6 9.6 0 0 0 3.362.605c4.716 0 8.6-3.36 8.6-7.543c0-4.299-4.014-8.1-8.6-8.1M5.227 7.813a1.5 1.5 0 1 1 0 2.998a1.5 1.5 0 0 1 0-2.998m4.998 0a1.5 1.5 0 1 1 0 2.998a1.5 1.5 0 0 1 0-2.998m4.997 0a1.5 1.5 0 1 1 0 2.998a1.5 1.5 0 0 1 0-2.998"/>
 				</svg>
-				<span>Select a chat room <br> to start chatting</span>
+				<span>{{ t('message.chat.selectChat') }}</span>
 			</div>
 			<div v-else class="current-chat__done">
 				<div class="current-chat__header">
@@ -310,7 +312,7 @@ onUpdated(() => {
 											<circle cx="9" cy="9" r="4" fill="#25C78B" />
 										</svg>
 									</span>
-									Online
+									{{ $t('message.chat.online') }}
 								</div>
 								<div v-else class="current-chat__offline">
 									<span>
@@ -318,7 +320,7 @@ onUpdated(() => {
 											<circle cx="9" cy="9" r="4" fill="#DB5962" />
 										</svg>
 									</span>
-								Offline
+									{{ $t('message.chat.offline') }}
 								</div>
 							</div>
 						</div>
@@ -369,7 +371,7 @@ onUpdated(() => {
 						type="text" 
 						v-model="newMessage" 
 						class="current-chat__write-message" 
-						placeholder="Send your message…"
+						:placeholder="t('message.chat.textareaPlaceholder')"
 					></textarea>
 					<div v-if="filePreviewUrl" class="current-chat__file-preview">
 							<img :src="filePreviewUrl" alt="File preview" class="current-chat__file-image">
@@ -461,7 +463,6 @@ onUpdated(() => {
 			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
 			border-radius: 10px;
 			background-color: $light-blue;
-			margin: 10px 0;
 
 		}
 	}
@@ -572,6 +573,7 @@ onUpdated(() => {
 		gap: rem(10);
 
 		span {
+			max-width: 150px;
 			text-align: center;
 			color: $light-purple;
 		}
@@ -697,7 +699,6 @@ onUpdated(() => {
 			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
 			border-radius: 10px;
 			background-color: $light-blue;
-			margin: 10px 0;
 
 		}
 	}

@@ -4,10 +4,11 @@ import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import TaskPageTimeLimit from '@/components/TaskPageTimeLimit.vue';
 import TaskPageNewTask from '@/components/TaskPageNewTask.vue';
-
-
 import { useTaskToday } from "@/hooks/useTaskToday";
 import { useNewTasks } from "@/hooks/useNewTasks";
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n({useScope: 'global'})
 const { tasksToday } = useTaskToday()
 const { newTasks } = useNewTasks()
 
@@ -25,31 +26,31 @@ const choiceOption = (category, sort, search) => {
 }
 
 const sortedTasksToday = computed(() => {
-	if (sortOption.value === 'Deadline') {
+	if (sortOption.value === t('headerMenu.sortArr.option-2')) {
 		return [...tasksToday.value].sort((post1, post2) => post1.timeLeft[0] - post2.timeLeft[0])
 	}
-	if (sortOption.value === 'Popular') {
+	if (sortOption.value === t('headerMenu.sortArr.option-1')) {
 		return [...tasksToday.value].sort((post1, post2) => post2.progress - post1.progress)
 	}
-	if (categoryOption.value === 'Developer') {
+	if (categoryOption.value === t('headerMenu.categoryArr.option-1')) {
 		return [...tasksToday.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
 	}
-	if (categoryOption.value === 'Design') {
+	if (categoryOption.value === t('headerMenu.categoryArr.option-2')) {
 		return [...tasksToday.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
 	}
 	return tasksToday.value
 })
 const sortedNewTasks = computed(() => {
-	if (sortOption.value === 'Deadline') {
+	if (sortOption.value === t('headerMenu.sortArr.option-2')) {
 		return [...newTasks.value].sort((post1, post2) => post1.timeLeft[0] - post2.timeLeft[0])
 	}
-	if (sortOption.value === 'Popular') {
+	if (sortOption.value === t('headerMenu.sortArr.option-1')) {
 		return [...newTasks.value].sort((post1, post2) => post2.progress - post1.progress)
 	}
-	if (categoryOption.value === 'Developer') {
+	if (categoryOption.value === t('headerMenu.categoryArr.option-1')) {
 		return [...newTasks.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
 	}
-	if (categoryOption.value === 'Design') {
+	if (categoryOption.value === t('headerMenu.categoryArr.option-2')) {
 		return [...newTasks.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
 	}
 	return newTasks.value
@@ -69,7 +70,7 @@ const	sortedAndSearchedTasksToday = computed(() => {
 		<div class="page__content">
 			<HeaderMenu 
 				@send-option="choiceOption"
-				title="Explore Task"
+				:title="t('task.titleHeader')"
 				pageClass="task-page"
 				:isSearchBlock="true"
 			/>

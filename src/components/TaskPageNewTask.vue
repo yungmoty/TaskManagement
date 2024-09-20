@@ -3,8 +3,9 @@ import SliderSwiper from '@/components/SliderSwiper.vue';
 import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/counter';
+import { useI18n } from 'vue-i18n'
 
-
+const { t } = useI18n({useScope: 'global'})
 const sliderStore = useSliderStore();
 const loading = ref(false)
 const router = useRouter();
@@ -71,7 +72,7 @@ onBeforeUnmount(() => {
 	<SliderSwiper
 		nameSwiper="swiper4" 
 		swiperBtn="swiper4-btn" 
-		sliderTitle="New Task"
+		:sliderTitle="t('task.newTask.title')"
 		:slidesCountNewTask="slidesCountNewTask"
 	>
 		<transition-group name="task-list">
@@ -119,7 +120,7 @@ onBeforeUnmount(() => {
 					<div class="task__major">{{ newTask.major }}</div>
 				</a>
 				<div class="task__progress-bar">
-					<div class="task__progress">Progress</div>
+					<div class="task__progress">{{ $t('task.newTask.progress') }}</div>
 					<div class="task__percent">{{ newTask.progress }}%</div>
 					<div class="task__bar linebar">
 						<div class="linebar__wrapper">
@@ -216,6 +217,9 @@ onBeforeUnmount(() => {
 	}
 	&__title {
 		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	&__major {
 		font-size: rem(12);

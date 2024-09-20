@@ -3,8 +3,9 @@ import { ref, onMounted, onUnmounted } from 'vue';
 const selectedOption = ref('');
 const isOpen = ref(false);
 const select = ref(null);
+import { useI18n } from 'vue-i18n'
 
-
+const { t } = useI18n({useScope: 'global'})
 const props = defineProps({
 	selectArr: {
 		type: Array,
@@ -38,7 +39,7 @@ const emit = defineEmits(['update:selectedOption']);
 
 function selectOption(option) {
 	selectedOption.value = ':' + ' ' + option;
-	if (selectedOption.value === ':' + ' ' + 'None') selectedOption.value = ''
+	if (selectedOption.value === ':' + ' ' + t('headerMenu.sortArr.option-3')) selectedOption.value = ''
 	isOpen.value = false;
 	emit('update:selectedOption', option);
 }

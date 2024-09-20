@@ -3,7 +3,9 @@ import { onMounted, ref, onUnmounted } from 'vue';
 import { useStudentStore } from '@/stores/counter';
 import { useRouter } from 'vue-router';
 import DrawerMenu from '@/components/DrawerMenu.vue';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const studentStore = useStudentStore();
 const router = useRouter();
 
@@ -91,11 +93,11 @@ onUnmounted(() => {
 			class="register__form register-form"
 			method="post"
 		>
-			<div class="register-form__title">Registration</div>
+			<div class="register-form__title">{{ $t('registration.title') }}</div>
 			<div class="register-form__name">
-				<label for="name" class="register-form__label-name reg-label">Name</label>
+				<label for="name" class="register-form__label-name reg-label">{{ $t('registration.name') }}</label>
 				<input 
-					placeholder="Name..." 
+					:placeholder="t('registration.namePlaceholder')" 
 					v-model="studentName" 
 					type="text" 
 					id="name"
@@ -104,9 +106,9 @@ onUnmounted(() => {
 				>
 			</div>
 			<div class="register-form__class">
-				<label for="class" class="register-form__label-class reg-label">Class</label>
+				<label for="class" class="register-form__label-class reg-label">{{ $t('registration.class') }}</label>
 				<input 
-					placeholder="Class..." 
+					:placeholder="t('registration.classPlaceholder')" 
 					v-model="studentClass" 
 					type="text" 
 					id="class"
@@ -116,7 +118,7 @@ onUnmounted(() => {
 			</div>
 			<div class="register-form__photo">
 				<label for="photo" class="register-form__label-photo">
-					Photo
+					{{ $t('registration.photo') }}
 					<span class="register-form__icon _icon-msg-attachfile"></span>
 				</label>
 				<input
@@ -129,12 +131,12 @@ onUnmounted(() => {
 			</div>
 			<Transition>
 				<div class="register-form__preview" v-if="studentPhotoUrl">
-					<h2 class="register-form__subtitle">Photo preview</h2>
+					<h2 class="register-form__subtitle">{{ $t('registration.preview') }}</h2>
 					<img class="register-form__image" :src="studentPhotoUrl" :alt="studentName" />
 				</div>
 			</Transition>
 			<div class="register-form__btn">
-				<USubmitBtn>Submit</USubmitBtn>
+				<USubmitBtn>{{ $t('registration.nameBtn') }}</USubmitBtn>
 			</div>
 		</form>
 		<div v-if="isLoading" class="register__loading">

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const props = defineProps({
 	mentor: {
 		type: Object,
@@ -33,7 +35,7 @@ const choiceFollow = () => {
 					class="mentor__followed"
 					@click.prevent="choiceFollow"
 				>
-					Followed
+					{{ $t('overview.sliderMentors.followed') }}
 				</a>
 				<a
 					v-if="!isFollow"
@@ -41,7 +43,7 @@ const choiceFollow = () => {
 					class="mentor__follow"
 					@click.prevent="choiceFollow"
 				>
-				+ Follow
+				+ {{ $t('overview.sliderMentors.follow') }}
 				</a>
 		</div>
 		<div class="mentor__bottom">
@@ -50,14 +52,14 @@ const choiceFollow = () => {
 				class="mentor__task"
 			>
 				<span class="_icon-note"></span>
-				{{ mentor.taskQuantity }} Task
+				{{ mentor.taskQuantity }} {{ $t('overview.sliderMentors.task') }}
 			</a>
 			<a 
 				href="" 
 				class="mentor__reviews"
 			>
 				<span class="_icon-star"></span>
-				{{ mentor.rating }} ({{ mentor.reviews }} Reviews)
+				{{ mentor.rating }} ({{ mentor.reviews }} {{ $t('overview.sliderMentors.reviews') }})
 			</a>
 		</div>
 	</div>
@@ -133,7 +135,8 @@ const choiceFollow = () => {
 	}
 	&__bottom {
 		display: flex;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: rem(15);
 	}
 	&__task {
 		font-size: rem(14);

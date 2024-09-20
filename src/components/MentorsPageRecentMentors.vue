@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue'
 import SliderSwiper from '@/components/SliderSwiper.vue';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const props = defineProps({
 	mentors: {
 		type: Array,
@@ -36,7 +38,7 @@ watch(() => slidesCountLimitTask.value, () => {
 	<SliderSwiper 
 		nameSwiper="swiper4" 
 		swiperBtn="swiper4-btn" 
-		sliderTitle="Recent Mentors"
+		:sliderTitle="t('mentors.recentMentors.title')"
 		:slidesCountLimitTask="slidesCountLimitTask"
 	>
 		<transition-group name="task-list">
@@ -78,14 +80,14 @@ watch(() => slidesCountLimitTask.value, () => {
 						class="recent-mentors__task"
 					>
 						<span class="_icon-note"></span>
-						{{ mentor.taskQuantity }} Task
+						{{ mentor.taskQuantity }} {{ $t('mentors.recentMentors.task') }}
 					</a>
 					<a 
 						href="" 
 						class="recent-mentors__reviews"
 					>
 						<span class="_icon-star"></span>
-						{{ mentor.rating }} ({{ mentor.reviews }} Reviews)
+						{{ mentor.rating }} ({{ mentor.reviews }} {{ $t('mentors.recentMentors.reviews') }})
 					</a>
 				</div>
 			</div>
@@ -177,6 +179,12 @@ watch(() => slidesCountLimitTask.value, () => {
 	&__bottom {
 		display: flex;
 		justify-content: space-between;
+		gap: rem(30);
+
+		@media (max-width: 415px){
+			flex-direction: column;
+			gap: rem(15);
+		}
 	}
 	&__task {
 		font-size: rem(14);

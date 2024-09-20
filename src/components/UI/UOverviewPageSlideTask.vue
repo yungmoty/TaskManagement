@@ -1,7 +1,9 @@
 <script setup>
 import { onMounted, ref, onBeforeUnmount } from 'vue'
-const loading = ref(false)
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
+const loading = ref(false)
 const props = defineProps({
 	newTask: {
 		type: Object,
@@ -38,7 +40,6 @@ onBeforeUnmount(() => {
 
 
 <template>
-	<!-- <transition-group name="task-list"> -->
 	<div :key="newTask.id" class="swiper-slide task">
 		<a href="" class="task__image">
 			<img v-show="loading" :src="newTask.image" :alt="newTask.titleImage">
@@ -79,7 +80,7 @@ onBeforeUnmount(() => {
 			<div class="task__major">{{ newTask.major }}</div>
 		</a>
 		<div class="task__progress-bar">
-			<div class="task__progress">Progress</div>
+			<div class="task__progress">{{ $t('overview.sliderTasks.progress') }}</div>
 			<div class="task__percent">{{ progress }}%</div>
 			<div class="task__bar linebar">
 				<div class="linebar__wrapper">
@@ -112,7 +113,6 @@ onBeforeUnmount(() => {
 			</div>
 		</div>
 	</div>
-<!-- </transition-group> -->
 </template>
 
 
@@ -174,6 +174,9 @@ onBeforeUnmount(() => {
 	}
 	&__title {
 		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	&__major {
 		font-size: rem(12);

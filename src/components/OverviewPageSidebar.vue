@@ -4,7 +4,9 @@ import OverviewPageCalendar from '@/components/OverviewPageCalendar.vue';
 import { useTaskToday } from "@/hooks/useTaskToday";
 import { useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/counter';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const sliderStore = useSliderStore();
 const { tasksToday, fetchData, loadingTaskToday } = useTaskToday()
 const router = useRouter();
@@ -65,7 +67,7 @@ onMounted(fetchDataAndSetItem);
 
 		<div class="sidebar-menu__current-task current-task">
 			<div class="current-task__header">
-				<div class="current-task__title">Task Today</div>
+				<div class="current-task__title">{{ $t('overview.taskToday.title') }}</div>
 				<div 
 					:class="{_active : isActive}"
 					@click="openSettings" 
@@ -117,25 +119,25 @@ onMounted(fetchDataAndSetItem);
 			</div>
 			<div class="current-task__about">
 				<div class="current-task__detail">
-					<div class="current-task__subtitle">Detail Task</div>
+					<div class="current-task__subtitle">{{ $t('overview.taskToday.detailTitle') }}</div>
 					<div class="current-task__major">{{ getMajor }}</div>
 				</div>
 				<ul class="current-task__list">
 					<li class="current-task__item">
 						<span>1</span>
-						Understanding the tools in Figma
+						{{ $t('overview.taskToday.cases.case-1') }}
 					</li>
 					<li class="current-task__item">
 						<span>2</span>
-						Understand the basics of making designs
+						{{ $t('overview.taskToday.cases.case-2') }}
 					</li>
 					<li class="current-task__item">
 						<span>3</span>
-						Design a mobile application with figma
+						{{ $t('overview.taskToday.cases.case-3') }}
 					</li>
 				</ul>
 				<USubmitBtn @click="[navigateToDetail(getId), selectSlide(getId)]">
-					Go To Detail
+					{{ $t('overview.taskToday.nameBtn') }}
 				</USubmitBtn>
 			</div>
 		</div>

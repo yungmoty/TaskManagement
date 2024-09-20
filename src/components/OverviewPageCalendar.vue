@@ -1,10 +1,12 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, } from 'vue';
 import moment from 'moment';
+import { useI18n } from 'vue-i18n'
 
-	const countDays = ref(1)
-	const namePeriod = ref('week')
-	const lengthDays = ref(7)
+const { t } = useI18n({useScope: 'global'})
+const countDays = ref(1)
+const namePeriod = ref('week')
+const lengthDays = ref(7)
 const currentWeekStart = ref(moment().startOf(namePeriod.value));
 const today = moment();
 
@@ -68,7 +70,7 @@ onUnmounted(() => {
 			v-if="!isToday" 
 			class="calendar__today" 
 		>
-			<span @click="goToCurrentDay">Today</span>
+			<span @click="goToCurrentDay">{{ $t('overview.calendar.today') }}</span>
 		</div>
 		<div class="calendar__days">
 			<TransitionGroup>

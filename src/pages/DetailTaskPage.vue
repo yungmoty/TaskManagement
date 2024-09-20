@@ -3,7 +3,9 @@ import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import DetailTaskPageForm from '@/components/DetailTaskPageForm.vue';
 import DetailTaskPageMain from '@/components/DetailTaskPageMain.vue';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 
 </script>
 
@@ -14,7 +16,7 @@ import DetailTaskPageMain from '@/components/DetailTaskPageMain.vue';
 	<DrawerMenu pageClass="detail-task-page" />
 		<div class="page__content">
 			<HeaderMenu 
-				title="Detail Task"
+				:title="t('detailTask.titleHeader')"
 				pageClass="detail-task-page"
 			/>
 			<div class="page__detail-task">

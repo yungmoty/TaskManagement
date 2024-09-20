@@ -2,7 +2,9 @@
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import MessagePageChat from '@/components/MessagePageChat.vue';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 </script>
 
 
@@ -12,7 +14,7 @@ import MessagePageChat from '@/components/MessagePageChat.vue';
 		<div class="page__content">
 			<HeaderMenu 
 				pageClass="message-page"
-				title="Message"
+				:title="t('message.titleHeader')"
 			/>
 			<div class="page__common">
 				<MessagePageChat />

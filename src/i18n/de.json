@@ -1,0 +1,181 @@
+{
+	"headerMenu": {
+		"categoryArr": {
+			"name": "Kategorie",
+			"option-1": "Entwickler",
+			"option-2": "Design",
+			"option-3": "Keine"
+		},
+		"sortArr": {
+			"name": "Sortieren",
+			"option-1": "Beliebt",
+			"option-2": "Frist",
+			"option-3": "Keine"
+		},
+		"searchInputPlaceholder": "Aufgabe suchen"
+	},
+
+	"drawerMenu": {
+		"links": {
+			"overview": "Überblick",
+			"task": "Aufgabe",
+			"mentors": "Mentoren",
+			"message": "Nachricht",
+			"settings": "Einstellungen"
+		},
+		"helpCenter": {
+			"title": "Hilfe-Center",
+			"text": "Haben Sie Schwierigkeiten beim Lernen? Bitte kontaktieren Sie uns für weitere Fragen.",
+			"nameBtn": "Zum Hilfe-Center"
+		}
+	},
+
+	"overview": {
+		"titleHeader": "Hallo",
+		"textHeader": "Lass uns deine Aufgabe heute beenden!",
+		"sliderMentors": {
+			"name": "Monatliche Mentoren",
+			"followed": "Folge",
+			"follow": "Folgen",
+			"task": "Aufgabe",
+			"reviews": "Bewertungen"
+		},
+		"sliderTasks": {
+			"name": "Bevorstehende Aufgabe",
+			"progress": "Fortschritt"
+		},
+		"taskToday": {
+			"title": "Aufgabe heute",
+			"progress": "Fortschritt",
+			"detailTitle": "Detailaufgabe",
+			"cases": {
+				"case-1": "Verstehen der Werkzeuge in Figma",
+				"case-2": "Die Grundlagen des Designs verstehen",
+				"case-3": "Eine mobile Anwendung mit Figma entwerfen"
+			},
+			"nameBtn": "Zu den Details"
+		},
+		"chart": {
+			"title": "Aktivität",
+			"timeInterval": {
+				"day": "Heute",
+				"week": "Diese Woche",
+				"mounth": "Diesen Monat"
+			},
+			"task": "Aufgabe"
+		},
+		"progressTask": {
+			"title": "Laufende Aufgabe",
+			"task": "Aufgabe"
+		},
+		"calendar": {
+			"today": "Heute"
+		}
+	},
+
+	"task": {
+		"titleHeader": "Aufgabe erkunden",
+		"limitTask": {
+			"title": "Zeitlimit",
+			"progress": "Fortschritt"
+		},
+		"newTask": {
+			"title": "Neue Aufgabe",
+			"progress": "Fortschritt"
+		}
+	},
+
+	"detailTask": {
+		"titleHeader": "Detailaufgabe",
+		"taskForm": {
+			"assigned": "Zugewiesene Aufgaben",
+			"major": "App-Design",
+			"studentTitle": "Details zum Studenten",
+			"studentName": "Name des Studenten",
+			"studentClass": "Klasse des Studenten",
+			"studentId": "Studenten-Nr.",
+			"fileTitle": "Aufgaben-Datei",
+			"modified": "Zuletzt geändert",
+			"submissions": "Datei-Einreichungen",
+			"alert": "Ziehen oder vom Gerät hochladen",
+			"nameBtn": "Einreichen"
+		},
+		"mainContent": {
+			"major": "App-Design",
+			"mentors": "+ Mentoren hinzuzufügen",
+			"studentInvolved": "200 Studenten beteiligt",
+			"description": "Beschreibung",
+			"textDescription": "Folge dem Video-Tutorial oben. Verstehe, wie du jedes Werkzeug in der Figma-Anwendung verwendest. Lerne auch, wie man ein gutes und korrektes Design erstellt, angefangen bei Abständen, Typografie, Inhalten und vielen anderen Designhierarchien. Versuche dann, es selbst mit deiner Vorstellungskraft und Inspiration zu erstellen.",
+			"assessmentCriteria": {
+				"title": "Essenz der Bewertung",
+				"case-1": "Verstehen der Werkzeuge in Figma",
+				"case-2": "Die Grundlagen des Designs verstehen",
+				"case-3": "Entwerfen einer mobilen Anwendung mit Figma",
+				"case-4": "Präsentation des Designflusses"
+			}
+		}
+	},
+
+	"mentors": {
+		"titleHeader": "Mentoren erkunden",
+		"recentMentors": {
+			"title": "Neueste Mentoren",
+			"task": "Aufgabe",
+			"reviews": "Bewertungen"
+		},
+		"totalMentors": {
+			"title": "Mentoren",
+			"followed": "Folge",
+			"follow": "Folgen",
+			"task": "Aufgabe",
+			"reviews": "Bewertungen",
+			"aboutYourself": "Hallo, ich bin"
+		}
+	},
+
+	"message": {
+		"titleHeader": "Nachricht",
+		"chat": {
+			"today": "Heute",
+			"yesterday": "Gestern",
+			"selectChat": "Wähle einen Chatraum, um zu chatten",
+			"online": "Online",
+			"offline": "Offline",
+			"textareaPlaceholder": "Sende deine Nachricht…",
+			"inputPlaceholder": "Name suchen",
+			"ownMessage": "Du"
+		}
+	},
+
+	"settings": {
+		"titleHeader": "Einstellungen",
+		"general": {
+			"name": "Allgemein",
+			"language": "Sprache",
+			"timeZone": "Zeitzone",
+			"timeFormat": "Zeitformat",
+			"h24": "24 Stunden",
+			"h12": "12 Stunden",
+			"nameBtn": "Änderungen speichern"
+		},
+		"notification": {
+			"name": "Mitteilung",
+			"setup-1": "Nachricht",
+			"setup-2": "Job-Update",
+			"setup-3": "Aufgabenfrist",
+			"setup-4": "Hilfe Mentoren",
+			"nameBtn": "Änderungen speichern"
+		}
+	},
+
+	"registration": {
+		"title": "Registrierung",
+		"name": "Name",
+		"class": "Klasse",
+		"namePlaceholder": "Name...",
+		"classPlaceholder": "Klasse...",
+		"photo": "Foto",
+		"preview": "Foto-Vorschau",
+		"nameBtn": "Einreichen"
+	}
+}

@@ -1,44 +1,58 @@
 <script setup>
 import { ref } from 'vue'
-import USubmitBtn from './UI/USubmitBtn.vue';
+import { useI18n } from 'vue-i18n'
 
+const { t, locale } = useI18n({useScope: 'global'})
 const countChecked = ref(1)
+const selectedLanguage = ref('')
 
 const languageSelection = ref([
-	'English',
-	'Deutsch',
+	{name: 'English', value: 'en'},
+	{name: 'Deutsch', value: 'de'},
 ])
 const timezoneSelection = ref([
-	'English',
-	'Deutsch',
+	{name: 'English', value: 'en'},
+	{name: 'Deutsch', value: 'de'},
 ])
+
+const selectedLanguageOption = (option) => {
+	selectedLanguage.value = option
+}
+
+const switchLang = () => {
+	locale.value = selectedLanguage.value
+	localStorage.setItem('lang', locale.value)
+}
 </script>
 
 
 <template>
 	<div class="general">
 		<div class="general__language">
-			<h3 class="general__title-language general-title">Language</h3>
-			<USelect :selectList="languageSelection"/>
+			<h3 class="general__title-language general-title">{{ $t('settings.general.language') }}</h3>
+			<USelect 
+				@update:selectedOption="selectedLanguageOption"
+				:selectList="languageSelection"
+			/>
 		</div>
 		<div class="general__timezone">
-			<h3 class="general__title-timezone general-title">Time zone</h3>
+			<h3 class="general__title-timezone general-title">{{ $t('settings.general.timeZone') }}</h3>
 			<USelect :selectList="timezoneSelection"/>
 		</div>
 		<div class="general__timeformat">
-			<h3 class="general__title-timeformat general-title">Time format</h3>
+			<h3 class="general__title-timeformat general-title">{{ $t('settings.general.timeFormat') }}</h3>
 			<div class="general__radio-btns">
 				<label for="hours-24" class="general__radio-btn" @click="countChecked = 1" :class="{checked : countChecked === 1}">
 					<input id="hours-24" name="hours" type="radio" checked>
-					<label for="hours-24" class="general__label">24 Hours</label>
+					<label for="hours-24" class="general__label">{{ $t('settings.general.h24') }}</label>
 				</label>
 				<label for="hours-12" class="general__radio-btn" @click="countChecked = 2" :class="{checked : countChecked === 2}">
 					<input id="hours-12" name="hours" type="radio">
-					<label for="hours-12" class="general__label">12 Hours</label>
+					<label for="hours-12" class="general__label">{{ $t('settings.general.h12') }}</label>
 				</label>
 			</div>
 		</div>
-		<UButton class="general__btn">Save Changes</UButton>
+		<UButton @click="switchLang" class="general__btn">{{ $t('settings.general.nameBtn') }}</UButton>
 	</div>
 </template>
 

@@ -3,7 +3,9 @@ import SliderSwiper from '@/components/SliderSwiper.vue';
 import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/counter';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const sliderStore = useSliderStore();
 const router = useRouter();
 const loading = ref(false)
@@ -71,7 +73,7 @@ onBeforeUnmount(() => {
 	<SliderSwiper 
 		nameSwiper="swiper3" 
 		swiperBtn="swiper3-btn" 
-		sliderTitle="Time Limit"
+		:sliderTitle="t('task.limitTask.title')"
 		:slidesCountLimitTask="slidesCountLimitTask"
 	>
 		<transition-group name="task-list">
@@ -119,7 +121,7 @@ onBeforeUnmount(() => {
 					<div class="task__major">{{ taskToday.major }}</div>
 				</a>
 				<div class="task__progress-bar">
-					<div class="task__progress">Progress</div>
+					<div class="task__progress">{{ $t('task.limitTask.progress') }}</div>
 					<div class="task__percent">{{ taskToday.progress }}%</div>
 					<div class="task__bar linebar">
 						<div class="linebar__wrapper">
@@ -216,6 +218,9 @@ onBeforeUnmount(() => {
 	}
 	&__title {
 		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis; 
 	}
 	&__major {
 		font-size: rem(12);

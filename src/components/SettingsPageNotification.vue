@@ -8,21 +8,21 @@ import { ref } from 'vue'
 	<div class="notification">
 		<div class="notification__switch">
 			<input type="checkbox" name="message" id="message" checked>
-			<label for="message" class="notification__label">Message</label>
+			<label for="message" class="notification__label">{{ $t('settings.notification.setup-1') }}</label>
 		</div>
 		<div class="notification__switch">
 			<input type="checkbox" name="task-update" id="task-update">
-			<label for="task-update" class="notification__label">Task Update</label>
+			<label for="task-update" class="notification__label">{{ $t('settings.notification.setup-2') }}</label>
 		</div>
 		<div class="notification__switch">
 			<input type="checkbox" name="task-deadline" id="task-deadline" checked disabled>
-			<label for="task-deadline" class="notification__label">Task Deadline</label>
+			<label for="task-deadline" class="notification__label">{{ $t('settings.notification.setup-3') }}</label>
 		</div>
 		<div class="notification__switch">
 			<input type="checkbox" name="mentor-help" id="mentor-help" disabled>
-			<label for="mentor-help" class="notification__label">Mentor Help</label>
+			<label for="mentor-help" class="notification__label">{{ $t('settings.notification.setup-4') }}</label>
 		</div>
-		<UButton class="notification__btn">Save Changes</UButton>
+		<UButton class="notification__btn">{{ $t('settings.notification.nameBtn') }}</UButton>
 	</div>
 </template>
 

@@ -1,17 +1,38 @@
 <script setup>
-import { ref, watch, nextTick } from 'vue';
+import { ref, watch, nextTick, computed, shallowRef } from 'vue';
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import General from '@/components/SettingsPageGeneral.vue';
 import Notification from '@/components/SettingsPageNotification.vue';
+import { useI18n } from 'vue-i18n'
 
-const currentTab = ref('General')
+const { t, locale } = useI18n({useScope: 'global'})
+const currentTab = ref('general')
 const sliderStyles = ref({})
-const tabs = {
-	General,
-	Notification
-}
+const tabs = shallowRef({});
 
+const updateTabs = () => {
+	tabs.value = {
+		general: {
+			component: General,
+			name: t('settings.general.name'),
+		},
+		notification: {
+			component: Notification,
+			name: t('settings.notification.name'),
+		},
+	};
+};
+
+updateTabs();
+
+watch(locale, () => {
+	updateTabs();
+});
+const tabNames = computed(() => Object.keys(tabs.value).map(key => ({
+	key,
+	name: tabs.value[key].name,
+})));
 
 watch(
 	() => currentTab.value,
@@ -40,7 +61,7 @@ watch(
 		<DrawerMenu pageClass="settings-page" />
 		<div class="page__content">
 			<HeaderMenu
-			title="Settings"
+			:title="t('settings.titleHeader')"
 			pageClass="settings-page"
 			/>
 
@@ -50,17 +71,17 @@ watch(
 						<a
 							href="#"
 							class="settings__btns"
-							v-for="(_, tab) in tabs"
-							:key="tab"
-							:data-tab="tab"
-							:class="['settings__btn', { active: currentTab === tab }]"
-							@click.prevent="currentTab = tab"
+							v-for="tab in tabNames"
+							:key="tab.key"
+							:data-tab="tab.key"
+							:class="['settings__btn', { active: currentTab === tab.key }]"
+							@click.prevent="currentTab = tab.key"
 						>
-							{{ tab }}
+							{{ tab.name }}
 						</a>
 						<span class="settings__tabs-slider" :style="sliderStyles"></span>
 					</div>
-					<component :is="tabs[currentTab]" class="settings__content"></component>
+					<component :is="tabs[currentTab].component" class="settings__content"></component>
 				</div>
 			</div>
 		</div>
@@ -103,6 +124,7 @@ watch(
 
 .settings {
 	padding: rem(42);
+
 
 	@media (max-width: $laptop-inter){
 		padding: rem(32);

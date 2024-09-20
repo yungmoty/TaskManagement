@@ -9,10 +9,11 @@ import OverviewPageSidebar from '@/components/OverviewPageSidebar.vue';
 import { useStudentStore } from '@/stores/counter';
 import { useMentors } from "@/hooks/useMentors";
 import { useNewTasks } from "@/hooks/useNewTasks";
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n({useScope: 'global'})
 const studentStore = useStudentStore();
 const { mentors } = useMentors()
 const { newTasks } = useNewTasks()
-
 
 onMounted(() => {
 	studentStore.loadFromLocalStorage();
@@ -26,18 +27,18 @@ onMounted(() => {
 		<div class="main-content">
 			<div class="main-wrapper">
 				<HeaderMenu 
-					:title="`Hi, ${studentStore.studentName}`"
+					:title= "t('overview.titleHeader') + `, ${studentStore.studentName}`"
 					:isSearchBlock="false"
 					pageClass="overview-page"
 				>
-					<span class="header__text">Let's finish your task today!</span>
+					<span class="header__text">{{ $t('overview.textHeader') }}</span>
 				</HeaderMenu>
-				<OverviewPageActivityBlock title="Hi, Dennis Nzioki" />
+				<OverviewPageActivityBlock :title= "t('overview.titleHeader') + `, ${studentStore.studentName}`" />
 				<div class="mentors-block">
 					<SliderSwiper 
 						nameSwiper="swiper1" 
 						swiperBtn="swiper1-btn" 
-						sliderTitle="Monthly Mentors"
+						:sliderTitle="t('overview.sliderMentors.name')"
 					>
 						<UOverviewPageSlideMentor
 							:mentors="mentors"
@@ -51,7 +52,7 @@ onMounted(() => {
 					<SliderSwiper 
 						nameSwiper="swiper2" 
 						swiperBtn="swiper2-btn" 
-						sliderTitle="Upcoming Task"
+						:sliderTitle="t('overview.sliderTasks.name')"
 					>
 						<UOverviewPageSlideTask
 							:newTasks="newTasks"

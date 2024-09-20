@@ -1,0 +1,181 @@
+{
+	"headerMenu": {
+		"categoryArr" : {
+			"name": "Category",
+			"option-1": "Developer",
+			"option-2": "Design",
+			"option-3": "None"
+		},
+		"sortArr" : {
+			"name": "Sort By",
+			"option-1": "Popular",
+			"option-2": "Deadline",
+			"option-3": "None"
+		},
+		"searchInputPlaceholder": "Search Task"
+	},
+
+	"drawerMenu": {
+		"links": {
+			"overview": "Overview",
+			"task": "Task",
+			"mentors": "Mentors",
+			"message": "Message",
+			"settings": "Settings"
+		},
+		"helpCenter": {
+			"title": "Help Center",
+			"text": "Having Trouble in Learning. Please contact us for more questions.",
+			"nameBtn": "Go To Help Center"
+		}
+	},
+
+	"overview": {
+		"titleHeader": "Hi",
+		"textHeader": "Let's finish your task today!",
+		"sliderMentors": {
+			"name": "Monthly Mentors",
+			"followed": "Followed",
+			"follow": "Follow",
+			"task": "Task",
+			"reviews": "Reviews"
+		},
+		"sliderTasks": {
+			"name": "Upcoming Task",
+			"progress": "Progress"
+		},
+		"taskToday": {
+			"title": "Task Today",
+			"progress": "Progress",
+			"detailTitle": "Detail Task",
+			"cases": {
+				"case-1": "Understanding the tools in Figma",
+				"case-2": "Understand the basics of making designs",
+				"case-3": "Design a mobile application with figma"
+			},
+			"nameBtn": "Go To Detail"
+		},
+		"chart": {
+			"title": "Activity",
+			"timeInterval": {
+				"day": "This Day",
+				"week": "This Week",
+				"mounth": "This Mounth"
+			},
+			"task": "Task"
+		},
+		"progressTask" : {
+			"title": "Running Task",
+			"task": "Task"
+		},
+		"calendar": {
+			"today": "Today"
+		}
+	},
+
+	"task": {
+		"titleHeader": "Explore Task",
+		"limitTask": {
+			"title": "Time Limit",
+			"progress": "Progress"
+		},
+		"newTask": {
+			"title": "New Task",
+			"progress": "Progress"
+		}
+	},
+
+	"detailTask": {
+		"titleHeader": "Detail Task",
+		"taskForm": {
+			"assigned": "Assigned Assignments",
+			"major": "Apps Design",
+			"studentTitle": "Detail Student",
+			"studentName": "Student's name",
+			"studentClass": "Student Class",
+			"studentId": "Student Number",
+			"fileTitle": "File Task",
+			"modified": "Last Modified",
+			"submissions": "File submissions",
+			"alert": "drag or browser from device",
+			"nameBtn": "Submit"
+		},
+		"mainContent": {
+			"major": "Apps Design",
+			"mentors": "+ Get Mentors",
+			"studentInvolved": "200 Students Involved",
+			"description": "Description",
+			"textDescription": "Follow the video tutorial above. Understand how to use each tool in the Figma application. Also learn how to make a good and correct design. Starting from spacing, typography, content, and many other design hierarchies. Then try to make it yourself with your imagination and inspiration.",
+			"assessmentCriteria": {
+				"title": "Essence of Assessment",
+				"case-1": "Understanding the tools in Figma",
+				"case-2": "Understand the basics of making designs",
+				"case-3": "Designing a mobile application using figma",
+				"case-4": "Presenting the design flow"
+			}
+		}
+	},
+
+	"mentors": {
+		"titleHeader": "Explore Mentors",
+		"recentMentors": {
+			"title": "Recent Mentors",
+			"task": "Task",
+			"reviews": "Reviews"
+		},
+		"totalMentors": {
+			"title": "Mentors",
+			"followed": "Followed",
+			"follow": "Follow",
+			"task": "Task",
+			"reviews": "Reviews",
+			"aboutYourself": "Hi, I'm"
+		}
+	},
+
+	"message": {
+		"titleHeader": "Message",
+		"chat": {
+			"today": "Today",
+			"yesterday": "Yesterday",
+			"selectChat": "Select a chat room to start chatting",
+			"online": "Online",
+			"offline": "Offline",
+			"textareaPlaceholder": "Send your message…",
+			"inputPlaceholder": "Search Name",
+			"ownMessage": "You"
+		}
+	},
+
+	"settings": {
+		"titleHeader": "Settings",
+		"general": {
+			"name": "General",
+			"language": "Language",
+			"timeZone": "Time Zone",
+			"timeFormat": "Time Format",
+			"h24": "24 Hours",
+			"h12": "12 Hours",
+			"nameBtn": "Save Changes"
+		},
+		"notification": {
+			"name": "Notification",
+			"setup-1": "Message",
+			"setup-2": "Task Update",
+			"setup-3": "Task Deadline",
+			"setup-4": "Mentor Help",
+			"nameBtn": "Save Changes"
+		}
+	},
+
+	"registration": {
+		"title": "Registration",
+		"name": "Name",
+		"class": "Class",
+		"namePlaceholder": "Name...",
+		"classPlaceholder": "Class...",
+		"photo": "Photo",
+		"preview": "Photo preview",
+		"nameBtn": "Submit"
+	}
+}

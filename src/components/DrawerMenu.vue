@@ -41,7 +41,6 @@ onMounted(() => {
 	} else document.body.classList.remove('registration');
 
 });
-console.log(currentPath.value);
 
 onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
@@ -64,7 +63,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 						class="sidebar__link"
 					>
 						<span class="_icon-overview"></span>
-						Overview
+						{{ $t('drawerMenu.links.overview') }}
 					</div>
 					<div 
 						:class="[{_active : currentPath === '/task'}, {_active : taskDetailPattern.test(currentPath)}]"
@@ -72,7 +71,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 						class="sidebar__link"
 					>
 						<span class="_icon-task"></span>
-						Task
+						{{ $t('drawerMenu.links.task') }}
 					</div>
 					<div 
 						:class="{_active : currentPath === '/mentors'}"
@@ -80,7 +79,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 						class="sidebar__link"
 					>
 						<span class="_icon-mentors"></span>
-						Mentors
+						{{ $t('drawerMenu.links.mentors') }}
 					</div>
 					<div 
 						:class="{_active : currentPath === '/message'}" 
@@ -88,7 +87,7 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 						@click="$router.push('/message')"
 					>
 						<span class="_icon-message"></span>
-						Message
+						{{ $t('drawerMenu.links.message') }}
 					</div>
 					<div 
 						:class="{_active : currentPath === '/settings'}" 
@@ -96,17 +95,17 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 						@click="$router.push('/settings')"
 					>
 						<span class="_icon-settings"></span>
-						Settings
+						{{ $t('drawerMenu.links.settings') }}
 					</div>
 				</div>
 				<div class="sidebar__help">
 						<div class="sidebar__item sidebar__item_circle-1"></div>
 						<div class="sidebar__item sidebar__item_circle-2"></div>
 						<div class="sidebar__item sidebar__item_mark">?</div>
-						<div class="sidebar__title">Help Center</div>
-						<div class="sidebar__text">Having Trouble in Learning. Please contact us for more questions.
+						<div class="sidebar__title">{{ $t('drawerMenu.helpCenter.title') }}</div>
+						<div class="sidebar__text">{{ $t('drawerMenu.helpCenter.text') }}
 						</div>
-						<UButton class="sidebar__btn" >Go To Help Center</UButton>
+						<UButton class="sidebar__btn">{{ $t('drawerMenu.helpCenter.nameBtn') }}</UButton>
 				</div>
 			</div>
 		</aside>

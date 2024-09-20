@@ -1,7 +1,9 @@
 <script setup>
 import { onMounted, ref, onBeforeUnmount } from 'vue'
-const loading = ref(false)
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
+const loading = ref(false)
 const props = defineProps({
 	taskToday: {
 		type: Object,
@@ -52,7 +54,6 @@ onBeforeUnmount(() => {
 
 
 <template>
-<!-- <transition-group name="task-list"> -->
 	<div :key="taskToday.id" :class="classToTaskToday" class="swiper-slide task">
 		<a href="" class="task__image">
 			<img v-show="loading" :src="taskToday.image" :alt="taskToday.titleImage">
@@ -93,7 +94,7 @@ onBeforeUnmount(() => {
 			<div class="task__major">{{ taskToday.major }}</div>
 		</a>
 		<div class="task__progress-bar">
-			<div class="task__progress">Progress</div>
+			<div class="task__progress">{{ $t('overview.taskToday.progress') }}</div>
 			<div class="task__percent">{{ progress }}%</div>
 			<div class="task__bar linebar">
 				<div class="linebar__wrapper">
@@ -126,7 +127,6 @@ onBeforeUnmount(() => {
 			</div>
 		</div>
 	</div>
-<!-- </transition-group> -->
 </template>
 
 

@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const props = defineProps({
+const { t } = useI18n({useScope: 'global'})
+defineProps({
 	mentors: {
 		type: Array,
 		required: true
@@ -12,7 +14,7 @@ const props = defineProps({
 
 <template>
 	<div class="total-mentors">
-		<div class="total-mentors__title">Mentors</div>
+		<div class="total-mentors__title">{{ $t('mentors.totalMentors.title') }}</div>
 		<div class="total-mentors__body">
 			<transition-group name="list">
 			<div
@@ -36,7 +38,7 @@ const props = defineProps({
 					class="slides-mentors__followed"
 					@click.prevent="mentor.isFollow = !mentor.isFollow"
 				>
-					Followed
+				{{ $t('mentors.totalMentors.followed') }}
 				</a>
 				<a
 					v-if="!mentor.isFollow"
@@ -44,11 +46,11 @@ const props = defineProps({
 					class="slides-mentors__follow"
 					@click.prevent="mentor.isFollow = !mentor.isFollow"
 				>
-				+ Follow
+				+ {{ $t('mentors.totalMentors.follow') }}
 				</a>
 			</div>
 			<div class="slides-mentors__middle">
-				Hi, I'm {{ mentor.name }}. {{ mentor.info }}...
+				{{ $t('mentors.totalMentors.aboutYourself') }} {{ mentor.name }}. {{ mentor.info }}...
 			</div>
 			<div class="slides-mentors__bottom">
 				<a 
@@ -56,14 +58,14 @@ const props = defineProps({
 					class="slides-mentors__task"
 				>
 					<span class="_icon-note"></span>
-					{{ mentor.taskQuantity }} Task
+					{{ mentor.taskQuantity }} 
 				</a>
 				<a 
 					href="" 
 					class="slides-mentors__reviews"
 				>
 					<span class="_icon-star"></span>
-					{{ mentor.rating }} ({{ mentor.reviews }} Reviews)
+					{{ mentor.rating }} ({{ mentor.reviews }} {{ $t('mentors.totalMentors.reviews') }})
 				</a>
 			</div>
 			</div>
@@ -190,6 +192,11 @@ const props = defineProps({
 	&__bottom {
 		display: flex;
 		justify-content: space-between;
+
+		@media (max-width: 375px){
+			flex-direction: column;
+			gap: rem(15);
+		}
 	}
 	&__task {
 		font-size: rem(14);

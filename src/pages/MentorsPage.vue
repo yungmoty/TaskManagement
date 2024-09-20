@@ -5,8 +5,9 @@ import HeaderMenu from '@/components/HeaderMenu.vue';
 import RecentMentors from '@/components/MentorsPageRecentMentors.vue';
 import TotalMentors from '@/components/MentorsPageTotalMentors.vue';
 import { useMentors } from "@/hooks/useMentors";
+import { useI18n } from 'vue-i18n'
 
-
+const { t } = useI18n({useScope: 'global'})
 const { mentors } = useMentors()
 const categoryOption = ref('')
 const sortOption = ref('')
@@ -46,7 +47,7 @@ const	sortedAndSearchedMentors = computed(() => {
 			<HeaderMenu 
 				@send-option="choiceOption"
 				pageClass="mentors-page"
-				title="Explore Mentors"
+				:title="t('mentors.titleHeader')"
 				:isSearchBlock="true"
 			/>
 			<div class="page__common">
