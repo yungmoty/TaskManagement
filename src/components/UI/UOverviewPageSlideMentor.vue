@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const props = defineProps({
 	mentor: {
 		type: Object,
@@ -18,29 +20,31 @@ const choiceFollow = () => {
 <template>
 	<div class="swiper-slide mentor">
 		<div class="mentor__top">
-			<a href class="mentor__avatar">
-				<img :src="mentor.avatar" :alt="mentor.name">
-			</a>
-			<a href="" class="mentor__info">
-				<div class="mentor__name">{{ mentor.name }}</div>
-				<div class="mentor__major">{{ mentor.major }}</div>
-			</a>
-			<a 
-				v-if="isFollow"
-				href=""
-				class="mentor__followed"
-				@click.prevent="choiceFollow"
-			>
-				Followed
-			</a>
-			<a
-				v-if="!isFollow"
-				href=""
-				class="mentor__follow"
-				@click.prevent="choiceFollow"
-			>
-			+ Follow
-			</a>
+			<div class="mentor__main">
+				<a href class="mentor__avatar">
+					<img :src="mentor.avatar" :alt="mentor.name">
+				</a>
+				<a href="" class="mentor__info">
+					<div class="mentor__name">{{ mentor.name }}</div>
+					<div class="mentor__major">{{ mentor.major }}</div>
+				</a>
+			</div>
+				<a 
+					v-if="isFollow"
+					href=""
+					class="mentor__followed"
+					@click.prevent="choiceFollow"
+				>
+					{{ $t('overview.sliderMentors.followed') }}
+				</a>
+				<a
+					v-if="!isFollow"
+					href=""
+					class="mentor__follow"
+					@click.prevent="choiceFollow"
+				>
+				+ {{ $t('overview.sliderMentors.follow') }}
+				</a>
 		</div>
 		<div class="mentor__bottom">
 			<a 
@@ -48,14 +52,14 @@ const choiceFollow = () => {
 				class="mentor__task"
 			>
 				<span class="_icon-note"></span>
-				{{ mentor.taskQuantity }} Task
+				{{ mentor.taskQuantity }} {{ $t('overview.sliderMentors.task') }}
 			</a>
 			<a 
 				href="" 
 				class="mentor__reviews"
 			>
 				<span class="_icon-star"></span>
-				{{ mentor.rating }} ({{ mentor.reviews }} Reviews)
+				{{ mentor.rating }} ({{ mentor.reviews }} {{ $t('overview.sliderMentors.reviews') }})
 			</a>
 		</div>
 	</div>
@@ -73,7 +77,19 @@ const choiceFollow = () => {
 	&__top {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		margin-bottom: rem(20);
+
+		@media (max-width: 425px){
+			align-items: flex-start;
+			flex-direction: column;
+		}
+	}
+	&__main {
+		display: flex;
+		@media (max-width: 425px){
+			margin-bottom: rem(20);
+		}
 	}
 	&__avatar {
 		img {
@@ -119,7 +135,8 @@ const choiceFollow = () => {
 	}
 	&__bottom {
 		display: flex;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: rem(15);
 	}
 	&__task {
 		font-size: rem(14);

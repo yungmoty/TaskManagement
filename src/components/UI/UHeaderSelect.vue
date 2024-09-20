@@ -3,9 +3,10 @@ import { ref, onMounted, onUnmounted } from 'vue';
 const selectedOption = ref('');
 const isOpen = ref(false);
 const select = ref(null);
+import { useI18n } from 'vue-i18n'
 
-
-defineProps({
+const { t } = useI18n({useScope: 'global'})
+const props = defineProps({
 	selectArr: {
 		type: Array,
 		required: true,
@@ -13,6 +14,7 @@ defineProps({
 	selectTitle: String,
 	iconClass: String,
 	isSort: Boolean,
+	optionsClass: String,
 });
 
 function toggleDropdown() {
@@ -33,15 +35,18 @@ onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
 });
 
+const emit = defineEmits(['update:selectedOption']);
+
 function selectOption(option) {
 	selectedOption.value = ':' + ' ' + option;
-	if (selectedOption.value === ':' + ' ' + 'None') selectedOption.value = ''
+	if (selectedOption.value === ':' + ' ' + t('headerMenu.sortArr.option-3')) selectedOption.value = ''
 	isOpen.value = false;
+	emit('update:selectedOption', option);
 }
 </script>
 
 <template>
-	<div 
+	<div
 		class="select" 
 		ref="select" 
 		:class="{ _active: isOpen }"
@@ -55,20 +60,24 @@ function selectOption(option) {
 			{{ selectTitle }}
 			<div v-if="isSort">{{ selectedOption }}</div>
 		</a>
-		<div class="select__items">
-			<a href=""
-				v-for="item in selectArr"
-				:key="item"
-				class="select__item"
-				@click.prevent="selectOption(item)"
-			>
-				{{ item }}
-			</a>
-		</div>
+		<Transition name="select-menu">
+			<div v-if="isOpen" :class="optionsClass" class="select__items">
+				<a 
+					href=""
+					v-for="item in selectArr"
+					:key="item"
+					:value="item"
+					class="select__item"
+					@click.prevent="selectOption(item)"
+				>
+					{{ item }}
+				</a>
+			</div>
+		</Transition>
 	</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/assets/scss/main.scss';
 
 .select {
@@ -85,18 +94,22 @@ function selectOption(option) {
 	&__link {
 		padding: rem(14) rem(28);
 		display: flex;
-		border: 1px solid #f5f5f7;
+		border: 1px solid $medium-white;
 		border-radius: rem(10);
 		align-items: center;
 		transition: all 0.3s ease 0s;
 		font-weight: 600;
 		font-size: rem(13);
+		background-color: inherit;
 
-		&:hover {
-		background-color: $light-blue;
-		}
-		&:hover span {
-			color: $purple;
+
+		@media (any-hover: hover){
+			&:hover {
+			background-color: $light-blue;
+			}
+			&:hover span {
+				color: $purple;
+			}
 		}
 	}
 	&__icon {
@@ -104,8 +117,6 @@ function selectOption(option) {
 	}
 	&__items {
 		display: flex;
-		opacity: 0;
-		visibility: hidden;
 		flex-direction: column;
 		background-color: $medium-white;
 		border-radius: rem(10);
@@ -115,8 +126,11 @@ function selectOption(option) {
 		margin-top: rem(15);
 		font-weight: 600;
 		font-size: rem(13);
-		transition: all 0.3s ease 0s;
 		border: 2px solid $light-blue;
+
+		&._options {
+			transition: all 0s ease 0s;
+		}
 	}
 	&__item {
 		padding: rem(10) rem(15);
@@ -130,12 +144,9 @@ function selectOption(option) {
 	&._active ._icon-category {
 	transform: rotate(90deg);
 	}
-	&._active &__items {
-		opacity: 1;
-		visibility: visible;
-	}
 	&._active &__link {
 		background-color: $light-blue;
+		border: 1px solid $light-blue;
 	}
 	&._active span {
 		color: $purple;
@@ -146,6 +157,23 @@ function selectOption(option) {
 }
 ._icon-sort {
 	transition: all 0.3s ease 0s;
+}
+.select-menu-enter-active {
+	animation: fadeInUp 0.3s;
+}
+.select-menu-leave-active {
+	animation: fadeInUp 0.3s reverse;
+}
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translate3d(0, 10%, 0);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
 }
 </style>
  

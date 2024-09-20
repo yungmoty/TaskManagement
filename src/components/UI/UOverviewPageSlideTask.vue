@@ -1,29 +1,19 @@
 <script setup>
 import { onMounted, ref, onBeforeUnmount } from 'vue'
-const loading = ref(false)
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
+const loading = ref(false)
 const props = defineProps({
 	newTask: {
 		type: Object,
 		required: true,
 	},
-	classToTaskToday: String,
 })
 
 setTimeout(() => {
 	loading.value = true
 }, 500);
-
-const emit = defineEmits(['string-sent']);
-
-function sendString() {
-	const stringToSend = props.newTask.major;
-	emit('string-sent', stringToSend);
-}
-
-onMounted(() => {
-	sendString()
-})
 
 const progress = ref(props.newTask.progress);
 const quotientProgress = ref(0.97);
@@ -50,7 +40,7 @@ onBeforeUnmount(() => {
 
 
 <template>
-	<div :class="classToTaskToday" class="swiper-slide task">
+	<div :key="newTask.id" class="swiper-slide task">
 		<a href="" class="task__image">
 			<img v-show="loading" :src="newTask.image" :alt="newTask.titleImage">
 			<div v-show="!loading" class="task__loading">
@@ -90,7 +80,7 @@ onBeforeUnmount(() => {
 			<div class="task__major">{{ newTask.major }}</div>
 		</a>
 		<div class="task__progress-bar">
-			<div class="task__progress">Progress</div>
+			<div class="task__progress">{{ $t('overview.sliderTasks.progress') }}</div>
 			<div class="task__percent">{{ progress }}%</div>
 			<div class="task__bar linebar">
 				<div class="linebar__wrapper">
@@ -130,18 +120,17 @@ onBeforeUnmount(() => {
 @import '@/assets/scss/main.scss';
 
 .swiper-slide {
+	width: 361px;
+
+	&:not(:last-child) {
+		margin-right: 36px;
+	}
 }
 .task {
 	padding: rem(24);
 	background-color: $white;
 	border-radius: rem(10);
 
-	&.task-today &__image {
-		height: 160px;
-	}
-	&.task-today {
-		padding-top: rem(20);
-	}
 	&__image {
 		display: flex;
 		justify-content: center;
@@ -185,6 +174,9 @@ onBeforeUnmount(() => {
 	}
 	&__title {
 		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	&__major {
 		font-size: rem(12);
@@ -273,5 +265,20 @@ onBeforeUnmount(() => {
 		transition: left 0.4s ease;
 	}
 }
-
+// .task-list-item {
+// 	display: inline-block;
+// 	margin-right: 10px;
+// }
+// .task-list-enter-active,
+// .task-list-leave-active {
+// 	transition: all 0.4s ease 0s;
+// }
+// .task-list-enter-from,
+// .task-list-leave-to {
+// 	opacity: 0;
+// 	transform: translateX(130px);
+// }
+// .task-list-move {
+// 	transition: transform 0.4s ease 0s;
+// }
 </style>

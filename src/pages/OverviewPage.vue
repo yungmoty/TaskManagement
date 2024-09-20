@@ -1,37 +1,44 @@
 <script setup>
+import { onMounted } from 'vue';
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import OverviewPageActivityBlock from '@/components/OverviewPageActivityBlock.vue';
 import SliderSwiper from '@/components/SliderSwiper.vue';
 import OverviewPageSidebar from '@/components/OverviewPageSidebar.vue';
 
-
+import { useStudentStore } from '@/stores/counter';
 import { useMentors } from "@/hooks/useMentors";
 import { useNewTasks } from "@/hooks/useNewTasks";
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n({useScope: 'global'})
+const studentStore = useStudentStore();
 const { mentors } = useMentors()
 const { newTasks } = useNewTasks()
 
-
+onMounted(() => {
+	studentStore.loadFromLocalStorage();
+});
 </script>
 
 
 <template>
 	<div class="page">
-		<DrawerMenu />
+		<DrawerMenu pageClass="overview-page" />
 		<div class="main-content">
 			<div class="main-wrapper">
 				<HeaderMenu 
-					title="Hi, Dennis Nzioki"
+					:title= "t('overview.titleHeader') + `, ${studentStore.studentName}`"
 					:isSearchBlock="false"
+					pageClass="overview-page"
 				>
-					<span class="header__text">Let's finish your task today!</span>
+					<span class="header__text">{{ $t('overview.textHeader') }}</span>
 				</HeaderMenu>
-				<OverviewPageActivityBlock title="Hi, Dennis Nzioki" />
+				<OverviewPageActivityBlock :title= "t('overview.titleHeader') + `, ${studentStore.studentName}`" />
 				<div class="mentors-block">
 					<SliderSwiper 
 						nameSwiper="swiper1" 
 						swiperBtn="swiper1-btn" 
-						sliderTitle="Monthly Mentors"
+						:sliderTitle="t('overview.sliderMentors.name')"
 					>
 						<UOverviewPageSlideMentor
 							:mentors="mentors"
@@ -45,7 +52,7 @@ const { newTasks } = useNewTasks()
 					<SliderSwiper 
 						nameSwiper="swiper2" 
 						swiperBtn="swiper2-btn" 
-						sliderTitle="Upcoming Task"
+						:sliderTitle="t('overview.sliderTasks.name')"
 					>
 						<UOverviewPageSlideTask
 							:newTasks="newTasks"
@@ -67,13 +74,11 @@ const { newTasks } = useNewTasks()
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
 
-// 752px
 .page {
 	height: 100vh;
 	box-sizing: border-box;
 	display: grid;
-	// flex-direction: row;
-	grid-template-columns: 17.5% auto 30.3%;
+	grid-template-columns: 16.5% auto 30.3%;	
 
 	@media (max-width: $l-dekstop){
 		grid-template-columns: 1fr auto;
@@ -83,12 +88,7 @@ const { newTasks } = useNewTasks()
 	}
 }
 .main-content {
-	// width: 752px;
-	// width: 100%;
 	background-color: $light-white;
-	// @media (max-width: $laptop){
-	// 	width: 100%;
-	// }
 }
 .main-wrapper {
 	max-width: 752px;
@@ -101,7 +101,7 @@ const { newTasks } = useNewTasks()
 		@include adaptiveValue(1000, 340, 1024, 'max-width');
 	}
 	@media (max-width: 400px){
-		@include adaptiveValue(460, 410, 410, 'max-width');
+		@include adaptiveValue(400, 320, 410, 'max-width');
 	}
 }
 .header__text {
@@ -110,11 +110,23 @@ const { newTasks } = useNewTasks()
 .mentors-block {
 	padding: rem(32);
 	padding-top: 0;
-	// display: flex;
-	// justify-content: center;
+
+	@media (max-width: 425px){
+		padding: rem(22);
+	}
+	@media (max-width: 375px){
+		padding: rem(22) 0;
+	}
 }
 .task-block {
 	padding: 0 rem(32);
+
+	@media (max-width: 425px){
+		padding: 0 rem(22);
+	}
+	@media (max-width: 375px){
+		padding: 0 0 rem(22) 0;
+	}
 }
 .sidebar-block {
 	padding: rem(32);
@@ -122,6 +134,10 @@ const { newTasks } = useNewTasks()
 	// width: 50vw;
 	@media (max-width: $laptop){
 		// @include adaptiveValue(1000, 340, 1024, 'max-width');
+	}
+
+	@media (max-width: 425px){
+		padding: rem(22) rem(22) rem(22) rem(22);
 	}
 }
 </style>

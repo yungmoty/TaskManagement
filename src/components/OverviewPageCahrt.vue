@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted } from 'vue'
 import Chart from 'chart.js/auto';
+import { useI18n } from 'vue-i18n'
 
-
+const { t } = useI18n({useScope: 'global'})
 const getOrCreateTooltip = (chart) => {
 	let tooltipEl = chart.canvas.parentNode.querySelector('div');
 
@@ -146,7 +147,7 @@ onMounted(() => {
 								minimumFractionDigits: 0,
 								maximumFractionDigits: 0
 							}).format(context.formattedValue);
-							return label + ' ' + 'Task';
+							return label + ' ' + t('overview.chart.task');
 						},
 					},
 					enabled: false,

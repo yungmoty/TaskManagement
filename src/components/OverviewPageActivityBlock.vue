@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import OverviewPageCahrt from '@/components/OverviewPageCahrt.vue';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
 const currentTask = ref(65)
 const completedTasks = currentTask
 const totalTasks = ref(100)
@@ -12,9 +14,9 @@ const percent = computed(() => {
 	return Math.floor(((completedTasks.value / totalTasks.value) * 100))
 })
 const timeInterval = ref([
-	'This Day',
-	'This Week',
-	'This Mounth',
+	t('overview.chart.timeInterval.day'),
+	t('overview.chart.timeInterval.week'),
+	t('overview.chart.timeInterval.mounth'),
 ])
 const selectedOption = ref(timeInterval.value[1]);
 const isOpen = ref(false);
@@ -54,11 +56,11 @@ function selectOption(option) {
 <template>
 	<div class="activity-block">
 		<div class="header__content">
-				<div class="header__title">{{ title }}</div>
-				<span class="header__text">Let's finish your task today!</span>
-			</div>
+			<div class="header__title">{{ title }}</div>
+			<span class="header__text">{{ $t('overview.textHeader') }}</span>
+		</div>
 		<div class="activity-block__progress-task progress-task">
-			<div class="progress-task__title">Running Task</div>
+			<div class="progress-task__title">{{ $t('overview.progressTask.title') }}</div>
 			<div class="progress-task__current">{{ currentTask }}</div>
 			<div class="progress-task__all">
 				<div class="progress-task__progress">
@@ -72,13 +74,13 @@ function selectOption(option) {
 				</div>
 				<div class="progress-task__total">
 					{{ totalTasks }}
-					<span>Task</span>
+					<span>{{ $t('overview.progressTask.task') }}</span>
 				</div>
 			</div>
 		</div>
 		<div class="activity-block__activity-graph activity-graph">
 			<div class="activity-graph__header">
-				<div class="activity-graph__title">Activity</div>
+				<div class="activity-graph__title">{{ $t('overview.chart.title') }}</div>
 
 				<div
 					ref="dropdown"
@@ -92,17 +94,19 @@ function selectOption(option) {
 					>
 						{{ selectedOption }} <span class="_icon-arrow-down"></span>
 					</a>
-					<div class="activity-graph__items">
-						<a
-							v-for="item in timeInterval"
-							:key="item"
-							href=""
-							class="activity-graph__item"
-							@click.prevent="selectOption(item)"
-						>
-						{{ item }}
-						</a>
-					</div>
+					<Transition name="select-menu">
+						<div v-if="isOpen" class="activity-graph__items">
+							<a
+								v-for="item in timeInterval"
+								:key="item"
+								href=""
+								class="activity-graph__item"
+								@click.prevent="selectOption(item)"
+							>
+							{{ item }}
+							</a>
+						</div>
+					</Transition>
 				</div>
 			</div>
 			<div class="activity-graph__block">
@@ -132,6 +136,12 @@ function selectOption(option) {
 		row-gap: rem(16);
 		justify-items: center;
 	}
+	@media (max-width: 425px){
+		padding: rem(22) rem(22) rem(22) rem(19);
+	}
+	@media (max-width: 375px){
+		padding: rem(22) 0;
+	}
 		&__progress-task {
 
 		}
@@ -154,6 +164,7 @@ function selectOption(option) {
 		}
 		@media (max-width: 580px) {
 			grid-row: 1;
+			grid-column: 1 / 3;
 		}
 		
 	}
@@ -199,7 +210,7 @@ function selectOption(option) {
 	@media (max-width: 1180px) {
 		grid-column: 2;
 		grid-row: 1;
-		max-width: 290px;
+		max-width: 280px;
 		justify-self: end;
 	}
 	@media (max-width: 580px) {
@@ -215,7 +226,7 @@ function selectOption(option) {
 
 		&__title {
 			font-weight: 600;
-			line-height: 150%;
+			line-height: 100%;
 			
 			@media (max-width: $l-dekstop) {
 				grid-column: 1;
@@ -224,7 +235,7 @@ function selectOption(option) {
 		&__current {
 			font-weight: 600;
 			font-size: rem(32);
-			line-height: 150%;
+			line-height: 100%;
 			letter-spacing: -0.03em;
 
 			@media (max-width: $l-dekstop) {
@@ -297,12 +308,8 @@ function selectOption(option) {
 		cursor: pointer;
 		position: relative;
 		z-index: 1;
-		width: rem(120);
+		width: rem(140);
 		text-align: right;
-		&._active .activity-graph__items {
-			opacity: 1;
-			visibility: visible;
-		}
 		&._active ._icon-arrow-down {
 			transform: rotate(180deg);
 		}
@@ -322,8 +329,6 @@ function selectOption(option) {
 	}
 	&__items {
 		display: flex;
-		opacity: 0;
-		visibility: hidden;
 		flex-direction: column;
 		background-color: $medium-white;
 		border-radius: rem(10);
@@ -355,7 +360,24 @@ function selectOption(option) {
 	}
 }
 ._icon-arrow-down {
-	transition: transform 0.3s ease 0s;
+	transition: transform 0.6s ease 0s;
 	display: inline-block;
+}
+.select-menu-enter-active {
+	animation: fadeInUp 0.3s;
+}
+.select-menu-leave-active {
+	animation: fadeInUp 0.3s reverse;
+}
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translate(50%, 0) translate3d(0, 10%, 0);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate(50%, 0) translate3d(0, 0, 0);
+	}
 }
 </style>

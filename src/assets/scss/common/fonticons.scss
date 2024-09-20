@@ -72,30 +72,36 @@
  ._icon-player-pause:before {
 	content: "\e910";
  }
- ._icon-player-volume:before {
+ ._icon-player-play:before {
 	content: "\e911";
  }
- ._icon-search:before {
+ ._icon-player-volume:before {
 	content: "\e912";
  }
- ._icon-settings:before {
+ ._icon-search:before {
 	content: "\e913";
  }
- ._icon-sort:before {
+ ._icon-settings:before {
 	content: "\e914";
  }
- ._icon-star:before {
+ ._icon-sort:before {
 	content: "\e915";
  }
- ._icon-task:before {
+ ._icon-star:before {
 	content: "\e916";
  }
- ._icon-users:before {
+ ._icon-task:before {
 	content: "\e917";
  }
- ._icon-video-call:before {
+ ._icon-users:before {
 	content: "\e918";
  }
- ._icon-voice-call:before {
+ ._icon-video-call:before {
 	content: "\e919";
+ }
+ ._icon-voice-call:before {
+	content: "\e91a";
+ }
+ ._icon-player-restart:before {
+	content: "\e984";
  }

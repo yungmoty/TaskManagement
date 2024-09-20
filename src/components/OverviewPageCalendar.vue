@@ -1,31 +1,48 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted, } from 'vue';
 import moment from 'moment';
+import { useI18n } from 'vue-i18n'
 
-const currentWeekStart = ref(moment().startOf('week'));
+const { t } = useI18n({useScope: 'global'})
+const countDays = ref(1)
+const namePeriod = ref('week')
+const lengthDays = ref(7)
+const currentWeekStart = ref(moment().startOf(namePeriod.value));
 const today = moment();
 
-const isToday = computed(() => currentWeekStart.value.isSame(today, 'week'))
+const isToday = computed(() => currentWeekStart.value.isSame(today, namePeriod.value))
 
 const days = computed(() => {
-	const weekStart = currentWeekStart.value.clone().startOf('week');
-	return Array.from({ length: 7 }, (_, i) => weekStart.clone().add(i, 'days'));
+	const weekStart = currentWeekStart.value.clone().startOf(namePeriod);
+	return Array.from({ length: lengthDays.value }, (_, i) => weekStart.clone().add(i, 'days'));
 });
 
 const header = computed(() => currentWeekStart.value.format('MMMM YYYY'));
 
 function previousWeek() {
-	currentWeekStart.value = currentWeekStart.value.clone().subtract(1, 'week');
+	currentWeekStart.value = currentWeekStart.value.clone().subtract(countDays.value, namePeriod.value);
 }
 
 function nextWeek() {
-	currentWeekStart.value = currentWeekStart.value.clone().add(1, 'week');
+	currentWeekStart.value = currentWeekStart.value.clone().add(countDays.value, namePeriod.value);
 }
 
 function goToCurrentDay() {
 	currentWeekStart.value = moment().startOf('day');
 }
+const updateDisplay = () => {
+	countDays.value = window.innerWidth <= 425 ? 5 : 1
+	lengthDays.value = window.innerWidth <= 425 ? 5 : 7
+	namePeriod.value = window.innerWidth <= 425 ? 'day' : 'week'
+}
 
+onMounted(() => {
+	updateDisplay ()
+	window.addEventListener('resize', updateDisplay )
+})
+onUnmounted(() => {
+	window.removeEventListener('resize', updateDisplay)
+})
 
 </script>
 
@@ -53,18 +70,20 @@ function goToCurrentDay() {
 			v-if="!isToday" 
 			class="calendar__today" 
 		>
-			<span @click="goToCurrentDay">Today</span>
+			<span @click="goToCurrentDay">{{ $t('overview.calendar.today') }}</span>
 		</div>
 		<div class="calendar__days">
-			<div
-				v-for="(day, index) in days"
-				:key="index"
-				class="calendar__day"
-				:class="{ today: day.isSame(today, 'day'), 'current-month': day.month() === today.month() }"
-			>
-				<div class="calendar__day-name">{{ day.format('dddd')[0] }}</div>
-				<div class="calendar__day-date">{{ day.date() }}</div>
-			</div>
+			<TransitionGroup>
+				<div
+					v-for="(day, index) in days"
+					:key="index"
+					class="calendar__day"
+					:class="{ today: day.isSame(today, 'day'), 'current-month': day.month() === today.month() }"
+				>
+					<div class="calendar__day-name">{{ day.format('dddd')[0] }}</div>
+					<div class="calendar__day-date">{{ day.date() }}</div>
+				</div>
+			</TransitionGroup>
 		</div>
 	</div>
 </template>
@@ -73,6 +92,10 @@ function goToCurrentDay() {
 <style lang="scss" scoped>
 @import '@/assets/scss/main.scss';
 
+
+.v-move {
+	transition: all 0.4s ease 0s;
+}
 .calendar {
 	// width: 100%;
 	width: 372px;
@@ -88,6 +111,10 @@ function goToCurrentDay() {
 		width: 372px;
 		padding: rem(20);
 	}
+	@media (max-width: 425px){
+		@include adaptiveValue(372, 320, 425, 'width');
+	}
+
 	&__header {
 		display: flex;
 		justify-content: space-between;

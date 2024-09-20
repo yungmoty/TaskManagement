@@ -1,76 +1,98 @@
 <script setup>
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import Swiper from 'swiper';
-import { Navigation, Autoplay, Keyboard } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import { useMentors } from "@/hooks/useMentors";
+
+const { loading } = useMentors()
 
 const props = defineProps({
 	sliderTitle: String,
 	nameSwiper: String,
 	swiperBtn: String,
+	slidesCountNewTask: Number,
+	slidesCountLimitTask: Number,
 })
 const nameSwiperSlider = props.nameSwiper
 const swiperSliderBtn = props.swiperBtn
 let swiperInstance = null;
+const swiperContainer = ref(null)
 
+
+const keyboardFlip = () => {
+	let isHovered = false
+
+	swiperContainer.value.addEventListener('mouseenter', () => { isHovered = true })
+
+	swiperContainer.value.addEventListener('mouseleave', () => { isHovered = false })
+	
+
+	document.addEventListener('keydown', (event) => {
+		if (isHovered) {
+			if (event.key === 'ArrowLeft') {
+				swiperInstance.slidePrev();
+			} else if (event.key === 'ArrowRight') {
+				swiperInstance.slideNext();
+			}
+		}
+	})
+}
 
 const updateSwiper = () => {
-	const slidesPerView = window.innerWidth <= 1150 ? 1 : 2;
+	const slidesPerViewOverviewPage = window.innerWidth <= 1150 ? 1 : 2
+	const slidesPerViewTaskPage = window.innerWidth > 1024 ? 3 : window.innerWidth > 744 ? 2 : 1;
+
+	const slidesCountNewTaskNext = props.slidesCountNewTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
+	const slidesCountLimitTaskNext = props.slidesCountLimitTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
+	const slidesCountNewTaskPrev = props.slidesCountNewTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
+	const slidesCountLimitTaskPrev = props.slidesCountLimitTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
+
 
 	if (swiperInstance) {
-		swiperInstance.destroy(); 
+		swiperInstance.destroy(true, true)
+		swiperInstance = null
 	}
 
-	if (nameSwiperSlider === 'swiper1') {
-		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
-		modules: [Navigation, Autoplay, Keyboard],
+	const swiperConfig = {
+		modules: [Navigation, Autoplay],
 		navigation: {
-			nextEl: `.${swiperSliderBtn}.slider__btn-next`,
-			prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
+
+			nextEl: nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4'
+			? slidesCountNewTaskNext || slidesCountLimitTaskNext
+			: `.${swiperSliderBtn}.slider__btn-next`,
+
+			prevEl: nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4'
+			? slidesCountNewTaskPrev || slidesCountLimitTaskPrev 
+			: `.${swiperSliderBtn}.slider__btn-prev`,
+			
 		},
-		slidesPerView: slidesPerView,
+		slidesPerView: nameSwiperSlider === 'swiper3' || nameSwiperSlider === 'swiper4' ? slidesPerViewTaskPage : slidesPerViewOverviewPage,
 		spaceBetween: 32,
-		keyboard: true,
-		autoplay: {
+		autoplay: nameSwiperSlider === 'swiper1' ? {
 			delay: 3000,
 			pauseOnMouseEnter: true,
-		},
-		});
-	} else {
-		swiperInstance = new Swiper(`.${nameSwiperSlider}`, {
-			modules: [Navigation, Autoplay, Keyboard],
-			navigation: {
-				nextEl: `.${swiperSliderBtn}.slider__btn-next`,
-				prevEl: `.${swiperSliderBtn}.slider__btn-prev`,
-			},
-			slidesPerView: slidesPerView,
-			spaceBetween: 32,
-			keyboard: true,
-			// autoplay: {
-			// 	delay: 1500,
-			// 	pauseOnMouseEnter: true,
-			// }
-		});
+		} : false,
 	}
+	swiperInstance = new Swiper(`.${nameSwiperSlider}`, swiperConfig)
 };
 
 onMounted(() => {
-	updateSwiper();
-	window.addEventListener('resize', updateSwiper);
+	updateSwiper()
+	keyboardFlip()
+	window.addEventListener('resize', updateSwiper)
 });
 
 onBeforeUnmount(() => {
 	if (swiperInstance) {
-		swiperInstance.destroy();
+		swiperInstance.destroy(true, true)
 	}
-	window.removeEventListener('resize', updateSwiper);
+	window.removeEventListener('resize', updateSwiper)
 });
 
-
-
-
-import { useMentors } from "@/hooks/useMentors";
-const { loading } = useMentors()
+watch(() => [props.slidesCountNewTask, props.slidesCountLimitTask], () => {
+	updateSwiper()
+}, { immediate: true })
 
 </script>
 

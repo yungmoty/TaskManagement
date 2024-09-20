@@ -12,6 +12,7 @@ let burgerMenu
 
 defineProps({
 	open: Boolean,
+	pageClass: String,
 })
 
 watch(() => eventBus.someEvent, (newValue) => {
@@ -25,69 +26,86 @@ function handleClickOutside(event) {
 	}
 }
 
+const removeBodyClass = () => {
+	document.body.classList.remove('_lock');
+}
+
 onMounted(() => {
 	document.addEventListener('click', handleClickOutside);
+	if (currentPath.value === '/overview') {
+		document.body.classList.add('overview');
+	} else document.body.classList.remove('overview')
+
+	if (currentPath.value === '/') {
+		document.body.classList.add('registration');
+	} else document.body.classList.remove('registration');
+
 });
 
 onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
 });
 
+const taskDetailPattern = /^\/task-detail\/\d+$/
 </script>
 
 
 <template>
-		<aside ref="drawerMenu" :class="{_active: store.isTrue}" class="sidebar">
+		<aside ref="drawerMenu" :class="[{_active: store.isTrue}, pageClass]" class="sidebar">
 			<div class="sidebar__logo">
 				<img src="@/assets/images/logo.svg" alt="Logo">
 			</div>
 			<div class="sidebar__body">
-				<div class="sidebar__navigation">
+				<div @click="removeBodyClass" class="sidebar__navigation">
 					<div 
-						:class="{_active : currentPath === '/'}" 
-						@click="$router.push('/')" 
+						:class="[{_active : currentPath === '/overview'}]" 
+						@click="$router.push('/overview')"
 						class="sidebar__link"
 					>
 						<span class="_icon-overview"></span>
-						Overview
+						{{ $t('drawerMenu.links.overview') }}
 					</div>
 					<div 
-						:class="{_active : currentPath === '/task'}" 
+						:class="[{_active : currentPath === '/task'}, {_active : taskDetailPattern.test(currentPath)}]"
+						@click="$router.push('/task')"
 						class="sidebar__link"
 					>
 						<span class="_icon-task"></span>
-						Task
+						{{ $t('drawerMenu.links.task') }}
 					</div>
 					<div 
-						:class="{_active : currentPath === '/mentors'}" 
+						:class="{_active : currentPath === '/mentors'}"
+						@click="$router.push('/mentors')"
 						class="sidebar__link"
 					>
 						<span class="_icon-mentors"></span>
-						Mentors
+						{{ $t('drawerMenu.links.mentors') }}
 					</div>
 					<div 
 						:class="{_active : currentPath === '/message'}" 
 						class="sidebar__link"
+						@click="$router.push('/message')"
 					>
 						<span class="_icon-message"></span>
-						Message
+						{{ $t('drawerMenu.links.message') }}
 					</div>
 					<div 
 						:class="{_active : currentPath === '/settings'}" 
 						class="sidebar__link"
+						@click="$router.push('/settings')"
 					>
 						<span class="_icon-settings"></span>
-						Settings
+						{{ $t('drawerMenu.links.settings') }}
 					</div>
 				</div>
 				<div class="sidebar__help">
 						<div class="sidebar__item sidebar__item_circle-1"></div>
 						<div class="sidebar__item sidebar__item_circle-2"></div>
 						<div class="sidebar__item sidebar__item_mark">?</div>
-						<div class="sidebar__title">Help Center</div>
-						<div class="sidebar__text">Having Trouble in Learning. Please contact us for more questions.
+						<div class="sidebar__title">{{ $t('drawerMenu.helpCenter.title') }}</div>
+						<div class="sidebar__text">{{ $t('drawerMenu.helpCenter.text') }}
 						</div>
-						<UButton class="sidebar__btn" >Go To Help Center</UButton>
+						<UButton class="sidebar__btn">{{ $t('drawerMenu.helpCenter.nameBtn') }}</UButton>
 				</div>
 			</div>
 		</aside>
@@ -99,30 +117,85 @@ onUnmounted(() => {
 
 .sidebar {
 	width: 252px;
+	height: 100vh;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	background-color: $white;
 	z-index: 5;
 	position: relative;
-	transition: all 0.3s ease 0s;
+	transition: all 0.5s ease 0s;
 
-	@media (max-width: $l-dekstop){
-		height: 100vh;
-		position: fixed;
-		overflow: auto;
-		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-		border-radius: rem(32) 0 0 rem(32);
-		top: 0;
-		right: -100%;
-		
-		&._active {
-			right: 0;
+	@media (max-width: 374px){
+		width: 225px;
+	}
+	&.registration-page {
+		display: none;
+	}
+
+	&.overview-page,
+	&.detail-task-page{
+		@media (max-width: $l-dekstop){
+			position: fixed;
+			overflow: auto;
+			box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+			border-radius: rem(32) 0 0 rem(32);
+			top: 0;
+			right: -100%;
+			
+			&._active {
+				right: 0;
+				animation: slideInRight;
+			}
+		}
+		@media (max-width: $laptop-inter){
+			height: 100%;
 		}
 	}
-	@media (max-width: $laptop-inter){
-		height: 100%;
+
+	&.task-page,
+	&.mentors-page,
+	&.message-page {
+		@media (max-width: $dekstop) {
+			position: fixed;
+			overflow: auto;
+			box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+			border-radius: rem(32) 0 0 rem(32);
+			top: 0;
+			right: -100%;
+			
+			&._active {
+				right: 0;
+				animation: slideInRight;
+			}
+		}
+		@media (max-width: $laptop-inter){
+			height: 100%;
+		}
 	}
+	&.settings-page {
+		@media (max-width: $laptop) {
+			position: fixed;
+			overflow: auto;
+			box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+			border-radius: rem(32) 0 0 rem(32);
+			top: 0;
+			right: -100%;
+			
+			&._active {
+				right: 0;
+				animation: slideInRight;
+			}
+		}
+		@media (max-width: $laptop-inter){
+			height: 100%;
+		}
+	}
+
+	&.message-page {
+		border-right: 1px solid $medium-white;
+	}
+
 
 	&__logo {
 		margin-bottom: rem(60);
@@ -266,6 +339,17 @@ onUnmounted(() => {
 		&:hover {
 			background-color: $light-blue;
 		}
+	}
+}
+
+@keyframes slideInRight {
+	from {
+		transform: translate3d(100%, 0, 0);
+		visibility: visible;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0);
 	}
 }
 </style>

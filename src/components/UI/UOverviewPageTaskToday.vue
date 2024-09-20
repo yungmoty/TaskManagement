@@ -1,7 +1,9 @@
 <script setup>
 import { onMounted, ref, onBeforeUnmount } from 'vue'
-const loading = ref(false)
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({useScope: 'global'})
+const loading = ref(false)
 const props = defineProps({
 	taskToday: {
 		type: Object,
@@ -18,8 +20,9 @@ setTimeout(() => {
 const emit = defineEmits(['string-sent']);
 
 function sendString() {
-	const stringToSend = props.taskToday.major;
-	emit('string-sent', stringToSend);
+	const majorToSend = props.taskToday.major;
+	const idToSend = props.taskToday.id;
+	emit('string-sent', majorToSend, idToSend);
 }
 
 onMounted(() => {
@@ -51,7 +54,7 @@ onBeforeUnmount(() => {
 
 
 <template>
-	<div :class="classToTaskToday" class="swiper-slide task">
+	<div :key="taskToday.id" :class="classToTaskToday" class="swiper-slide task">
 		<a href="" class="task__image">
 			<img v-show="loading" :src="taskToday.image" :alt="taskToday.titleImage">
 			<div v-show="!loading" class="task__loading">
@@ -91,7 +94,7 @@ onBeforeUnmount(() => {
 			<div class="task__major">{{ taskToday.major }}</div>
 		</a>
 		<div class="task__progress-bar">
-			<div class="task__progress">Progress</div>
+			<div class="task__progress">{{ $t('overview.taskToday.progress') }}</div>
 			<div class="task__percent">{{ progress }}%</div>
 			<div class="task__bar linebar">
 				<div class="linebar__wrapper">
@@ -131,12 +134,16 @@ onBeforeUnmount(() => {
 @import '@/assets/scss/main.scss';
 
 .swiper-slide {
+	width: 361px;
+
+	&:not(:last-child) {
+		margin-right: 36px;
+	}
 }
 .task {
 	padding: rem(24);
 	background-color: $white;
 	border-radius: rem(10);
-
 	&.task-today &__image {
 		height: 160px;
 
@@ -146,6 +153,7 @@ onBeforeUnmount(() => {
 	}
 	&.task-today {
 		padding-top: rem(20);
+		width: 100%;
 	}
 	&__image {
 		display: flex;
@@ -276,5 +284,20 @@ onBeforeUnmount(() => {
 		transition: left 0.4s ease;
 	}
 }
-
+// .task-list-item {
+// 	display: inline-block;
+// 	margin-right: 10px;
+// }
+// .task-list-enter-active,
+// .task-list-leave-active {
+// 	transition: all 0.4s ease 0s;
+// }
+// .task-list-enter-from,
+// .task-list-leave-to {
+// 	opacity: 0;
+// 	transform: translateX(130px);
+// }
+// .task-list-move {
+// 	transition: transform 0.4s ease 0s;
+// }
 </style>

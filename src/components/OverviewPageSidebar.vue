@@ -2,38 +2,58 @@
 import { onMounted, ref } from 'vue'
 import OverviewPageCalendar from '@/components/OverviewPageCalendar.vue';
 import { useTaskToday } from "@/hooks/useTaskToday";
+import { useRouter } from 'vue-router';
+import { useSliderStore } from '@/stores/counter';
+import { useI18n } from 'vue-i18n'
 
-const { taskToday, fetchData, loadingTaskToday } = useTaskToday()
+const { t } = useI18n({useScope: 'global'})
+const sliderStore = useSliderStore();
+const { tasksToday, fetchData, loadingTaskToday } = useTaskToday()
+const router = useRouter();
 const item = ref([])
-const receivedString = ref('');
+const getMajor = ref('');
+const getId = ref('');
 const isActive = ref(false)
 
 const openSettings = () => {
 	isActive.value = !isActive.value
 }
-const handleStringSent = (payload) => {
-	receivedString.value = payload;
+const handleStringSent = (major, id) => {
+	getMajor.value = major;
+	getId.value = id;
 }
 
+const selectSlide = (slideId) => {
+	sliderStore.setActiveSlideId(slideId);
+	sliderStore.setActiveSlider('tasksToday');
 
-onMounted(() => {
-	fetchData().then(() => {
-		// const random = Math.floor(Math.random() * newTasks.value.length)
+	localStorage.setItem('activeSlideId', JSON.stringify(slideId));
+	localStorage.setItem('activeSlider', JSON.stringify('tasksToday'));
+};
+
+const navigateToDetail = (taskId) => {
+	router.push({ name: 'task-detail', params: { id: taskId } });
+};
+
+const fetchDataAndSetItem = async () => {
+	try {
+		await fetchData();
 		let currentDate = new Date();
-		let count = currentDate.getDate()
-		let maxLength = taskToday.value.length
-		const tmp = Math.ceil(count / (maxLength - 1))
+		let count = currentDate.getDate();
+		let maxLength = tasksToday.value.length;
+		const tmp = Math.ceil(count / (maxLength - 1));
 
 		if (count > maxLength - 1) {
-			count -= (maxLength - 1) * (tmp - 1)
+				count -= (maxLength - 1) * (tmp - 1);
 		}
 
-		item.value.push(taskToday.value[count])
-	}).catch(error => {
-		console.error(error)
-	});
-})
+		item.value.push(tasksToday.value[count]);
+	} catch (error) {
+		console.error(error);
+	}
+};
 
+onMounted(fetchDataAndSetItem);
 
 
 </script>
@@ -47,7 +67,7 @@ onMounted(() => {
 
 		<div class="sidebar-menu__current-task current-task">
 			<div class="current-task__header">
-				<div class="current-task__title">Task Today</div>
+				<div class="current-task__title">{{ $t('overview.taskToday.title') }}</div>
 				<div 
 					:class="{_active : isActive}"
 					@click="openSettings" 
@@ -57,7 +77,7 @@ onMounted(() => {
 				</div>
 			</div>
 			<div v-show="!loadingTaskToday" class="current-task__task">
-				<OverviewPageTaskToday
+				<UOverviewPageTaskToday
 					@string-sent="handleStringSent"
 					classToTaskToday="task-today"
 					:useTaskToday="useTaskToday"
@@ -99,26 +119,26 @@ onMounted(() => {
 			</div>
 			<div class="current-task__about">
 				<div class="current-task__detail">
-					<div class="current-task__subtitle">Detail Task</div>
-					<div class="current-task__major">{{ receivedString }}</div>
+					<div class="current-task__subtitle">{{ $t('overview.taskToday.detailTitle') }}</div>
+					<div class="current-task__major">{{ getMajor }}</div>
 				</div>
 				<ul class="current-task__list">
 					<li class="current-task__item">
 						<span>1</span>
-						Understanding the tools in Figma
+						{{ $t('overview.taskToday.cases.case-1') }}
 					</li>
 					<li class="current-task__item">
 						<span>2</span>
-						Understand the basics of making designs
+						{{ $t('overview.taskToday.cases.case-2') }}
 					</li>
 					<li class="current-task__item">
 						<span>3</span>
-						Design a mobile application with figma
+						{{ $t('overview.taskToday.cases.case-3') }}
 					</li>
 				</ul>
-				<UButton class="current-task__btn">
-					Go To Detail
-				</UButton>
+				<USubmitBtn @click="[navigateToDetail(getId), selectSlide(getId)]">
+					{{ $t('overview.taskToday.nameBtn') }}
+				</USubmitBtn>
 			</div>
 		</div>
 	</aside>
@@ -137,7 +157,7 @@ onMounted(() => {
 		@include adaptiveValue(1000, 340, 1024, 'max-width');
 	}
 	@media (max-width: 400px){
-		@include adaptiveValue(460, 410, 410, 'max-width');
+		@include adaptiveValue(400, 320, 400, 'max-width');
 	}
 
 	&__calendar {
@@ -248,14 +268,6 @@ onMounted(() => {
 			height: 36px;
 			border-radius: rem(10);
 			background-color: $medium-white;
-		}
-	}
-	&__btn {
-		background-color: $dark-blue;
-		transition: transform 0.3s ease 0s;
-
-		&:hover {
-			transform: scale(0.97);
 		}
 	}
 }

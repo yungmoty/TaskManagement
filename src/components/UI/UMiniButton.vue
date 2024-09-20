@@ -8,7 +8,7 @@ defineProps({
 
 
 <template>
-	<a href="" :class="title" class="mini-btn">
+	<a @click.prevent href="" :class="title" class="mini-btn">
 		<slot></slot>
 	</a>
 </template>
@@ -21,7 +21,6 @@ defineProps({
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: $white;
 		border: 1px solid #f5f5f7;
 		border-radius: 50%;
 		width: rem(52);
