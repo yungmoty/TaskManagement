@@ -135,7 +135,7 @@ const choiceFollow = () => {
 	}
 	&__bottom {
 		display: flex;
-		flex-direction: column;
+		justify-content: space-between;
 		gap: rem(15);
 	}
 	&__task {

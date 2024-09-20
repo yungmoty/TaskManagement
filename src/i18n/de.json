@@ -38,7 +38,7 @@
 			"followed": "Folge",
 			"follow": "Folgen",
 			"task": "Aufgabe",
-			"reviews": "Bewertungen"
+			"reviews": "Feedback"
 		},
 		"sliderTasks": {
 			"name": "Bevorstehende Aufgabe",
@@ -121,14 +121,14 @@
 		"recentMentors": {
 			"title": "Neueste Mentoren",
 			"task": "Aufgabe",
-			"reviews": "Bewertungen"
+			"reviews": "Feedback"
 		},
 		"totalMentors": {
 			"title": "Mentoren",
 			"followed": "Folge",
 			"follow": "Folgen",
 			"task": "Aufgabe",
-			"reviews": "Bewertungen",
+			"reviews": "Feedback",
 			"aboutYourself": "Hallo, ich bin"
 		}
 	},
