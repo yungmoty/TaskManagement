@@ -86,7 +86,7 @@ const hideControls = () => {
 					<div class="main-content__major">
 						{{ task.major }}. {{ $t('detailTask.mainContent.major') }}
 						<span class="main-content__line"></span>
-						<a href="" class="main-content__mentors">{{ $t('detailTask.mainContent.mentors') }}</a>
+						<a @click.prevent href="" class="main-content__mentors">{{ $t('detailTask.mainContent.mentors') }}</a>
 					</div>
 					<div class="main-content__total">
 						<div class="main-content__students">

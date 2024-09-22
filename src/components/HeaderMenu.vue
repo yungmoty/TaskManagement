@@ -103,7 +103,7 @@ onMounted(() => {
 				<UMiniButton class="_icon-notification">
 					<span class="header__circle"></span>
 				</UMiniButton>
-				<a href="" class="header__user">
+				<a @click.prevent href="" class="header__user">
 					<img v-if="studentStore.studentPhotoUrl" :src="studentStore.studentPhotoUrl" :alt="studentStore.studentName">
 					<img v-else src="@/assets/images/unavatar.svg" :alt="studentStore.studentName">
 				</a>

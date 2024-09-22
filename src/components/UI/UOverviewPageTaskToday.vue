@@ -55,7 +55,7 @@ onBeforeUnmount(() => {
 
 <template>
 	<div :key="taskToday.id" :class="classToTaskToday" class="swiper-slide task">
-		<a href="" class="task__image">
+		<a @click.prevent href="" class="task__image">
 			<img v-show="loading" :src="taskToday.image" :alt="taskToday.titleImage">
 			<div v-show="!loading" class="task__loading">
 						<svg version="1.1" id="L5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
@@ -89,7 +89,7 @@ onBeforeUnmount(() => {
 						</svg>
 			</div>
 		</a>
-		<a href="" class="task__info">
+		<a @click.prevent href="" class="task__info">
 			<div class="task__title">{{ taskToday.titleImage }}</div>
 			<div class="task__major">{{ taskToday.major }}</div>
 		</a>
@@ -109,19 +109,19 @@ onBeforeUnmount(() => {
 				{{ taskToday.timeLeft }}
 			</div>
 			<div class="task__contributors">
-				<a href="" class="task__contributor">
+				<a @click.prevent href="" class="task__contributor">
 					<img :src="taskToday.contributor_1" alt="User">
 				</a>
-				<a href="" class="task__contributor">
+				<a @click.prevent href="" class="task__contributor">
 					<img :src="taskToday.contributor_2" alt="User">
 				</a>
-				<a href="" class="task__contributor">
+				<a @click.prevent href="" class="task__contributor">
 					<img :src="taskToday.contributor_3" alt="User">
 				</a>
-				<a href="" class="task__contributor">
+				<a @click.prevent href="" class="task__contributor">
 					<img :src="taskToday.contributor_4" alt="User">
 				</a>
-				<a href="" class="task__contributor">
+				<a @click.prevent href="" class="task__contributor">
 					<img :src="taskToday.contributor_5" alt="User">
 				</a>
 			</div>

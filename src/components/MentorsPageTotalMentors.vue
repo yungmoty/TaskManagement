@@ -24,10 +24,10 @@ defineProps({
 			>
 			<div class="slides-mentors__top">
 				<div class="slides-mentors__main">
-					<a href class="slides-mentors__avatar">
+					<a @click.prevent href="" class="slides-mentors__avatar">
 						<img :src="mentor.avatar" :alt="mentor.name">
 					</a>
-					<a href="" class="slides-mentors__info">
+					<a @click.prevent href="" class="slides-mentors__info">
 						<div class="slides-mentors__name">{{ mentor.name }}</div>
 						<div class="slides-mentors__major">{{ mentor.major }}</div>
 					</a>
@@ -56,6 +56,7 @@ defineProps({
 				<a 
 					href="" 
 					class="slides-mentors__task"
+					@click.prevent
 				>
 					<span class="_icon-note"></span>
 					{{ mentor.taskQuantity }} 
@@ -63,6 +64,7 @@ defineProps({
 				<a 
 					href="" 
 					class="slides-mentors__reviews"
+					@click.prevent
 				>
 					<span class="_icon-star"></span>
 					{{ mentor.rating }} ({{ mentor.reviews }} {{ $t('mentors.totalMentors.reviews') }})

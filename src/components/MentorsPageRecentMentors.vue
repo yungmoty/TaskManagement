@@ -49,10 +49,10 @@ watch(() => slidesCountLimitTask.value, () => {
 			>
 				<div class="recent-mentors__top">
 					<div class="recent-mentors__main">
-						<a href class="recent-mentors__avatar">
+						<a @click.prevent href="" class="recent-mentors__avatar">
 							<img :src="mentor.avatar" :alt="mentor.name">
 						</a>
-						<a href="" class="recent-mentors__info">
+						<a @click.prevent href="" class="recent-mentors__info">
 							<div class="recent-mentors__name">{{ mentor.name }}</div>
 							<div class="recent-mentors__major">{{ mentor.major }}</div>
 						</a>
@@ -78,6 +78,7 @@ watch(() => slidesCountLimitTask.value, () => {
 					<a 
 						href="" 
 						class="recent-mentors__task"
+						@click.prevent
 					>
 						<span class="_icon-note"></span>
 						{{ mentor.taskQuantity }} {{ $t('mentors.recentMentors.task') }}
@@ -85,6 +86,7 @@ watch(() => slidesCountLimitTask.value, () => {
 					<a 
 						href="" 
 						class="recent-mentors__reviews"
+						@click.prevent
 					>
 						<span class="_icon-star"></span>
 						{{ mentor.rating }} ({{ mentor.reviews }} {{ $t('mentors.recentMentors.reviews') }})

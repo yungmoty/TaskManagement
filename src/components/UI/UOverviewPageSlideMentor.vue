@@ -21,10 +21,10 @@ const choiceFollow = () => {
 	<div class="swiper-slide mentor">
 		<div class="mentor__top">
 			<div class="mentor__main">
-				<a href class="mentor__avatar">
+				<a @click.prevent href="" class="mentor__avatar">
 					<img :src="mentor.avatar" :alt="mentor.name">
 				</a>
-				<a href="" class="mentor__info">
+				<a @click.prevent href="" class="mentor__info">
 					<div class="mentor__name">{{ mentor.name }}</div>
 					<div class="mentor__major">{{ mentor.major }}</div>
 				</a>
@@ -50,6 +50,7 @@ const choiceFollow = () => {
 			<a 
 				href="" 
 				class="mentor__task"
+				@click.prevent
 			>
 				<span class="_icon-note"></span>
 				{{ mentor.taskQuantity }} {{ $t('overview.sliderMentors.task') }}
@@ -57,6 +58,7 @@ const choiceFollow = () => {
 			<a 
 				href="" 
 				class="mentor__reviews"
+				@click.prevent
 			>
 				<span class="_icon-star"></span>
 				{{ mentor.rating }} ({{ mentor.reviews }} {{ $t('overview.sliderMentors.reviews') }})
