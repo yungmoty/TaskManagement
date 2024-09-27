@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
@@ -6,35 +6,45 @@ import RecentMentors from '@/components/MentorsPageRecentMentors.vue';
 import TotalMentors from '@/components/MentorsPageTotalMentors.vue';
 import { useMentors } from "@/hooks/useMentors";
 import { useI18n } from 'vue-i18n'
+import { Mentor } from '@/interfaces/mentor';
 
 const { t } = useI18n({useScope: 'global'})
 const { mentors } = useMentors()
-const categoryOption = ref('')
-const sortOption = ref('')
-const searchQuerry = ref('')
+const categoryOption = ref<string>('')
+const sortOption = ref<string>('')
+const searchQuerry = ref<string>('')
 
-const choiceOption = (category, sort, search) => {
+const choiceOption = (category: string, sort: string, search: string): void => {
 	categoryOption.value = category
 	sortOption.value = sort
 	searchQuerry.value = search
 }
 
 const sortedMentors = computed(() => {
+	const mentorsArr = mentors.value as Mentor[]
 	if (sortOption.value === 'Deadline') {
-		return [...mentors.value].sort((post1, post2) => post1.taskQuantity[0] - post2.taskQuantity[0])
+		return [...mentorsArr].sort((post1, post2) => 
+		post1.taskQuantity - post2.taskQuantity
+	)
 	}
 	if (sortOption.value === 'Popular') {
-		return [...mentors.value].sort((post1, post2) => post2.rating - post1.rating)
+		return [...mentorsArr].sort((post1, post2) => 
+		post2.rating - post1.rating
+	)
 	}
 	if (categoryOption.value === 'Developer') {
-		return [...mentors.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
+		return [...mentorsArr].filter(post => 
+		post.major.toLowerCase().includes(categoryOption.value.toLowerCase())
+	)
 	}
 	if (categoryOption.value === 'Design') {
-		return [...mentors.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
+		return [...mentorsArr].filter(post => 
+		post.major.toLowerCase().includes(categoryOption.value.toLowerCase())
+	)
 	}
-	return mentors.value
+	return mentorsArr
 })
-const	sortedAndSearchedMentors = computed(() => {
+const sortedAndSearchedMentors = computed(() => {
 	return sortedMentors.value.filter(post => post.name.toLowerCase().includes(searchQuerry.value.toLowerCase()))
 })
 </script>

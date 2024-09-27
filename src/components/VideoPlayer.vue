@@ -1,18 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted, defineExpose } from 'vue';
 
-defineProps({
-	videoUrl: String,
-})
+// Типизация пропсов
+defineProps<{
+	videoUrl: string // URL видео
+}>()
 
-const videoElement = ref(null)
-const isPlaying = ref(true)
-const isRestart = ref(false)
-const duration = ref(0)
-const currentTime = ref(0)
-const isControls = ref(false)
-const isVolume = ref(false)
-const volume = ref(0.7)
+const videoElement = ref<HTMLVideoElement  | null>(null)
+const isPlaying = ref<boolean>(true)
+const isRestart = ref<boolean>(false)
+const duration = ref<number>(0)
+const currentTime = ref<number>(0)
+const isControls = ref<boolean>(false)
+const isVolume = ref<boolean>(false)
+const volume = ref<number>(0.7)
 
 const togglePlay = () => {
 	if (videoElement.value) {
@@ -44,7 +45,7 @@ const updateProgress = () => {
 
 const seek = () => {
 	if (videoElement.value) {
-		videoElement.value.currentTime = currentTime.value		
+		videoElement.value.currentTime = currentTime.value
 	}
 }
 
@@ -71,7 +72,7 @@ const toggleControls = () => {
 	}
 }
 
-const formatTime = (seconds) => {
+const formatTime = (seconds: number): string => {
 	const minutes = Math.floor(seconds / 60)
 	const secs = Math.floor(seconds % 60)
 	return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
@@ -84,7 +85,9 @@ const fullscreen = () => {
 }
 
 const updateVolume = () => {
-	videoElement.value.volume = volume.value
+	if (videoElement.value) {
+		videoElement.value.volume = volume.value; 
+	}
 }
 
 const handleClickOutside = () => {
@@ -97,7 +100,7 @@ const handleVideoEnd = () => {
 	isRestart.value = true
 }
 
-const handleKeyboardEvents = (event) => {
+const handleKeyboardEvents = (event: KeyboardEvent) => {
 	if (event.key === ' ') {
 		event.preventDefault()
 		toggleControls()
@@ -112,6 +115,8 @@ const play = () => {
 		})
 	}
 }
+
+// Экспонируем метод play, чтобы его можно было вызвать извне
 defineExpose({ play })
 
 onMounted(() => {
@@ -439,220 +444,3 @@ onUnmounted(() => {
 }
 
 </style>
-
-<!-- <template>
-<div :class="{ 'mini-player': isMiniPlayer }" class="video-player-container">
-	<video
-		ref="video"
-		@timeupdate="updateProgress"
-		@play="updatePlayButton"
-		@pause="updatePlayButton"
-		@mouseover="showControls = true"
-		@mouseleave="showControls = false"
-	>
-		<source :src="videoUrl" type="video/mp4" />
-		Ваш браузер не поддерживает видео.
-	</video>
-
-
-	<div v-if="showControls" class="video-controls-overlay">
-		<button v-if="!isPlaying" @click="togglePlay" class="control-btn play-btn">▶</button>
-		<button v-if="isPlaying" @click="togglePlay" class="control-btn stop-btn">■</button>
-	</div>
-
-
-	<div v-if="isMiniPlayer" class="mini-player-controls">
-		<button @click="toggleMiniPlayer" class="close-btn">✖</button>
-	</div>
-
-
-	<div v-if="!isMiniPlayer" class="controls">
-		<button @click="togglePlay">{{ isPlaying ? 'Pause' : 'Play' }}</button>
-		<input
-		type="range"
-		min="0"
-		:max="videoDuration"
-		v-model="currentTime"
-		@input="seek"
-		/>
-		<button @click="toggleFullscreen">{{ isFullscreen ? 'Exit Fullscreen' : 'Fullscreen' }}</button>
-		<button @click="toggleMiniPlayer">{{ isMiniPlayer ? 'Maximize' : 'Minimize' }}</button>
-		<input
-		type="range"
-		min="0"
-		max="1"
-		step="0.01"
-		v-model="volume"
-		@input="updateVolume"
-		/>
-	</div>
-</div>
-</template>
-
-<script setup>
-import { ref, onMounted, watch } from 'vue';
-defineProps({
-videoUrl: String,
-})
-
-const video = ref(null);
-const isPlaying = ref(false);
-const isFullscreen = ref(false);
-const isMiniPlayer = ref(false);
-const showControls = ref(false);
-const volume = ref(1);
-const currentTime = ref(0);
-const videoDuration = ref(0);
-
-const togglePlay = () => {
-if (video.value.paused) {
-	video.value.play();
-} else {
-	video.value.pause();
-}
-};
-
-const updatePlayButton = () => {
-isPlaying.value = !video.value.paused;
-};
-
-const updateProgress = () => {
-currentTime.value = video.value.currentTime;
-};
-
-const seek = () => {
-video.value.currentTime = currentTime.value;
-};
-
-const toggleFullscreen = () => {
-if (isFullscreen.value) {
-	document.exitFullscreen();
-} else {
-	video.value.requestFullscreen();
-}
-isFullscreen.value = !isFullscreen.value;
-};
-
-const toggleMiniPlayer = () => {
-isMiniPlayer.value = !isMiniPlayer.value;
-if (isMiniPlayer.value) {
-	video.value.style.position = 'fixed';
-	video.value.style.bottom = '0';
-	video.value.style.right = '0';
-	video.value.style.width = '320px';
-	video.value.style.height = '180px';
-} else {
-	video.value.style.position = 'static';
-	video.value.style.width = '100%';
-	video.value.style.height = 'auto';
-}
-};
-
-const updateVolume = () => {
-video.value.volume = volume.value;
-};
-
-onMounted(() => {
-videoDuration.value = video.value.duration;
-});
-
-watch(() => video.duration, (newVal) => {
-videoDuration.value = newVal;
-});
-</script>
-
- <style scoped>
- .video-player-container {
-	position: relative;
- }
- 
- video {
-	width: 100%;
-	height: auto;
-	transition: opacity 0.3s;
- }
- 
- .video-controls-overlay {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 100%;
-	pointer-events: none; /* To ensure video controls can still be used */
- }
- 
- .control-btn {
-	background: rgba(0, 0, 0, 0.5);
-	color: white;
-	border: none;
-	border-radius: 50%;
-	width: 50px;
-	height: 50px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 24px;
-	cursor: pointer;
-	transition: background 0.3s;
- }
- 
- .control-btn:hover {
-	background: rgba(0, 0, 0, 0.8);
- }
- 
- .play-btn {
-	display: none;
- }
- 
- .stop-btn {
-	display: none;
- }
- 
- .video-player-container:hover .video-controls-overlay .play-btn {
-	display: block;
- }
- 
- .video-player-container:hover .video-controls-overlay .stop-btn {
-	display: block;
- }
- 
- .mini-player {
-	border: 2px solid #ccc;
-	border-radius: 8px;
- }
- 
- .mini-player-controls {
-	position: absolute;
-	bottom: 5px;
-	right: 5px;
- }
- 
- .close-btn {
-	background: rgba(0, 0, 0, 0.5);
-	color: white;
-	border: none;
-	border-radius: 50%;
-	width: 24px;
-	height: 24px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	font-size: 18px;
- }
- 
- .close-btn:hover {
-	background: rgba(0, 0, 0, 0.8);
- }
- 
- .controls {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
- }
- </style>
-  -->

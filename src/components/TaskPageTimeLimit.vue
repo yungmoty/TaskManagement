@@ -1,71 +1,75 @@
-<script setup>
+<script setup lang="ts">
 import SliderSwiper from '@/components/SliderSwiper.vue';
 import { onMounted, ref, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/counter';
 import { useI18n } from 'vue-i18n'
+import { TaskToday } from '@/interfaces/taskToday';
+
+// Типизация пропсов
+const props = defineProps<{
+	tasksToday: TaskToday[]
+}>()
 
 const { t } = useI18n({useScope: 'global'})
-const sliderStore = useSliderStore();
-const router = useRouter();
-const loading = ref(false)
 
-const props = defineProps({
-	tasksToday: {
-		type: Array,
-		required: true
-	},
-})
+// Типизация для хранилища слайдера
+const sliderStore = useSliderStore()
+const router = useRouter()
+const loading = ref<boolean>(false)
 
-const selectSlide = (slideId) => {
-	sliderStore.setActiveSlideId(slideId);
-	sliderStore.setActiveSlider('tasksToday');
+const selectSlide = (slideId: number) => {
+	sliderStore.setActiveSlideId(slideId)
+	sliderStore.setActiveSlider('tasksToday')
 
-	localStorage.setItem('activeSlideId', JSON.stringify(slideId));
-	localStorage.setItem('activeSlider', JSON.stringify('tasksToday'));
-};
+	localStorage.setItem('activeSlideId', JSON.stringify(slideId))
+	localStorage.setItem('activeSlider', JSON.stringify('tasksToday'))
+}
 
+const slidesCountLimitTask = ref<number>(0);
+let timer: ReturnType<typeof setTimeout> | undefined
 
-const slidesCountLimitTask = ref(0);
-let timer;
-
+// Имитируем асинхронную загрузку
 const startLoading = () => {
 	if (timer) {
 		clearTimeout(timer);
 	}
 	timer = setTimeout(() => {
 		loading.value = true;
-	}, 500);
-};
+	}, 500)
+}
 
+// Наблюдение за изменениями props.taskToday
 watch(() => props.tasksToday, (taskToday) => {
 	slidesCountLimitTask.value = taskToday.length;
-});
+})
 watch(() => slidesCountLimitTask.value, () => {
 	loading.value = false;
-	startLoading();
-});
+	startLoading()
+})
 
-const navigateToDetail = (taskId) => {
+// Функция для навигации к деталям задачи
+const navigateToDetail = (taskId: number) => {
 	router.push({ name: 'task-detail', params: { id: taskId } });
 };
 
-const quotientProgress = ref(0.95);
+const quotientProgress = ref<number>(0.95);
 
+// Обновление прогресса при изменении размера окна
 const updateQuotientProgress = () => {
 	if (window.innerWidth < 1024) {
-		quotientProgress.value = 0.97;
+		quotientProgress.value = 0.97
 	}
-};
+}
 
 onMounted(() => {
-	window.addEventListener('resize', updateQuotientProgress);
-	updateQuotientProgress();
-});
+	window.addEventListener('resize', updateQuotientProgress)
+	updateQuotientProgress()
+})
 
 onBeforeUnmount(() => {
-	window.removeEventListener('resize', updateQuotientProgress);
-});
+	window.removeEventListener('resize', updateQuotientProgress)
+})
 </script>
 
 

@@ -1,48 +1,52 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-const selectedOption = ref('');
-const isOpen = ref(false);
-const select = ref(null);
 import { useI18n } from 'vue-i18n'
+import { SortEnum } from '@/enums/sortEnum';
 
+// Типизируем пропсы
+const props = defineProps<{
+	selectArr: string[],
+	selectTitle: string,
+	iconClass?: string,
+	isSort?: boolean,
+	optionsClass?: string,
+}>()
+
+const selectedOption = ref<string>('');
+const isOpen = ref<boolean>(false);
+const select = ref<HTMLElement | null>(null);
 const { t } = useI18n({useScope: 'global'})
-const props = defineProps({
-	selectArr: {
-		type: Array,
-		required: true,
-	},
-	selectTitle: String,
-	iconClass: String,
-	isSort: Boolean,
-	optionsClass: String,
-});
 
-function toggleDropdown() {
-isOpen.value = !isOpen.value;
+function toggleDropdown():void {
+	isOpen.value = !isOpen.value;
 }
 
-function handleClickOutside(event) {
-	if (select.value && !select.value.contains(event.target)) {
+function handleClickOutside(event: MouseEvent): void {
+	if (select.value && !select.value.contains(event.target as Node)) {
 		isOpen.value = false;
 	}
 }
 
+const emit = defineEmits<{
+	(e: 'update:selectedOption', option: string): void;
+}>()
+
+function selectOption(option: string): void {
+	selectedOption.value = `: ${option}`
+	if (selectedOption.value === `: ${t(SortEnum.None)}`) {
+		selectedOption.value = ''
+	}
+	isOpen.value = false
+	emit('update:selectedOption', option)
+}
+
 onMounted(() => {
-	document.addEventListener('click', handleClickOutside);
-});
+	document.addEventListener('click', handleClickOutside)
+})
 
 onUnmounted(() => {
-	document.removeEventListener('click', handleClickOutside);
-});
-
-const emit = defineEmits(['update:selectedOption']);
-
-function selectOption(option) {
-	selectedOption.value = ':' + ' ' + option;
-	if (selectedOption.value === ':' + ' ' + t('headerMenu.sortArr.option-3')) selectedOption.value = ''
-	isOpen.value = false;
-	emit('update:selectedOption', option);
-}
+	document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>

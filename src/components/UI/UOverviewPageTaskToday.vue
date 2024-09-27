@@ -1,55 +1,60 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { TaskToday } from '@/interfaces/taskToday';
+
+// Типизация пропсов
+const props = defineProps<{
+	taskToday: TaskToday,
+	classToTaskToday: string,
+}>()
 
 const { t } = useI18n({useScope: 'global'})
-const loading = ref(false)
-const props = defineProps({
-	taskToday: {
-		type: Object,
-		required: true,
-	},
-	classToTaskToday: String,
-})
+const loading = ref<boolean>(false)
 
+// Имитируем асинхронную загрузку
 setTimeout(() => {
+	
 	loading.value = true
-}, 500);
+}, 500)
 
+// Эмит события для отправки данных
+const emit = defineEmits<{
+	(e: 'string-sent', major: string, id: number): void
+}>()
 
-const emit = defineEmits(['string-sent']);
-
-function sendString() {
+function sendString(): void {
 	const majorToSend = props.taskToday.major;
 	const idToSend = props.taskToday.id;
-	emit('string-sent', majorToSend, idToSend);
+	emit('string-sent', majorToSend, idToSend)
+}
+	
+// Прогресс и расчет коэффициента
+const progress = ref(props.taskToday.progress);
+const quotientProgress = ref<number>(0.97)
+
+// Функция для обновления коэффициента прогресса на основе ширины экрана
+const updateQuotientProgress = () => {
+	const windowWidth = window.innerWidth
+
+	if (windowWidth > 1024) {
+		quotientProgress.value = 0.97;
+	} else if (windowWidth > 700 && windowWidth <= 1024) {
+		quotientProgress.value = 0.99;
+	} else {
+		quotientProgress.value = 0.97;
+	}
 }
 
 onMounted(() => {
+	window.addEventListener('resize', updateQuotientProgress)
+	updateQuotientProgress()
 	sendString()
 })
 
-const progress = ref(props.taskToday.progress);
-const quotientProgress = ref(0.97);
-
-const updateQuotientProgress = () => {
-	if (window.innerWidth > 1024) {
-		quotientProgress.value = 0.97;
-	} else if (window.innerWidth <= 1024) {
-		quotientProgress.value = 0.99;
-	} else if (window.innerWidth <= 700) {
-		quotientProgress.value = 0.97;
-	}
-};
-
-onMounted(() => {
-	window.addEventListener('resize', updateQuotientProgress);
-	updateQuotientProgress();
-});
-
 onBeforeUnmount(() => {
-	window.removeEventListener('resize', updateQuotientProgress);
-});
+	window.removeEventListener('resize', updateQuotientProgress)
+})
 </script>
 
 
@@ -284,20 +289,4 @@ onBeforeUnmount(() => {
 		transition: left 0.4s ease;
 	}
 }
-// .task-list-item {
-// 	display: inline-block;
-// 	margin-right: 10px;
-// }
-// .task-list-enter-active,
-// .task-list-leave-active {
-// 	transition: all 0.4s ease 0s;
-// }
-// .task-list-enter-from,
-// .task-list-leave-to {
-// 	opacity: 0;
-// 	transform: translateX(130px);
-// }
-// .task-list-move {
-// 	transition: transform 0.4s ease 0s;
-// }
 </style>

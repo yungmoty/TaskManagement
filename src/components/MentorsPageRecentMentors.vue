@@ -1,20 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 import SliderSwiper from '@/components/SliderSwiper.vue';
 import { useI18n } from 'vue-i18n'
+import { Mentor } from '@/interfaces/mentor';
+
+// Типизация пропсов
+const props = defineProps<{
+	mentors: Mentor[]
+}>()
 
 const { t } = useI18n({useScope: 'global'})
-const props = defineProps({
-	mentors: {
-		type: Array,
-		required: true
-	},
-})
-const loading = ref(false)
-const slidesCountLimitTask = ref(0);
-let timer;
+const loading = ref<boolean>(false)
+const slidesCountLimitTask = ref<number>(0);
+	let timer: ReturnType<typeof setTimeout> | undefined
 
-const startLoading = () => {
+const startLoading = (): void => {
 	if (timer) {
 		clearTimeout(timer);
 	}

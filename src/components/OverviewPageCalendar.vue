@@ -1,39 +1,49 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, } from 'vue';
 import moment from 'moment';
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({useScope: 'global'})
-const countDays = ref(1)
-const namePeriod = ref('week')
-const lengthDays = ref(7)
-const currentWeekStart = ref(moment().startOf(namePeriod.value));
+
+
+const countDays = ref<number>(1)
+const namePeriod = ref<'week' | 'day'>('week')
+const lengthDays = ref<number>(7)
+const currentWeekStart = ref<moment.Moment>(moment().startOf(namePeriod.value));
 const today = moment();
 
 const isToday = computed(() => currentWeekStart.value.isSame(today, namePeriod.value))
 
 const days = computed(() => {
-	const weekStart = currentWeekStart.value.clone().startOf(namePeriod);
+	const weekStart = currentWeekStart.value.clone().startOf(namePeriod.value);
 	return Array.from({ length: lengthDays.value }, (_, i) => weekStart.clone().add(i, 'days'));
 });
 
 const header = computed(() => currentWeekStart.value.format('MMMM YYYY'));
 
-function previousWeek() {
+function previousWeek(): void {
 	currentWeekStart.value = currentWeekStart.value.clone().subtract(countDays.value, namePeriod.value);
 }
 
-function nextWeek() {
+function nextWeek(): void {
 	currentWeekStart.value = currentWeekStart.value.clone().add(countDays.value, namePeriod.value);
 }
 
-function goToCurrentDay() {
+function goToCurrentDay(): void {
 	currentWeekStart.value = moment().startOf('day');
 }
-const updateDisplay = () => {
-	countDays.value = window.innerWidth <= 425 ? 5 : 1
-	lengthDays.value = window.innerWidth <= 425 ? 5 : 7
-	namePeriod.value = window.innerWidth <= 425 ? 'day' : 'week'
+
+// Оптимизация обновления отображения
+const updateDisplay = (): void => {
+	if (window.innerWidth <= 425) {
+		countDays.value = 5;
+		lengthDays.value = 5;
+		namePeriod.value = 'day';
+	} else {
+		countDays.value = 1;
+		lengthDays.value = 7;
+		namePeriod.value = 'week';
+	}
 }
 
 onMounted(() => {
@@ -43,7 +53,6 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener('resize', updateDisplay)
 })
-
 </script>
 
 
@@ -97,7 +106,6 @@ onUnmounted(() => {
 	transition: all 0.4s ease 0s;
 }
 .calendar {
-	// width: 100%;
 	width: 372px;
 	padding: rem(20);
 	background-color: $white;
@@ -214,5 +222,4 @@ onUnmounted(() => {
 }
 .btn-next {
 }
-
 </style>

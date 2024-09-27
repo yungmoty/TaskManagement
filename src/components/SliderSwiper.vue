@@ -1,35 +1,37 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import Swiper from 'swiper';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import { useMentors } from "@/hooks/useMentors";
 
+// Типизация пропсов
+const props = defineProps<{
+	sliderTitle: string,
+	nameSwiper: string,
+	swiperBtn: string,
+	slidesCountNewTask?: number,
+	slidesCountLimitTask?: number,
+}>()
+
 const { loading } = useMentors()
 
-const props = defineProps({
-	sliderTitle: String,
-	nameSwiper: String,
-	swiperBtn: String,
-	slidesCountNewTask: Number,
-	slidesCountLimitTask: Number,
-})
 const nameSwiperSlider = props.nameSwiper
 const swiperSliderBtn = props.swiperBtn
-let swiperInstance = null;
-const swiperContainer = ref(null)
+let swiperInstance: Swiper | null = null;
+const swiperContainer = ref<HTMLElement | null>(null)
 
 
-const keyboardFlip = () => {
+const keyboardFlip = (): void => {
 	let isHovered = false
 
-	swiperContainer.value.addEventListener('mouseenter', () => { isHovered = true })
+	swiperContainer.value?.addEventListener('mouseenter', () => { isHovered = true })
 
-	swiperContainer.value.addEventListener('mouseleave', () => { isHovered = false })
+	swiperContainer.value?.addEventListener('mouseleave', () => { isHovered = false })
 	
 
-	document.addEventListener('keydown', (event) => {
-		if (isHovered) {
+	document.addEventListener('keydown', (event: KeyboardEvent) => {
+		if (isHovered && swiperInstance) {
 			if (event.key === 'ArrowLeft') {
 				swiperInstance.slidePrev();
 			} else if (event.key === 'ArrowRight') {
@@ -39,16 +41,16 @@ const keyboardFlip = () => {
 	})
 }
 
-const updateSwiper = () => {
+const updateSwiper = (): void => {
 	const slidesPerViewOverviewPage = window.innerWidth <= 1150 ? 1 : 2
 	const slidesPerViewTaskPage = window.innerWidth > 1024 ? 3 : window.innerWidth > 744 ? 2 : 1;
 
-	const slidesCountNewTaskNext = props.slidesCountNewTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
-	const slidesCountLimitTaskNext = props.slidesCountLimitTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
-	const slidesCountNewTaskPrev = props.slidesCountNewTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
-	const slidesCountLimitTaskPrev = props.slidesCountLimitTask > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
+	const slidesCountNewTaskNext = props.slidesCountNewTask! > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
+	const slidesCountLimitTaskNext = props.slidesCountLimitTask! > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-next` : null
+	const slidesCountNewTaskPrev = props.slidesCountNewTask! > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
+	const slidesCountLimitTaskPrev = props.slidesCountLimitTask! > slidesPerViewTaskPage ? `.${swiperSliderBtn}.slider__btn-prev` : null
 
-
+	// Удаляем старый экземпляр Swiper, если он существует
 	if (swiperInstance) {
 		swiperInstance.destroy(true, true)
 		swiperInstance = null
@@ -74,26 +76,29 @@ const updateSwiper = () => {
 			pauseOnMouseEnter: true,
 		} : false,
 	}
+	// Создание нового экземпляра Swiper
 	swiperInstance = new Swiper(`.${nameSwiperSlider}`, swiperConfig)
-};
+}
+
+
+// Отслеживание изменений количества слайдов
+watch(() => [props.slidesCountNewTask, props.slidesCountLimitTask], () => {
+	updateSwiper()
+}, { immediate: true })
+
 
 onMounted(() => {
 	updateSwiper()
 	keyboardFlip()
 	window.addEventListener('resize', updateSwiper)
-});
+})
 
 onBeforeUnmount(() => {
 	if (swiperInstance) {
 		swiperInstance.destroy(true, true)
 	}
 	window.removeEventListener('resize', updateSwiper)
-});
-
-watch(() => [props.slidesCountNewTask, props.slidesCountLimitTask], () => {
-	updateSwiper()
-}, { immediate: true })
-
+})
 </script>
 
 
@@ -151,11 +156,7 @@ watch(() => [props.slidesCountNewTask, props.slidesCountLimitTask], () => {
 
 
 .slider {
-	// width: 752px;
 
-	@media (max-width: $l-dekstop){
-		// width: 805px;
-	}
 	&__header {
 		display: flex;
 		justify-content: space-between;

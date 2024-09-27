@@ -1,106 +1,87 @@
-<script setup>
-import { onMounted } from 'vue'
+<script setup lang="ts">
+import { onMounted } from 'vue';
 import Chart from 'chart.js/auto';
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n({useScope: 'global'})
-const getOrCreateTooltip = (chart) => {
-	let tooltipEl = chart.canvas.parentNode.querySelector('div');
+const { t } = useI18n({ useScope: 'global' });
+
+// Создание или получение тултипа
+const getOrCreateTooltip = (chart: Chart): HTMLElement => {
+	let tooltipEl = chart.canvas.parentNode?.querySelector('div') as HTMLElement;
 
 	if (!tooltipEl) {
 		tooltipEl = document.createElement('div');
-		tooltipEl.style.background = '#141522';
-		tooltipEl.style.borderRadius = '10px';
-		tooltipEl.style.color = '#fff';
-		tooltipEl.style.fontSize = '14px';
-		tooltipEl.style.lineHeight = '150%';
-		tooltipEl.style.letterSpacing = '-0.02em';
-		tooltipEl.style.fontWeight = '600';
-		tooltipEl.style.opacity = 1;
-		tooltipEl.style.pointerEvents = 'none';
-		tooltipEl.style.position = 'absolute';
-		tooltipEl.style.transform = 'translate(-50%, -135%)';
-		tooltipEl.style.transition = 'all .3s ease';
+		Object.assign(tooltipEl.style, {
+			background: '#141522',
+			borderRadius: '10px',
+			color: '#fff',
+			fontSize: '14px',
+			lineHeight: '150%',
+			letterSpacing: '-0.02em',
+			fontWeight: '600',
+			opacity: '1',
+			pointerEvents: 'none',
+			position: 'absolute',
+			transform: 'translate(-50%, -135%)',
+			transition: 'all .3s ease',
+		});
 
 		const table = document.createElement('table');
 		table.style.margin = '0px';
-
 		tooltipEl.appendChild(table);
-		chart.canvas.parentNode.appendChild(tooltipEl);
+		chart.canvas.parentNode?.appendChild(tooltipEl);
 	}
 
 	return tooltipEl;
 };
 
-const externalTooltipHandler = (context) => {
-
-	const {chart, tooltip} = context;
+// Обработчик внешнего тултипа
+const externalTooltipHandler = (context: any) => {
+	const { chart, tooltip } = context;
 	const tooltipEl = getOrCreateTooltip(chart);
 
-
 	if (tooltip.opacity === 0) {
-		tooltipEl.style.opacity = 0;
+		tooltipEl.style.opacity = '0';
 		return;
 	}
 
-
 	if (tooltip.body) {
 		const titleLines = tooltip.title || [];
-		const bodyLines = tooltip.body.map(b => b.lines);
+		const bodyLines = tooltip.body.map((b: any) => b.lines);
+
+		const tableRoot = tooltipEl.querySelector('table') as HTMLTableElement;
+		tableRoot.innerHTML = ''; // Очистка предыдущего содержимого
 
 		const tableHead = document.createElement('thead');
-
-		titleLines.forEach(title => {
+		titleLines.forEach((title: any) => {
 			const tr = document.createElement('tr');
-			tr.style.borderWidth = 0;
-
 			const th = document.createElement('th');
-			th.style.borderWidth = 0;
-			const text = document.createTextNode(title);
-
-			th.appendChild(text);
+			th.appendChild(document.createTextNode(title));
 			tr.appendChild(th);
 			tableHead.appendChild(tr);
 		});
+		tableRoot.appendChild(tableHead);
 
 		const tableBody = document.createElement('tbody');
-
-		bodyLines.forEach((body) => {
+		bodyLines.forEach((body: any) => {
 			const tr = document.createElement('tr');
-			tr.style.backgroundColor = 'inherit';
-			tr.style.borderWidth = 0;
-
 			const td = document.createElement('td');
-			td.style.borderWidth = 0;
-
-			const text = document.createTextNode(body);
-
-			td.appendChild(text);
+			td.appendChild(document.createTextNode(body));
 			tr.appendChild(td);
 			tableBody.appendChild(tr);
 		});
-
-		const tableRoot = tooltipEl.querySelector('table');
-
-
-		while (tableRoot.firstChild) {
-			tableRoot.firstChild.remove();
-		}
-
-		tableRoot.appendChild(tableHead);
 		tableRoot.appendChild(tableBody);
 	}
 
-	const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
-
-		tooltipEl.style.opacity = 1;
-		tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-		tooltipEl.style.top = positionY + tooltip.caretY + 'px';
-		tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
+	const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
+	tooltipEl.style.opacity = '1';
+	tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+	tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+	tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
 };
 
 onMounted(() => {
-	const ctx = document.getElementById('myChart').getContext("2d");
+	const ctx = document.getElementById('myChart')?.getContext("2d") as CanvasRenderingContext2D;
 	const gradient = ctx.createLinearGradient(50, 30, 50, 150);
 	gradient.addColorStop(0, 'rgba(84, 111, 255, 0.2)');
 	gradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
@@ -112,7 +93,6 @@ onMounted(() => {
 
 	new Chart(ctx, {
 		type: 'line',
-
 		data: {
 			labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
 			datasets: [{
@@ -131,18 +111,16 @@ onMounted(() => {
 				borderColor: '#141522',
 			}],
 		},
-
 		options: {
 			maintainAspectRatio: false,
 			responsive: true,
-
 			plugins: {
 				legend: false,
 				tooltip: {
 					padding: 10,
 					callbacks: {
 						title: () => '',
-						label: function(context) {
+						label: (context) => {
 							let label = new Intl.NumberFormat('en-US', {
 								minimumFractionDigits: 0,
 								maximumFractionDigits: 0
@@ -154,7 +132,6 @@ onMounted(() => {
 					external: externalTooltipHandler
 				},
 			},
-
 			scales: {
 				x: {
 					grid: {
@@ -178,8 +155,9 @@ onMounted(() => {
 			},
 		}
 	});
-})
+});
 </script>
+
 
 
 <template>

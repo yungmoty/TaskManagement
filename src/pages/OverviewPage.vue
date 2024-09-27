@@ -10,6 +10,7 @@ import { useStudentStore } from '@/stores/counter';
 import { useMentors } from "@/hooks/useMentors";
 import { useNewTasks } from "@/hooks/useNewTasks";
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n({useScope: 'global'})
 const studentStore = useStudentStore();
 const { mentors } = useMentors()
@@ -131,10 +132,6 @@ onMounted(() => {
 .sidebar-block {
 	padding: rem(32);
 	background-color: $medium-white;
-	// width: 50vw;
-	@media (max-width: $laptop){
-		// @include adaptiveValue(1000, 340, 1024, 'max-width');
-	}
 
 	@media (max-width: 425px){
 		padding: rem(22) rem(22) rem(22) rem(22);

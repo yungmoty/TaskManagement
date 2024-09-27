@@ -1,16 +1,23 @@
-<script setup>
-import { ref, watch, nextTick, computed, shallowRef } from 'vue';
+<script setup lang="ts">
+import { ref, watch, nextTick, computed, shallowRef, CSSProperties, Ref } from 'vue';
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
 import General from '@/components/SettingsPageGeneral.vue';
 import Notification from '@/components/SettingsPageNotification.vue';
 import { useI18n } from 'vue-i18n'
 
-const { t, locale } = useI18n({useScope: 'global'})
-const currentTab = ref('general')
-const sliderStyles = ref({})
-const tabs = shallowRef({});
+// Типизация для объекта вкладок
+interface Tab {
+component: any;
+name: string;
+}
 
+const { t, locale } = useI18n({useScope: 'global'})
+const currentTab = ref<string>('general')
+const sliderStyles: Ref<CSSProperties> = ref({});
+const tabs: Ref<Record<string, Tab>> = shallowRef({});
+
+// Функция для обновления вкладок
 const updateTabs = () => {
 	tabs.value = {
 		general: {
@@ -26,21 +33,24 @@ const updateTabs = () => {
 
 updateTabs();
 
+// Следим за изменением локали и обновляем вкладки
 watch(locale, () => {
 	updateTabs();
 });
+
+// Вычисляемые имена вкладок
 const tabNames = computed(() => Object.keys(tabs.value).map(key => ({
 	key,
 	name: tabs.value[key].name,
 })));
 
+// Следим за изменением текущей вкладки
 watch(
 	() => currentTab.value,
-	async (newValue) => {
-		
+	async (newValue: string) => {
 		await nextTick();
 		
-		const el = document.querySelector(`.settings__btns[data-tab="${newValue}"]`);
+		const el = document.querySelector<HTMLElement>(`.settings__btns[data-tab="${newValue}"]`)
 		
 		if (el) {
 			sliderStyles.value = {

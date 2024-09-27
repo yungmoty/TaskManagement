@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 import DrawerMenu from '@/components/DrawerMenu.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
@@ -7,58 +7,85 @@ import TaskPageNewTask from '@/components/TaskPageNewTask.vue';
 import { useTaskToday } from "@/hooks/useTaskToday";
 import { useNewTasks } from "@/hooks/useNewTasks";
 import { useI18n } from 'vue-i18n'
+import { CategoryEnum } from '@/enums/categoryEnum';
+import { SortEnum } from '@/enums/sortEnum';
+import { NewTasks } from '@/interfaces/newTasks';
+import { TaskToday } from '@/interfaces/taskToday';
 
 const { t } = useI18n({useScope: 'global'})
 const { tasksToday } = useTaskToday()
 const { newTasks } = useNewTasks()
 
 
+const categoryOption = ref<string>('')
+const sortOption = ref<string>('')
+const searchQuerry = ref<string>('')
 
-
-const categoryOption = ref('')
-const sortOption = ref('')
-const searchQuerry = ref('')
-
-const choiceOption = (category, sort, search) => {
+// Функция для установки выбранных параметров
+const choiceOption = (category: string, sort: string, search: string): void => {
 	categoryOption.value = category
 	sortOption.value = sort
 	searchQuerry.value = search
 }
 
+
+// Вычисляемое свойство для сортировки задач на сегодня
 const sortedTasksToday = computed(() => {
-	if (sortOption.value === t('headerMenu.sortArr.option-2')) {
-		return [...tasksToday.value].sort((post1, post2) => post1.timeLeft[0] - post2.timeLeft[0])
+	const tasks = tasksToday.value as TaskToday[]
+
+	if (sortOption.value === t(SortEnum.Deadline)) {
+		return [...tasks].sort((post1, post2) => 
+		parseInt(post1.timeLeft[0]) - parseInt(post2.timeLeft[0])
+	)
 	}
-	if (sortOption.value === t('headerMenu.sortArr.option-1')) {
-		return [...tasksToday.value].sort((post1, post2) => post2.progress - post1.progress)
+	if (sortOption.value === t(SortEnum.Popular)) {
+		return [...tasks].sort((post1, post2) => 
+		post2.progress - post1.progress
+	)
 	}
-	if (categoryOption.value === t('headerMenu.categoryArr.option-1')) {
-		return [...tasksToday.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
+	if (categoryOption.value === t(CategoryEnum.Developer)) {
+		return [...tasks].filter(post => 
+		post.major.toLowerCase().includes(categoryOption.value.toLowerCase())
+	)
 	}
-	if (categoryOption.value === t('headerMenu.categoryArr.option-2')) {
-		return [...tasksToday.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
+	if (categoryOption.value === t(CategoryEnum.Design)) {
+		return [...tasks].filter(post => 
+		post.major.toLowerCase().includes(categoryOption.value.toLowerCase())
+	)
 	}
-	return tasksToday.value
+	return tasks
 })
+
+// Вычисляемое свойство для сортировки новых задач
 const sortedNewTasks = computed(() => {
-	if (sortOption.value === t('headerMenu.sortArr.option-2')) {
-		return [...newTasks.value].sort((post1, post2) => post1.timeLeft[0] - post2.timeLeft[0])
+	const tasks = newTasks.value as NewTasks[]
+
+	if (sortOption.value === t(SortEnum.Deadline)) {
+		return [...tasks].sort((post1, post2) => 
+		parseInt(post1.timeLeft[0]) - parseInt(post2.timeLeft[0])
+	)
 	}
-	if (sortOption.value === t('headerMenu.sortArr.option-1')) {
-		return [...newTasks.value].sort((post1, post2) => post2.progress - post1.progress)
+	if (sortOption.value === t(SortEnum.Popular)) {
+		return [...tasks].sort((post1, post2) => 
+		post2.progress - post1.progress
+	)
 	}
-	if (categoryOption.value === t('headerMenu.categoryArr.option-1')) {
-		return [...newTasks.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
+	if (categoryOption.value === t(CategoryEnum.Developer)) {
+		return [...tasks].filter(post => 
+		post.major.toLowerCase().includes(categoryOption.value.toLowerCase())
+	)
 	}
-	if (categoryOption.value === t('headerMenu.categoryArr.option-2')) {
-		return [...newTasks.value].filter(post => post.major.toLowerCase().includes(categoryOption.value.toLowerCase()))
+	if (categoryOption.value === t(CategoryEnum.Design)) {
+		return [...tasks].filter(post => 
+		post.major.toLowerCase().includes(categoryOption.value.toLowerCase())
+	)
 	}
-	return newTasks.value
+	return tasks
 })
-const	sortedAndSearchedNewTask = computed(() => {
+const sortedAndSearchedNewTask = computed(() => {
 	return sortedNewTasks.value.filter(post => post.titleImage.toLowerCase().includes(searchQuerry.value.toLowerCase()))
 })
-const	sortedAndSearchedTasksToday = computed(() => {
+const sortedAndSearchedTasksToday = computed(() => {
 	return sortedTasksToday.value.filter(post => post.titleImage.toLowerCase().includes(searchQuerry.value.toLowerCase()))
 })
 </script>

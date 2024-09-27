@@ -60,7 +60,7 @@
 			"timeInterval": {
 				"day": "This Day",
 				"week": "This Week",
-				"mounth": "This Mounth"
+				"mounth": "This Month"
 			},
 			"task": "Task"
 		},

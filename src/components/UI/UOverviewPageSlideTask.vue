@@ -1,41 +1,44 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { NewTasks } from '@/interfaces/newTasks';
+
+// Типизируем пропсы
+const props = defineProps<{
+	newTask: NewTasks
+}>()
 
 const { t } = useI18n({useScope: 'global'})
-const loading = ref(false)
-const props = defineProps({
-	newTask: {
-		type: Object,
-		required: true,
-	},
-})
+const loading = ref<boolean>(false)
 
+// Имитируем асинхронную загрузку
 setTimeout(() => {
 	loading.value = true
-}, 500);
+}, 500)
 
-const progress = ref(props.newTask.progress);
-const quotientProgress = ref(0.97);
+// Прогресс задачи
+const progress = ref(props.newTask.progress)
+const quotientProgress = ref<number>(0.97)
 
+// Функция для обновления коэффициента прогресса на основе ширины экрана
 const updateQuotientProgress = () => {
 	if (window.innerWidth > 1024) {
-		quotientProgress.value = 0.97;
-	} else if (window.innerWidth <= 1024) {
-		quotientProgress.value = 0.99;
-	} else if (window.innerWidth <= 700) {
-		quotientProgress.value = 0.97;
+		quotientProgress.value = 0.97
+	} else if (window.innerWidth <= 1024 && window.innerWidth > 700) {
+		quotientProgress.value = 0.99
+	} else {
+		quotientProgress.value = 0.97
 	}
-};
+}
 
 onMounted(() => {
-	window.addEventListener('resize', updateQuotientProgress);
+	window.addEventListener('resize', updateQuotientProgress)
 	updateQuotientProgress();
-});
+})
 
 onBeforeUnmount(() => {
-	window.removeEventListener('resize', updateQuotientProgress);
-});
+	window.removeEventListener('resize', updateQuotientProgress)
+})
 </script>
 
 

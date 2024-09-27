@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUpdated, watch } from 'vue'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
@@ -6,41 +6,57 @@ import { useNewTasks } from '@/hooks/useNewTasks'
 import { useTaskToday } from '@/hooks/useTaskToday'; 
 import { useStudentStore, useSliderStore } from '@/stores/counter';
 import { useI18n } from 'vue-i18n'
+import { NewTasks } from '@/interfaces/newTasks';
+
+interface DataTask {
+	name: string;
+	class: string;
+	id: number;
+	file: File | null;
+}
 
 const { t } = useI18n({useScope: 'global'})
+
+// Инициализация хранилищ
 const sliderStore = useSliderStore();
 const studentStore = useStudentStore()
 const { fetchTaskById } = useNewTasks()
 const { fetchTaskTodayById } = useTaskToday();
-const task = ref(null)
-const file = ref(null)
-const photoUrl = ref('');
-const formattedDate = ref('')
-const dataTask = ref({
-	name: String,
-	class: String,
-	id: Number,
+
+
+const task = ref<NewTasks | null>(null)
+const file = ref<HTMLElement | null>(null)
+const photoUrl = ref<string>('');
+const formattedDate = ref<string>('')
+const dataTask = ref<DataTask>({
+	name: '',
+	class: '',
+	id: 0,
 	file: null
-});
+})
 
+// Функция для форматирования текущей даты
 const formatDate = () => {
-	const now = new Date()
-
+	const now = new Date() 
 	formattedDate.value = format(now, 'd MMMM yyyy', { locale: enUS })
 };
 
 const loadTask = async () => {
 	const taskId = sliderStore.activeSlideId;
 
+	// Загрузка задачи в зависимости от выбранного слайдера
 	if (sliderStore.activeSlider === 'newTasks') {
-		task.value = await fetchTaskById(taskId);
+		task.value = await fetchTaskById(taskId as number);
 	} else if (sliderStore.activeSlider === 'tasksToday') {
-		task.value = await fetchTaskTodayById(taskId);
+		task.value = await fetchTaskTodayById(taskId as number);
 	}
 }
+
+// Наблюдение за изменением активного слайда
 watch(() => sliderStore.activeSlideId, loadTask, { immediate: true });
 
-const loadSavedSlide = () => {
+// Функция для загрузки сохранённого слайда из localStorage
+const loadSavedSlide = (): void => {
 	const savedSlideId = localStorage.getItem('activeSlideId');
 	const savedSlider = localStorage.getItem('activeSlider');
 	
@@ -51,44 +67,35 @@ const loadSavedSlide = () => {
 	}
 }
 
+// Функция для обработки загрузки файла
+function handleFileUpload(event: Event) {
+	const input = event.target as HTMLInputElement
+	const files = input.files;
 
-onMounted(async () => {
-	studentStore.loadFromLocalStorage()
-	formatDate()
-	loadSavedSlide()
-})
-
-onMounted(() => {
-	if (studentStore) {
-		dataTask.value.name = studentStore.studentName;
-		dataTask.value.class = studentStore.studentClass;
-		dataTask.value.id = studentStore.studentId;
-	}
-});
-
-function handleFileUpload(event) {
-	const files = event.target.files;
-	if (files.length > 0) {
+	// Проверка наличия загруженных файлов
+	if (files && files.length > 0) {
 		const file = files[0];
-		dataTask.value.file = file;
+		dataTask.value.file = file // Установка файла в объект данных
 
-		const reader = new FileReader();
+		const reader = new FileReader() // Создание нового FileReader для чтения файла
 		reader.onload = (e) => {
-			photoUrl.value = e.target.result;
+			photoUrl.value = ( e.target?.result as string ) || ''
 		};
-		reader.readAsDataURL(file);
+		reader.readAsDataURL(file) // Чтение файла как URL
 	}
 
 	const dropArea = file.value
 	if (!dropArea) return
 
-	const nameFile = event.target.files[0]?.name || ''
-	dataTask.value.file = event.target.files[0]
+	const nameFile = files?.[0].name || '' // Получение имени файла
+	dataTask.value.file = files?.[0] || null // Установка файла в объект данных
 	
 	
-	dropArea.style.setProperty('--after-content', `"${nameFile}"`)
+	dropArea.style.setProperty('--after-content', `"${nameFile}"`) // Установка имени файла в стили
 }
 
+
+// Обновление дроп-зоны при изменении компонента
 onUpdated(() => {
 	const dropArea = file.value
 	if (!dropArea) return
@@ -106,28 +113,35 @@ onUpdated(() => {
 		e.preventDefault()
 
 		dropArea.classList.remove('active')
-		const files = e.dataTransfer.files
+		const files = e.dataTransfer?.files
 		
-		dropArea.style.setProperty('--after-content', `"${files[0].name}"`)
+		if (files && files.length > 0) {
+			const fileName = files[0].name; // Получение имени файла
+			dropArea.style.setProperty('--after-content', `"${fileName}"`); // Установка имени файла в стили
+		}
 	})
 })
 
+// Ключ доступа к API
 const WEB3FORMS_ACCESS_KEY = "e74a2fef-3d97-48a4-9513-bdfcd5086d0b";
 
+// Функция для отправки формы
 const submitForm = async () => {
+	const formData = {
+		access_key: WEB3FORMS_ACCESS_KEY, // Ключ доступа
+		name: dataTask.value.name, // Имя студента
+		class: dataTask.value.class, // Класс студента
+		id: dataTask.value.id, // ID студента
+		file: dataTask.value.file // Загруженный файл
+	};
+
 	const response = await fetch("https://api.web3forms.com/submit", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 			Accept: "application/json",
 		},
-		body: JSON.stringify({
-			access_key: WEB3FORMS_ACCESS_KEY,
-			name: dataTask.value.name,
-			class: dataTask.value.class,
-			id: dataTask.value.id,
-			file: dataTask.value.file,
-		}),
+		body: JSON.stringify(formData),
 	});
 	const result = await response.json();
 	
@@ -135,6 +149,18 @@ const submitForm = async () => {
 		console.log(result);
 	}
 }
+
+onMounted(async () => {
+	studentStore.loadFromLocalStorage()
+	formatDate()
+	loadSavedSlide()
+
+	if (studentStore) {
+		dataTask.value.name = studentStore.studentName;
+		dataTask.value.class = studentStore.studentClass;
+		dataTask.value.id = studentStore.studentId;
+	}
+})
 </script>
 
 

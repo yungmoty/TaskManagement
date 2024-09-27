@@ -1,5 +1,5 @@
-<script setup>
-import { onMounted, ref, onUnmounted } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import { useStudentStore } from '@/stores/counter';
 import { useRouter } from 'vue-router';
 import DrawerMenu from '@/components/DrawerMenu.vue';
@@ -9,27 +9,32 @@ const { t } = useI18n({useScope: 'global'})
 const studentStore = useStudentStore();
 const router = useRouter();
 
-const studentName = ref('');
-const studentClass = ref('');
-const studentPhotoUrl = ref('');
-const isLoading = ref(false)
-const username = ref(null)
-const userclass = ref(null)
-const registerForm = ref(null)
+const studentName = ref<string>('');
+const studentClass = ref<string>('');
+const studentPhotoUrl = ref<string>('');
+const isLoading = ref<boolean>(false)
+const username = ref<HTMLInputElement | null>(null)
+const userclass = ref<HTMLInputElement | null>(null)
+const registerForm = ref<HTMLInputElement | null>(null)
 
-function handleFileUpload(event) {
-	const file = event.target.files[0];
+// Обработчик загрузки файла
+function handleFileUpload(event: Event): void {
+	const target = event.target as HTMLInputElement;
+	const file = target.files?.[0];
 	if (file) {
 		const reader = new FileReader();
 
-		reader.onload = (e) => {
-			studentPhotoUrl.value = e.target.result;
+		reader.onload = (e): void => {
+			const result = e.target?.result;
+			console.log(result);
+			
+			studentPhotoUrl.value = result as string;
 		};
 		reader.readAsDataURL(file);
 	}
 }
 
-function registerStudent() {
+function registerStudent(): void {
 	studentStore.setStudentData({
 		name: studentName.value,
 		class: studentClass.value,
@@ -44,41 +49,40 @@ function registerStudent() {
 let requiredName = false
 let requiredClass = false
 
-
-function validate() {
-		if (username.value.value.trim() == '') {
-			requiredName = false
-			username.value.classList.add('required');
-			
-			setTimeout(function() {
-				username.value.classList.remove('required');
-			}, 300);
-		} else {
-			requiredName = true
-		}
-
-		if (userclass.value.value.trim() == '') {
-			requiredClass = false
-			userclass.value.classList.add('required');
-			
-			setTimeout(function() {
-				userclass.value.classList.remove('required');
-			}, 300);
-		} else {
-			requiredClass = true
-		}
-
-		if (requiredName && requiredClass) {
-			isLoading.value = true
-			setTimeout(() => {
-				router.push('/overview')
-			}, 1000);
-		}
+// Валидация полей формы
+function validate(): void {
+	if (username.value?.value.trim() === '') {
+		requiredName = false
+		username.value.classList.add('required');
+		
+		setTimeout(function(): void {
+			username.value?.classList.remove('required');
+		}, 300);
+	} else {
+		requiredName = true
 	}
-onMounted(() => {
-	registerForm.value.addEventListener('submit', validate);
-})
-onUnmounted(() => {
+
+	if (userclass.value?.value.trim() === '') {
+		requiredClass = false
+		userclass.value.classList.add('required');
+		
+		setTimeout(function() {
+			userclass.value?.classList.remove('required');
+		}, 300);
+	} else {
+		requiredClass = true
+	}
+
+	if (requiredName && requiredClass) {
+		isLoading.value = true
+
+		setTimeout((): void => {
+			router.push('/overview')
+		}, 1000);
+	}
+}
+onMounted((): void => {
+		registerForm.value?.addEventListener('submit', validate as EventListener)
 })
 </script>
 

@@ -1,19 +1,24 @@
-<script setup>
-import { ref } from 'vue';
-import { useI18n } from 'vue-i18n'
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { Mentor } from '@/interfaces/mentor';
+
+// Типизируем пропсы
+const props = defineProps<{
+	mentor: Mentor;
+}>()
 
 const { t } = useI18n({useScope: 'global'})
-const props = defineProps({
-	mentor: {
-		type: Object,
-		required: true,
-	}
-})
 
 const isFollow = ref(props.mentor.isFollow)
 const choiceFollow = () => {
 	isFollow.value = !isFollow.value
 }
+
+// Следим за изменением пропсов, если нужно обновить локальное состояние
+watch(() => props.mentor.isFollow, (newVal: boolean): void => {
+	isFollow.value = newVal;
+});
 </script>
 
 

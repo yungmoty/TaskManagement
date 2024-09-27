@@ -1,31 +1,40 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 
+// Интерфейс для опций
+interface SelectOption {
+	name: string
+	value: string
+}
 
-const props = defineProps({
-	selectList: {
-		type: Array,
-		required: true
-	}
-})
-const isOpen = ref(false)
+// Типизируем пропсы
+const props = defineProps<{
+	selectList: SelectOption[]
+}>()
+
+// Состояния компонента
+const isOpen = ref<boolean>(false)
 const selectedOption = ref(props.selectList[0].name)
 
-function toggleDropdown() {
+function toggleDropdown(): void {
 	isOpen.value = !isOpen.value
 }
 
-const handleClickOutside = () => {
-	if (isOpen.value === true) {
+const handleClickOutside = (): void => {
+	if (isOpen.value) {
 		isOpen.value = false;
 	}
 }
-const emit = defineEmits(['update:selectedOption']);
 
-function selectOption(option) {
+// Эмит события для обновления выбранной опции
+const emit = defineEmits<{
+	(e: 'update:selectedOption', value: string): void;
+}>()
+
+function selectOption(option: SelectOption): void {
 	selectedOption.value = option.name
 	isOpen.value = false
-	emit('update:selectedOption', option.value);
+	emit('update:selectedOption', option.value)
 }
 </script>
 
@@ -145,6 +154,4 @@ function selectOption(option) {
 		transform: translate(50%, 0) translate3d(0, 0, 0);
 	}
 }
-
-
 </style>

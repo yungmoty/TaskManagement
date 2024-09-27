@@ -1,20 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-const model = defineModel()
 
-defineProps({
-	placeholder: String,
-})
+// Типизируем пропсы 
+defineProps<{
+	placeholder: string,
+}>()
+const query = ref<string>('');
+const emit = defineEmits<{
+	(e: 'search', query: string): void;
+}>()
 
-const emit = defineEmits(['search']);
-
-
-const query = ref('');
-
+// Функция для обработки клика по кнопке поиска
 function searchClick() {
 	emit('search', query.value);
 }
-function searchKeydown(event) {
+
+function searchKeydown(event: KeyboardEvent): void {
 	if (event.key === 'Enter') {
 		event.preventDefault();
 		searchClick();
