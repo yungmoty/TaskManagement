@@ -58,7 +58,7 @@
 		"chart": {
 			"title": "Aktivität",
 			"timeInterval": {
-				"day": "Heute",
+				"day": "Tag",
 				"week": "Diese Woche",
 				"mounth": "Diesen Monat"
 			},

@@ -1,14 +1,13 @@
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { Mentor } from '@/interfaces/mentor';
 
 const { t } = useI18n({useScope: 'global'})
-defineProps({
-	mentors: {
-		type: Array,
-		required: true
-	},
-})
+
+// Типизация пропсов
+defineProps<{
+	mentors: Mentor[]
+}>()
 </script>
 
 

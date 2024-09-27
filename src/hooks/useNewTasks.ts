@@ -3,24 +3,25 @@ import axios from 'axios';
 import { useI18n } from 'vue-i18n'
 
 export function useNewTasks() {
-	const newTasks = ref([]);
-	const loadingTask = ref(true);
-	const errorNewTasks = ref(null);
+	const newTasks = ref<object[]>([]);
+	const loadingTask = ref<boolean>(true);
+	const errorNewTasks = ref<string | null>(null);
 	const { locale } = useI18n({useScope: 'global'})
 
 	const fetchData = async () => {
+		loadingTask.value = true;
 		try {
 			const response = await axios.get(`https://1c95d6dd92be91a6.mokky.dev/newTasks_${locale.value}`);
 			newTasks.value = response.data;
 		} catch (err) {
-			errorNewTasks.value = err.message;
-			console.log(errorNewTasks.value);
+			errorNewTasks.value = err instanceof Error ? err.message : 'Unknown error';
+			console.error('Error fetching new tasks:', errorNewTasks.value);
 		} finally {
 			loadingTask.value = false;
 		}
 	};
 
-	const fetchTaskById = async (taskId) => {
+	const fetchTaskById = async (taskId: number): Promise<any> => {
 		try {
 			const response = await axios.get(`https://1c95d6dd92be91a6.mokky.dev/newTasks_${locale.value}/${taskId}`);
 			return response.data;
@@ -30,10 +31,10 @@ export function useNewTasks() {
 		}
 	};
 
-	const changeLanguageNewTasks = (newLocale) => {
+	const changeLanguageNewTasks = async (newLocale: string) => {
 		locale.value = newLocale;
-		fetchData();
-		fetchTaskById()
+		await fetchData();
+		// fetchTaskById()
 	};
 
 	onMounted(fetchData)

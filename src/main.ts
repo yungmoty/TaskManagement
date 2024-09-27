@@ -7,10 +7,14 @@ import App from '@/App.vue'
 import router from '@/router'
 import { languages, defaultLocale } from '@/i18n';
 
+interface Languages {
+	[key: string]: Record<string, string>;
+}
+
 const app = createApp(App)
 
-const localeStorageLang = localStorage.getItem('lang')
-const messages = Object.assign(languages)
+const localeStorageLang: string | null = localStorage.getItem('lang')
+const messages: Languages = Object.assign(languages)
 const i18n = createI18n({
 	legacy: false,
 	fallbackLocale: 'en',

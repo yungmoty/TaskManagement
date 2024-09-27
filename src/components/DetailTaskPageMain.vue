@@ -1,38 +1,47 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useNewTasks } from '@/hooks/useNewTasks'; 
 import { useTaskToday } from '@/hooks/useTaskToday'; 
 import { useStudentStore, useSliderStore } from '@/stores/counter';
-import VideoPlayer from './VideoPlayer.vue';
+import VideoPlayer from '@/components/VideoPlayer.vue';
 import { useI18n } from 'vue-i18n'
+import { NewTasks } from '@/interfaces/newTasks';
 
 const { t } = useI18n({useScope: 'global'})
+
 const sliderStore = useSliderStore();
 const studentStore = useStudentStore();
 const { fetchTaskById } = useNewTasks();
 const { fetchTaskTodayById } = useTaskToday();
-const task = ref(null);
-const isVideo = ref(false);
-const isControls = ref(true);
-const videoPlayerRef = ref(null);
 
-const playVideo = () => {
+const task = ref<NewTasks | null>(null);
+const isVideo = ref<boolean>(false); // состояния видео
+const isControls = ref<boolean>(true); // остояния контролов
+const videoPlayerRef = ref<HTMLVideoElement | null>(null);
+
+
+const playVideo = (): void => {
 	isVideo.value = true;
 	if (videoPlayerRef.value) {
 		videoPlayerRef.value.play();
 	}
 }
+
+// Функция для загрузки задачи по ID
 const loadTask = async () => {
 	const taskId = sliderStore.activeSlideId;
 
 	if (sliderStore.activeSlider === 'newTasks') {
-		task.value = await fetchTaskById(taskId);
+		task.value = await fetchTaskById(taskId as number);
 	} else if (sliderStore.activeSlider === 'tasksToday') {
-		task.value = await fetchTaskTodayById(taskId);
+		task.value = await fetchTaskTodayById(taskId as number);
 	}
 }
+
+// Наблюдение за изменением активного слайда и загрузка задачи
 watch(() => sliderStore.activeSlideId, loadTask, { immediate: true });
 
+// Функция для загрузки сохранённого слайда из localStorage
 const loadSavedSlide = () => {
 	const savedSlideId = localStorage.getItem('activeSlideId');
 	const savedSlider = localStorage.getItem('activeSlider');
@@ -145,8 +154,6 @@ const hideControls = () => {
 
 <style lang='scss' scoped>
 @import '@/assets/scss/main.scss';
-
-
 
 .video-player {
 	border-radius: rem(10);

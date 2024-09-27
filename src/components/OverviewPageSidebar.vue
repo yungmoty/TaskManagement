@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import OverviewPageCalendar from '@/components/OverviewPageCalendar.vue';
 import { useTaskToday } from "@/hooks/useTaskToday";
@@ -7,23 +7,25 @@ import { useSliderStore } from '@/stores/counter';
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({useScope: 'global'})
+
+
 const sliderStore = useSliderStore();
 const { tasksToday, fetchData, loadingTaskToday } = useTaskToday()
 const router = useRouter();
-const item = ref([])
-const getMajor = ref('');
-const getId = ref('');
-const isActive = ref(false)
+const dailyTask = ref<any[]>([]); 	// Определите тип данных в соответствии с вашим интерфейсом
+const getMajor = ref<string>('');
+const getId = ref<string>('');
+const isActive = ref<boolean>(false);
 
 const openSettings = () => {
 	isActive.value = !isActive.value
 }
-const handleStringSent = (major, id) => {
+const handleStringSent = (major: string, id: string): void => {
 	getMajor.value = major;
 	getId.value = id;
 }
 
-const selectSlide = (slideId) => {
+const selectSlide = (slideId: string | number): void => {
 	sliderStore.setActiveSlideId(slideId);
 	sliderStore.setActiveSlider('tasksToday');
 
@@ -31,31 +33,35 @@ const selectSlide = (slideId) => {
 	localStorage.setItem('activeSlider', JSON.stringify('tasksToday'));
 };
 
-const navigateToDetail = (taskId) => {
+const navigateToDetail = (taskId: string | number): void => {
 	router.push({ name: 'task-detail', params: { id: taskId } });
 };
 
-const fetchDataAndSetItem = async () => {
+const fetchDataAndSetItem = async (): Promise<void> => {
 	try {
 		await fetchData();
-		let currentDate = new Date();
-		let count = currentDate.getDate();
-		let maxLength = tasksToday.value.length;
-		const tmp = Math.ceil(count / (maxLength - 1));
-
-		if (count > maxLength - 1) {
-				count -= (maxLength - 1) * (tmp - 1);
-		}
-
-		item.value.push(tasksToday.value[count]);
+		setCurrentDailyTask()
 	} catch (error) {
 		console.error(error);
+	}
+}
+
+// Определение новой задачи каждый день
+const setCurrentDailyTask = (): void => {
+	const currentDate = new Date();
+	let count = currentDate.getDate();
+	const maxLength = tasksToday.value.length;
+
+	if (maxLength > 1) {
+		const tmp = Math.ceil(count / (maxLength - 1));
+		if (count > maxLength - 1) {
+			count -= (maxLength - 1) * (tmp - 1);
+		}
+		dailyTask.value.push(tasksToday.value[count]);
 	}
 };
 
 onMounted(fetchDataAndSetItem);
-
-
 </script>
 
 
@@ -81,7 +87,7 @@ onMounted(fetchDataAndSetItem);
 					@string-sent="handleStringSent"
 					classToTaskToday="task-today"
 					:useTaskToday="useTaskToday"
-					v-for="taskToday in item"
+					v-for="taskToday in dailyTask"
 					:taskToday="taskToday"
 					:key="taskToday.id"
 				/>

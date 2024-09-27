@@ -1,89 +1,94 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useMyStore } from '@/stores/counter';
-import eventBus from '@/directives/eventBus';
 import { useStudentStore } from '@/stores/counter';
 import { useI18n } from 'vue-i18n'
+import eventBus from '@/directives/eventBus';
+import { CategoryEnum } from '@/enums/categoryEnum';
+import { SortEnum } from '@/enums/sortEnum';
+
+// Типизация пропсов
+const props = defineProps<{
+	title: string,
+	isSearchBlock?: boolean,
+	pageClass: string,
+}>()
 
 const { t } = useI18n({useScope: 'global'})
 const studentStore = useStudentStore();
-const sortIcon = ref('_icon-sort')
-const categoryIcon = ref('_icon-category')
-const searchTask = ref('')
+const sortIcon = ref<string>('_icon-sort')
+const categoryIcon = ref<string>('_icon-category')
+const searchTask = ref<string>('')
+const isActiveOption = ref<boolean>(false)
 
-const categoryArr = ref([
-	t('headerMenu.categoryArr.option-1'),
-	t('headerMenu.categoryArr.option-2'),
-	t('headerMenu.categoryArr.option-3'),
+// Локализация категорий и сортировок
+const categoryArr = ref<string[]>([
+	t(CategoryEnum.Developer),
+	t(CategoryEnum.Design),
+	t(CategoryEnum.None),
 ])
-const sortArr = ref([
-	t('headerMenu.sortArr.option-1'),
-	t('headerMenu.sortArr.option-2'),
-	t('headerMenu.sortArr.option-3'),
-])
-const selectedCategory = ref('')
-const selectedSort = ref('')
 
-const burgerMenu = ref(null)
-const bodyClass = ref(false);
+const sortArr = ref<string[]>([
+	t(SortEnum.Popular),
+	t(SortEnum.Deadline),
+	t(SortEnum.None),
+])
+
+const selectedCategory = ref<string>('')
+const selectedSort = ref<string>('')
+const burgerMenu = ref<HTMLElement | null>(null)
+const bodyClass = ref<boolean>(false);
 const store = useMyStore();
 
-const toggleValue = () => {
+// Функция для изменения состояния меню и блокировки прокрутки
+const toggleValue = (): void => {
 	store.toggleValue();
-
 	bodyClass.value = !bodyClass.value;
-	if (bodyClass.value) {
-		document.body.classList.add('_lock');
-	} else {
-		document.body.classList.remove('_lock');
-	}
-};
+	document.body.classList.toggle('_lock', bodyClass.value);
+}
 
-defineProps({
-	title: String,
-	isSearchBlock: Boolean,
-	pageClass: String,
-})
+// Типизация событий
+const emit = defineEmits<{
+	(e: 'send-option', category: string, sort: string, search: string): void;
+}>()
 
-onMounted(() => {
-	eventBus.someEvent = burgerMenu.value;
-});
+// Отправка данных выбранной категории, сортировки и поискового запроса
+function sendData () {
+	emit('send-option', selectedCategory.value, selectedSort.value, searchTask.value)
+}
 
-
-function selectedCategoryOption(option) {
+function selectedCategoryOption(option: string): void {
 	selectedCategory.value = option;
 }
-function selectedSortOption(option) {	
+function selectedSortOption(option: string): void {	
 	selectedSort.value = option
 }
+function performSearch(query: string): void {
+	searchTask.value = query
+}
 
-const isActiveOption = ref(false)
-const activeOption = () => {
+function activeOption () {
 	isActiveOption.value = !isActiveOption.value
 }
 
-const emit = defineEmits()
-
-const sendData = () => {
-	emit('send-option', selectedCategory.value, selectedSort.value, searchTask.value)
-}
-watch(sendData, () => {})
-
-function performSearch(query) {
-	searchTask.value = query
-}
-const handleClickOutside = () => {
-	if (isActiveOption.value === true) {
+function handleClickOutside () {
+	if (isActiveOption.value) {
 		isActiveOption.value = false;
 	}
 }
+
+// Отслеживание изменений в выбранных категориях и сортировках
 watch([selectedCategory, selectedSort], () => {
 	isActiveOption.value = false
 })
 
+// Отслеживание изменений в данных для отправки
+watch(sendData, () => {})
+
 onMounted(() => {
-	studentStore.loadFromLocalStorage();
-});
+	eventBus.someEvent = burgerMenu.value
+	studentStore.loadFromLocalStorage()
+})
 </script>
 
 
@@ -157,7 +162,6 @@ onMounted(() => {
 				/>
 			</div>
 		</div>
-
 	</header>
 </template>
 

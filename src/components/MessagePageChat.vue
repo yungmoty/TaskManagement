@@ -1,20 +1,23 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUpdated, onBeforeUnmount } from 'vue';
 import { format, subDays, isToday, isYesterday, parseISO, subHours } from 'date-fns';
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n({useScope: 'global'})
-function adjustTime(date, hours) {
+
+// Функция для корректировки времени
+function adjustTime(date: Date, hours: number) {
 	return subHours(date, hours);
 }
 
+// Состояния и данные чатов
 const chats = ref([
 	{
 		id: 1,
 		name: "Angelie Crison",
 		avatar: "https://api.dicebear.com/9.x/miniavs/svg?seed=Coco&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
 		messages: [
-			{ text: "Yes sure, Any problem with your assignment?", time: format(adjustTime(subDays(new Date(), 3), 3), "yyyy-MM-dd HH:mm:ss"), file: {url: "https://images.unsplash.com/photo-1608742213509-815b97c30b36?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}, own: false },
+			{ text: "Yes sure, Any problem with your assignment?", time: format(adjustTime(subDays(new Date(), 3), 3), "yyyy-MM-dd HH:mm:ss"), file: {url: "https://images.unsplash.com/photo-1608742213509-815b97c30b36?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", name: 'photo'}, own: false },
 			{ text: "Morning Angelie, I have question about My Task", time: format(adjustTime(subDays(new Date(), 2), 2), "yyyy-MM-dd HH:mm:ss"), own: true }
 		],
 		isRead: true,
@@ -47,7 +50,7 @@ const chats = ref([
 		avatar: "https://api.dicebear.com/9.x/miniavs/svg?seed=Angel&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
 		messages: [
 			{ text: "Lorem ipsum dolor sit amet consectetur adipisicing.", time: format(adjustTime(subDays(new Date(), 2), 3), "yyyy-MM-dd HH:mm:ss"), own: false },
-			{ text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta nulla et excepturi ipsam.", time: format(adjustTime(subDays(new Date(), 2), 2), "yyyy-MM-dd HH:mm:ss"), file: {url: "https://images.unsplash.com/photo-1520583457224-aee11bad5112?q=80&w=1365&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}, own: true },
+			{ text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta nulla et excepturi ipsam.", time: format(adjustTime(subDays(new Date(), 2), 2), "yyyy-MM-dd HH:mm:ss"), file: {url: "https://images.unsplash.com/photo-1520583457224-aee11bad5112?q=80&w=1365&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", name: 'photo'}, own: true },
 			{ text: "Lorem ipsum.", time: format(adjustTime(subDays(new Date(), 0), 0), "yyyy-MM-dd HH:mm:ss"), own: false },
 		],
 		isRead: false,
@@ -78,7 +81,7 @@ const chats = ref([
 		name: "Angel Kimberly",
 		avatar: "https://api.dicebear.com/9.x/miniavs/svg?seed=Charlie&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf",
 		messages: [
-			{ text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet, ex.", time: format(adjustTime(subDays(new Date(), 13), 2), "yyyy-MM-dd HH:mm:ss"), file: {url: "https://images.unsplash.com/photo-1505238680356-667803448bb6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}, own: false },
+			{ text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet, ex.", time: format(adjustTime(subDays(new Date(), 13), 2), "yyyy-MM-dd HH:mm:ss"), file: {url: "https://images.unsplash.com/photo-1505238680356-667803448bb6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", name: 'photo'}, own: false },
 			{ text: "Lorem ipsum dolor sit amet.", time: format(adjustTime(subDays(new Date(), 13), 1), "yyyy-MM-dd HH:mm:ss"), own: true }
 		],
 		isRead: true,
@@ -96,60 +99,72 @@ const chats = ref([
 	},
 ]);
 
-const currentChatId = ref(0);
-const chatSelected = ref(false)
+// Текущее состояние выбранного чата
+const currentChatId = ref<number>(0);
+const chatSelected = ref<boolean>(false)
+
+const searchQuerry = ref<string>('')
+const newMessage = ref<string>('');
 
 const currentChat = computed(() => {
 	return chats.value.find(chat => chat.id === currentChatId.value);
 });
 
-const setChat = (id) => {
+// Установка чата
+const setChat = (id: number) => {
 	currentChatId.value = id;
 	chats.value[currentChatId.value-1].isRead = true
 	chatSelected.value = true
 	document.body.classList.add('_lock');
 };
 
-const newMessage = ref('');
-function searchKeydown(event) {
+
+// Обработка нажатия клавиши Enter для отправки сообщения
+function searchKeydown(event: KeyboardEvent) {
 	if (event.key === 'Enter') {
 		event.preventDefault();
 		sendMessage();
 	}
 }
 
-const formatMessageDay = (date, year) => {
+const formatMessageDay = (date: string, year: boolean) => {
 	const parsedDate = parseISO(date);
 	if (isToday(parsedDate)) return t('message.chat.today');
 	if (isYesterday(parsedDate)) return t('message.chat.yesterday');
-	if (year === false) return format(parsedDate, `dd MMM`);
-	return format(parsedDate, `dd MMM yyyy`)
+	return year ? format(parsedDate, `dd MMM yyyy`) : format(parsedDate, `dd MMM`);
 }
-const searchQuerry = ref('')
-function performSearch(query) {
+
+function performSearch(query: string) {
 	searchQuerry.value = query
 }
+
+// Вычисляемое свойство для поиска чатов
 const searchedChats = computed(() => {
 	return chats.value.filter(chat => chat.name.toLowerCase().includes(searchQuerry.value.toLowerCase()))
 })
 
-const selectedFile = ref(null);
-const main = ref(null);
-const filePreviewUrl = ref('');
-const heightFile = ref(0);
+// Переменные для работы с файлами
+const selectedFile = ref<File | null>(null);
+const main = ref<HTMLElement | null>(null);
+const filePreviewUrl = ref<string>('');
+const heightFile = ref<number>(0);
 
-const handleFileUpload = (event) => {
-	const file = event.target.files[0];
+const handleFileUpload = (event: Event) => {
+	const target = event.target as HTMLInputElement
+	const file = target.files ? target.files[0] : null 
+
 	if (file) {
 		const reader = new FileReader();
 		reader.onload = (e) => {
-			filePreviewUrl.value = e.target.result;
+			filePreviewUrl.value = e.target?.result as string // Сохраняем URL файла
 		};
 		reader.readAsDataURL(file);
 		selectedFile.value = file;
-		heightFile.value = 42
+		heightFile.value = 42 // Установка высоты для предварительного просмотра файла
 		if (window.innerWidth <= 830) {
-			main.value.style.height = (window.innerHeight - fileUploadVar.value) + 'px'
+			main.value!.style.height = (window.innerHeight - fileUploadVar.value) + 'px' // Корректировка высоты
+		} else {
+			main.value!.style.height = (window.innerHeight - fileUploadVar.value - 116) + 'px'
 		}
 	}
 };
@@ -160,16 +175,18 @@ const sendMessage = () => {
 				text: newMessage.value.trim(),
 				time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
 				own: true,
-				file: filePreviewUrl.value ? { url: filePreviewUrl.value, name: selectedFile.value.name } : null
+				file: filePreviewUrl.value ? { url: filePreviewUrl.value, name: selectedFile.value!.name } : undefined  // Добавляем файл к сообщению
 		};
 
-		currentChat.value.messages.push(message);
-		newMessage.value = '';
-		filePreviewUrl.value = '';
-		selectedFile.value = null;
+		currentChat.value?.messages.push(message); // Добавляем сообщение в текущий чат
+		newMessage.value = ''; // Сбрасываем поле ввода
+		filePreviewUrl.value = ''; // Очищаем предварительный просмотр файла
+		selectedFile.value = null; // Очищаем выбранный файл
 		heightFile.value = 0
 		if (window.innerWidth <= 830) {
-			main.value.style.height = (window.innerHeight - sendVar.value) + 'px'
+			main.value!.style.height = (window.innerHeight - sendVar.value) + 'px' // Корректировка высоты
+		} else {
+			main.value!.style.height = (window.innerHeight - sendVar.value - 116) + 'px'
 		}
 	}
 };
@@ -181,37 +198,31 @@ const comeBackChats = () => {
 		currentChatId.value = 0
 	}, 300);
 }
-const isMobile = ref(false)
-const sendVar = ref(196)
-const fileUploadVar = ref(238)
+
+// Переменные для мобильного представления
+const isMobile = ref<boolean>(false)
+const sendVar = ref<number>(196)
+const fileUploadVar = ref<number>(238)
 
 const checkMobile = () => {
 	isMobile.value = window.innerWidth <= 830 ? true : false
 }
 
+// Корректировка отступов в зависимости от ширины экрана
 const fileUploadMargins = () => {
 	fileUploadVar.value = window.innerWidth <= 540 ? 268 : 238
 }
-
 const sendMargins = () => {
 	sendVar.value = window.innerWidth <= 540 ? 268 : 196
 }
-onMounted(() => {
-	checkMobile()
-	fileUploadMargins()
-	sendMargins()
-	window.addEventListener('resize', checkMobile, fileUploadMargins, sendMargins)
-})
-onBeforeUnmount(() => {
-	window.removeEventListener('resize', checkMobile, fileUploadMargins, sendMargins)
-})
 
-const images = ref(null)
-const showModal = ref(false);
-const modalImage = ref('');
+// Переменные для отображения изображения в модальном окне
+const images = ref<HTMLImageElement[]>([])
+const showModal = ref<boolean>(false);
+const modalImage = ref<string>('');
 
-const openModal = (url) => {
-	modalImage.value = url;
+const openModal = (url: string) => {
+	modalImage.value = url; // Устанавливаем URL изображения
 	showModal.value = true;
 };
 
@@ -220,11 +231,22 @@ const closeModal = () => {
 	showModal.value = false;
 };
 
+// Обновление компонента для добавления обработчиков кликов на изображения
 onUpdated(() => {
 	images.value.forEach(img => {
 		img.addEventListener('click', () => openModal(img.src));
 	});
 });
+
+onMounted(() => {
+	checkMobile()
+	fileUploadMargins()
+	sendMargins()
+	window.addEventListener('resize', checkMobile)
+})
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', checkMobile)
+})
 </script>
 
 
@@ -257,7 +279,7 @@ onUpdated(() => {
 								<div class="total-chats__name">{{ chat.name }}</div>
 								<div class="total-chats__message" :class="{unread: !chat.isRead}">
 									{{ chat.messages[chat.messages.length - 1].own ? t('message.chat.ownMessage') + ': ' : '' }}
-									{{ chat.messages[chat.messages.length - 1].text ? chat.messages[chat.messages.length - 1].text : chat.messages[chat.messages.length - 1].file.name}}
+									{{ chat.messages[chat.messages.length - 1].text ? chat.messages[chat.messages.length - 1].text : chat.messages[chat.messages.length - 1].file?.name}}
 								</div>
 							</div>
 							<div class="total-chats__about">
@@ -299,14 +321,14 @@ onUpdated(() => {
 							</svg>
 						</a>
 						<div class="current-chat__avatar">
-							<img :src="currentChat.avatar" :alt="currentChat.name">
+							<img :src="currentChat!.avatar" :alt="currentChat!.name">
 						</div>
 						<div class="current-chat__about">
 							<div class="current-chat__name">
-								{{ currentChat.name }}
+								{{ currentChat!.name }}
 							</div>
 							<div class="current-chat__action">
-								<div v-if="currentChat.isOnline" class="current-chat__online">
+								<div v-if="currentChat!.isOnline" class="current-chat__online">
 									<span>
 										<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 											<circle cx="9" cy="9" r="4" fill="#25C78B" />
@@ -333,15 +355,15 @@ onUpdated(() => {
 				<div ref="main" class="current-chat__main">
 					<div 
 						class="current-chat__messages" 
-						v-for="(message, index) in currentChat.messages" 
+						v-for="(message, index) in currentChat!.messages" 
 						:key="index"
 						
 					>
 						<div 
 							class="current-chat__day"
-							v-if="index === 0 || formatMessageDay(message.time) !== formatMessageDay(currentChat.messages[index - 1].time)"
+							v-if="index === 0 || formatMessageDay(message.time, false) !== formatMessageDay(currentChat!.messages[index - 1].time, false)"
 						>
-							{{ formatMessageDay(message.time) }}
+							{{ formatMessageDay(message.time, true) }}
 						</div>
 						<div 
 							:class="{'current-chat__own-msg': message.own, 'current-chat__others-msg': !message.own}"

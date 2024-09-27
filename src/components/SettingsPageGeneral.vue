@@ -1,25 +1,31 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t, locale } = useI18n({useScope: 'global'})
-const countChecked = ref(1)
-const selectedLanguage = ref('')
+const countChecked = ref<number>(1)
+const selectedLanguage = ref<string>('')
 
-const languageSelection = ref([
+// Типизация для списка языков и часовых поясов
+interface SelectionOption {
+	name: string;
+	value: string;
+}
+
+const languageSelection = ref<SelectionOption[]>([
 	{name: 'English', value: 'en'},
 	{name: 'Deutsch', value: 'de'},
 ])
-const timezoneSelection = ref([
+const timezoneSelection = ref<SelectionOption[]>([
 	{name: 'English', value: 'en'},
 	{name: 'Deutsch', value: 'de'},
 ])
 
-const selectedLanguageOption = (option) => {
+const selectedLanguageOption = (option: string): void => {
 	selectedLanguage.value = option
 }
 
-const switchLang = () => {
+const switchLang = (): void => {
 	locale.value = selectedLanguage.value
 	localStorage.setItem('lang', locale.value)
 }

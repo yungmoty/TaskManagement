@@ -1,52 +1,64 @@
-<script setup>
+<script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { computed, ref, onMounted, onUnmounted, watch} from 'vue';
 import eventBus from '@/directives/eventBus';
 import { useMyStore } from '@/stores/counter';
 
-const route = useRoute();
-const currentPath = computed(() => route.path);
-const store = useMyStore();
-const drawerMenu = ref(null);
-let burgerMenu
+// Типищация пропсов
+const props = defineProps<{
+	open?: boolean,
+	pageClass: string,
+}>()
 
-defineProps({
-	open: Boolean,
-	pageClass: String,
-})
+// Получение текущего маршрута
+const route = useRoute()
+const currentPath = computed(() => route.path)
+const store = useMyStore()
 
-watch(() => eventBus.someEvent, (newValue) => {
-	burgerMenu = newValue
+// Рефы для элементов меню
+const drawerMenu = ref<HTMLElement | null>(null)
+const burgerMenu = ref<HTMLElement | null>(null)
+
+// Шаблон URL
+const taskDetailPattern = /^\/task-detail\/\d+$/
+
+// Обработка изменения состояния через eventBus
+watch(() => eventBus.someEvent, (newValue: HTMLElement | null): void => {
+	burgerMenu.value = newValue
 });
 
 
-function handleClickOutside(event) {
-	if (drawerMenu.value && !drawerMenu.value.contains(event.target) && !burgerMenu.contains(event.target)) {
+function handleClickOutside(event: MouseEvent): void {
+	if (
+		drawerMenu.value &&
+		!drawerMenu.value.contains(event.target as Node) &&
+		burgerMenu.value &&
+		!burgerMenu.value?.contains(event.target as Node)
+	) {
 		store.isTrue = false
 	}
 }
 
-const removeBodyClass = () => {
-	document.body.classList.remove('_lock');
+const removeBodyClass = (): void => {
+	document.body.classList.remove('_lock')
 }
 
-onMounted(() => {
-	document.addEventListener('click', handleClickOutside);
+onMounted((): void => {
+	document.addEventListener('click', handleClickOutside)
+
+	// Добавление классов в зависимости от маршрута
 	if (currentPath.value === '/overview') {
 		document.body.classList.add('overview');
 	} else document.body.classList.remove('overview')
 
 	if (currentPath.value === '/') {
 		document.body.classList.add('registration');
-	} else document.body.classList.remove('registration');
+	} else document.body.classList.remove('registration')
+})
 
-});
-
-onUnmounted(() => {
-	document.removeEventListener('click', handleClickOutside);
-});
-
-const taskDetailPattern = /^\/task-detail\/\d+$/
+onUnmounted((): void => {
+	document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 
@@ -261,10 +273,6 @@ const taskDetailPattern = /^\/task-detail\/\d+$/
 		background: $dark-purple;
 		z-index: 1;
 		margin-bottom: rem(32);
-
-		@media (max-width: $laptop-inter){
-			// display: none;
-		}
 	}
 	&__item {
 		&_circle-1 {

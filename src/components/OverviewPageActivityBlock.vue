@@ -1,55 +1,71 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import OverviewPageCahrt from '@/components/OverviewPageCahrt.vue';
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n({useScope: 'global'})
-const currentTask = ref(65)
-const completedTasks = currentTask
-const totalTasks = ref(100)
-const percentSvg = computed(() => {
-	return Math.floor((300 - (completedTasks.value / totalTasks.value * 300)))
-})
-const percent = computed(() => {
-	return Math.floor(((completedTasks.value / totalTasks.value) * 100))
-})
-const timeInterval = ref([
-	t('overview.chart.timeInterval.day'),
-	t('overview.chart.timeInterval.week'),
-	t('overview.chart.timeInterval.mounth'),
-])
-const selectedOption = ref(timeInterval.value[1]);
-const isOpen = ref(false);
-const dropdown = ref(null);
+// Типизация пропсов
+const props = defineProps<{
+	title: string,
+}>()
 
-
-defineProps({
-	title: String,
-})
-
-
-function toggleDropdown() {
-	isOpen.value = !isOpen.value;
+// Enum для локализованных ключей времени
+enum TimeIntervalEnum {
+	Day = 'overview.chart.timeInterval.day',
+	Week = 'overview.chart.timeInterval.week',
+	Month = 'overview.chart.timeInterval.mounth',
 }
 
-function handleClickOutside(event) {
-	if (dropdown.value && !dropdown.value.contains(event.target)) {
-		isOpen.value = false;
+const { t } = useI18n({useScope: 'global'})
+
+// Количество текущих и завершенных задач
+const currentTask = ref<number>(65)
+const completedTasks = currentTask
+const totalTasks = ref<number>(100)
+
+// Вычисляем проценты для SVG
+const percentSvg = computed((): number => {
+	return Math.floor((300 - (completedTasks.value / totalTasks.value * 300)))
+})
+
+// Вычисляем процент завершенных задач
+const percent = computed((): number => {
+	return Math.floor(((completedTasks.value / totalTasks.value) * 100))
+})
+
+// Опции интервала времени с локализацией
+const timeInterval = ref([
+	t(TimeIntervalEnum.Day),
+	t(TimeIntervalEnum.Week),
+	t(TimeIntervalEnum.Month),
+])
+
+const selectedOption = ref<string>(t(TimeIntervalEnum.Week)) // Неделя по умолчанию
+const isOpen = ref<boolean>(false) // Отслеживание состояния дропдауна
+const dropdown = ref<HTMLElement | null>(null)
+
+function toggleDropdown(): void {
+	isOpen.value = !isOpen.value
+}
+
+function handleClickOutside(event: MouseEvent): void {
+	if (dropdown.value && !dropdown.value.contains(event.target as Node)) {
+		isOpen.value = false
 	}
 }
 
-onMounted(() => {
-	document.addEventListener('click', handleClickOutside);
-});
-
-onUnmounted(() => {
-	document.removeEventListener('click', handleClickOutside);
-});
-
-function selectOption(option) {
-	selectedOption.value = option;
-	isOpen.value = false;
+// Выбор опции в дропдауне
+function selectOption(option: string): void {
+	selectedOption.value = option
+	isOpen.value = false
 }
+
+onMounted((): void => {
+	document.addEventListener('click', handleClickOutside)
+});
+
+onUnmounted((): void => {
+	document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 
